@@ -16,5 +16,15 @@ namespace DesktopSchedulingApp.Forms
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void previousBtn_Login(object sender, EventArgs e)
+        {
+
+        }
     }
 }

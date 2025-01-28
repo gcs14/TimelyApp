@@ -29,68 +29,71 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Welcome));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.welcomePic = new System.Windows.Forms.PictureBox();
+            this.welcomeLoginBtn = new System.Windows.Forms.Label();
+            this.welcomeRegisterBtn = new System.Windows.Forms.Label();
+            this.myScheduleLabel = new System.Windows.Forms.Label();
+            this.enterBtn = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.welcomePic)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // welcomePic
             // 
-            this.pictureBox1.Image = global::DesktopSchedulingApp.Properties.Resources.AdobeStock_415962900_scaled_1;
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 39);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(533, 380);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.welcomePic.Image = global::DesktopSchedulingApp.Properties.Resources.AdobeStock_415962900_scaled_1;
+            this.welcomePic.InitialImage = ((System.Drawing.Image)(resources.GetObject("welcomePic.InitialImage")));
+            this.welcomePic.Location = new System.Drawing.Point(12, 39);
+            this.welcomePic.Name = "welcomePic";
+            this.welcomePic.Size = new System.Drawing.Size(533, 380);
+            this.welcomePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.welcomePic.TabIndex = 0;
+            this.welcomePic.TabStop = false;
             // 
-            // label1
+            // welcomeLoginBtn
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(745, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Login";
+            this.welcomeLoginBtn.AutoSize = true;
+            this.welcomeLoginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.welcomeLoginBtn.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeLoginBtn.Location = new System.Drawing.Point(745, 9);
+            this.welcomeLoginBtn.Name = "welcomeLoginBtn";
+            this.welcomeLoginBtn.Size = new System.Drawing.Size(42, 16);
+            this.welcomeLoginBtn.TabIndex = 2;
+            this.welcomeLoginBtn.Text = "Login";
+            this.welcomeLoginBtn.Click += new System.EventHandler(this.welcomeLoginBtn_Click);
             // 
-            // label2
+            // welcomeRegisterBtn
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(663, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 16);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Register";
+            this.welcomeRegisterBtn.AutoSize = true;
+            this.welcomeRegisterBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.welcomeRegisterBtn.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeRegisterBtn.Location = new System.Drawing.Point(663, 9);
+            this.welcomeRegisterBtn.Name = "welcomeRegisterBtn";
+            this.welcomeRegisterBtn.Size = new System.Drawing.Size(60, 16);
+            this.welcomeRegisterBtn.TabIndex = 1;
+            this.welcomeRegisterBtn.Text = "Register";
             // 
-            // label3
+            // myScheduleLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Cambria", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(571, 170);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(203, 40);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "MySchedule";
+            this.myScheduleLabel.AutoSize = true;
+            this.myScheduleLabel.Font = new System.Drawing.Font("Cambria", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.myScheduleLabel.Location = new System.Drawing.Point(571, 170);
+            this.myScheduleLabel.Name = "myScheduleLabel";
+            this.myScheduleLabel.Size = new System.Drawing.Size(203, 40);
+            this.myScheduleLabel.TabIndex = 2;
+            this.myScheduleLabel.Text = "MySchedule";
             // 
-            // button1
+            // enterBtn
             // 
-            this.button1.AutoSize = true;
-            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.BackColor = System.Drawing.Color.Tan;
-            this.button1.Font = new System.Drawing.Font("Constantia", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(642, 237);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(51, 27);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Enter";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.enterBtn.AutoSize = true;
+            this.enterBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.enterBtn.BackColor = System.Drawing.Color.Tan;
+            this.enterBtn.Font = new System.Drawing.Font("Constantia", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.enterBtn.Location = new System.Drawing.Point(642, 237);
+            this.enterBtn.Name = "enterBtn";
+            this.enterBtn.Size = new System.Drawing.Size(57, 29);
+            this.enterBtn.TabIndex = 3;
+            this.enterBtn.Text = "Enter";
+            this.enterBtn.UseVisualStyleBackColor = false;
+            this.enterBtn.Click += new System.EventHandler(this.welcomeEnterBtn_Click);
             // 
             // Welcome
             // 
@@ -98,14 +101,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Cornsilk;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.enterBtn);
+            this.Controls.Add(this.myScheduleLabel);
+            this.Controls.Add(this.welcomeRegisterBtn);
+            this.Controls.Add(this.welcomeLoginBtn);
+            this.Controls.Add(this.welcomePic);
             this.Name = "Welcome";
             this.Text = "Welcome";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.welcomePic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,11 +116,11 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox welcomePic;
+        private System.Windows.Forms.Label welcomeLoginBtn;
+        private System.Windows.Forms.Label welcomeRegisterBtn;
+        private System.Windows.Forms.Label myScheduleLabel;
+        private System.Windows.Forms.Button enterBtn;
     }
 }
 
