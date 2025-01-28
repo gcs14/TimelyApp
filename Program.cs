@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DesktopSchedulingApp.Forms;
 
 namespace DesktopSchedulingApp
 {
@@ -16,7 +17,7 @@ namespace DesktopSchedulingApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Welcome());
+            Application.Run(new MainScreen());
         }
     }
 }
