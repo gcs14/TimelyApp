@@ -7,24 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DesktopSchedulingApp.Forms;
 
 namespace DesktopSchedulingApp
 {
-    public partial class Welcome : Form
+    public partial class WelcomeScreen : Form
     {
-        
-        public Welcome()
+        public WelcomeScreen()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Login login = new Login();
-            this.Hide();
-            login.ShowDialog();
-            
         }
     }
 }
