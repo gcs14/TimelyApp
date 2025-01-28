@@ -18,18 +18,14 @@ namespace DesktopSchedulingApp
         public Welcome()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void welcomeEnterBtn_Click(object sender, EventArgs e)
         {
-            //Login login = new Login();
-            //this.Hide();
-            //login.ShowDialog();
-
-            this.Close();
-            th = new Thread(OpenLogin);
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();
+            Login login = new Login();
+            this.Hide();
+            login.ShowDialog();
         }
 
         private void welcomeLoginBtn_Click(object sender, EventArgs e)
@@ -37,11 +33,6 @@ namespace DesktopSchedulingApp
             Login login = new Login();
             this.Hide();
             login.ShowDialog();
-        }
-
-        private void OpenLogin(Object obj)
-        {
-            Application.Run(new Login());
         }
     }
 }
