@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using DesktopSchedulingApp.Forms;
+using System.Globalization;
+using System.Diagnostics;
 
 namespace DesktopSchedulingApp
 {
@@ -18,11 +20,12 @@ namespace DesktopSchedulingApp
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            showCorrectLang();
         }
 
         private void Start_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void enterBtn_Start_Click(object sender, EventArgs e)
@@ -46,6 +49,19 @@ namespace DesktopSchedulingApp
             this.Close();
         }
 
-        
+        private void showCorrectLang()
+        {
+            switch (RegionInfo.CurrentRegion.EnglishName)
+            {
+                case "United States":
+                    MessageBox.Show("English");
+                    break;
+                case "Mexico":
+                    MessageBox.Show("Spanish");
+                    break;
+            }
+
+            
+        }
     }
 }
