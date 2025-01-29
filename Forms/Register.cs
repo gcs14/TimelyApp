@@ -20,14 +20,21 @@ namespace DesktopSchedulingApp.Forms
 
         private void startBtn_Register_Click(object sender, EventArgs e)
         {
-            new Welcome().ShowDialog();
+            this.Hide();
+            new Start().ShowDialog();
             this.Close();
         }
 
         private void loginBtn_Register_Click(object sender, EventArgs e)
         {
-            new Register().ShowDialog();
+            this.Hide();
+            new Login().ShowDialog();
             this.Close();
+        }
+
+        private void registerSubmitBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

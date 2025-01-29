@@ -19,17 +19,18 @@ namespace DesktopSchedulingApp.Forms
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            new Welcome().Close();
         }
 
         private void startBtn_Login_Click(object sender, EventArgs e)
         {
-            new Welcome().ShowDialog();
+            this.Hide();
+            new Start().ShowDialog();
             this.Close();
         }
 
         private void registerBtn_Login_Click(object sender, EventArgs e)
         {
+            this.Hide();
             new Register().ShowDialog();
             this.Close();
         }

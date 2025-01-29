@@ -1,6 +1,6 @@
 ﻿namespace DesktopSchedulingApp
 {
-    partial class Welcome
+    partial class Start
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Welcome));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Start));
             this.welcomePic = new System.Windows.Forms.PictureBox();
             this.welcomeLoginBtn = new System.Windows.Forms.Label();
             this.welcomeRegisterBtn = new System.Windows.Forms.Label();
@@ -98,7 +98,7 @@
             this.enterBtn.UseVisualStyleBackColor = false;
             this.enterBtn.Click += new System.EventHandler(this.enterBtn_Start_Click);
             // 
-            // Welcome
+            // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -109,8 +109,9 @@
             this.Controls.Add(this.welcomeRegisterBtn);
             this.Controls.Add(this.welcomeLoginBtn);
             this.Controls.Add(this.welcomePic);
-            this.Name = "Welcome";
-            this.Text = "Welcome";
+            this.Name = "Start";
+            this.Text = "Start";
+            this.Load += new System.EventHandler(this.Start_Load);
             ((System.ComponentModel.ISupportInitialize)(this.welcomePic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
