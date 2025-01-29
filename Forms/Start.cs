@@ -28,8 +28,8 @@ namespace DesktopSchedulingApp
         private void enterBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.Close();
             new Login().ShowDialog();
+            this.Close();
         }
 
         private void loginBtn_Start_Click(object sender, EventArgs e)
