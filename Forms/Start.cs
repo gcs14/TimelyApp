@@ -20,7 +20,7 @@ namespace DesktopSchedulingApp
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            showCorrectLang();
+            FindRegion();
         }
 
         private void Start_Load(object sender, EventArgs e)
@@ -31,14 +31,14 @@ namespace DesktopSchedulingApp
         private void enterBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login().ShowDialog();
+            new Login(CultureInfo.CurrentCulture.ThreeLetterISOLanguageName).ShowDialog();
             this.Close();
         }
 
         private void loginBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login().ShowDialog();
+            new Login(CultureInfo.CurrentCulture.ThreeLetterISOLanguageName).ShowDialog();
             this.Close();
         }
 
@@ -49,19 +49,27 @@ namespace DesktopSchedulingApp
             this.Close();
         }
 
-        private void showCorrectLang()
+        private void FindRegion()
         {
-            switch (RegionInfo.CurrentRegion.EnglishName)
+            string regionName = RegionInfo.CurrentRegion.EnglishName;
+            List<string> spanishSpeakingRegions = ["Spain","Mexico", "Puerto Rico", 
+                "Dominican Republic", "Costa Rico", "Columbia", "Argentina", "Chile", 
+                "Peru", "Venezuela", "Guatemala", "Ecudaor", "Bolivia", "Cuba", "Honduras", 
+                "Paraguay", "El Salvador", "Nicaragua", "Panama", "Uruguay", "Equitorial Guniea"];
+            if (spanishSpeakingRegions.Contains(regionName))
             {
-                case "United States":
-                    MessageBox.Show("English");
-                    break;
-                case "Mexico":
-                    MessageBox.Show("Spanish");
-                    break;
+                TranslateToSpanish();
             }
+        }
 
-            
+        private void TranslateToSpanish()
+        {
+            registerBtn_Start.Text = "Registrar";
+            loginBtn_Start.Text = "Acceder";
+            loginBtn_Start.Location = new Point(853, 10);
+            myScheduleLabel.Text = "MiAgenda";
+            myScheduleLabel.Location = new Point(673, 200);
+            enterBtn.Text = "Entrar";
         }
     }
 }

@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Start));
             welcomePic = new System.Windows.Forms.PictureBox();
-            welcomeLoginBtn = new System.Windows.Forms.Label();
-            welcomeRegisterBtn = new System.Windows.Forms.Label();
-            myScheduleLabel = new System.Windows.Forms.Label();
+            loginBtn_Start = new System.Windows.Forms.Label();
+            registerBtn_Start = new System.Windows.Forms.Label();
             enterBtn = new System.Windows.Forms.Button();
+            myScheduleLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)welcomePic).BeginInit();
             SuspendLayout();
             // 
@@ -49,44 +49,33 @@
             welcomePic.TabIndex = 0;
             welcomePic.TabStop = false;
             // 
-            // welcomeLoginBtn
+            // loginBtn_Start
             // 
-            welcomeLoginBtn.AutoSize = true;
-            welcomeLoginBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            welcomeLoginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            welcomeLoginBtn.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, 0);
-            welcomeLoginBtn.Location = new System.Drawing.Point(869, 10);
-            welcomeLoginBtn.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            welcomeLoginBtn.Name = "welcomeLoginBtn";
-            welcomeLoginBtn.Size = new System.Drawing.Size(47, 18);
-            welcomeLoginBtn.TabIndex = 2;
-            welcomeLoginBtn.Text = "Login";
-            welcomeLoginBtn.Click += loginBtn_Start_Click;
+            loginBtn_Start.AutoSize = true;
+            loginBtn_Start.Cursor = System.Windows.Forms.Cursors.Hand;
+            loginBtn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            loginBtn_Start.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, 0);
+            loginBtn_Start.Location = new System.Drawing.Point(869, 10);
+            loginBtn_Start.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            loginBtn_Start.Name = "loginBtn_Start";
+            loginBtn_Start.Size = new System.Drawing.Size(47, 18);
+            loginBtn_Start.TabIndex = 2;
+            loginBtn_Start.Text = "Login";
+            loginBtn_Start.Click += loginBtn_Start_Click;
             // 
-            // welcomeRegisterBtn
+            // registerBtn_Start
             // 
-            welcomeRegisterBtn.AutoSize = true;
-            welcomeRegisterBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            welcomeRegisterBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            welcomeRegisterBtn.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, 0);
-            welcomeRegisterBtn.Location = new System.Drawing.Point(774, 10);
-            welcomeRegisterBtn.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            welcomeRegisterBtn.Name = "welcomeRegisterBtn";
-            welcomeRegisterBtn.Size = new System.Drawing.Size(67, 18);
-            welcomeRegisterBtn.TabIndex = 1;
-            welcomeRegisterBtn.Text = "Register";
-            welcomeRegisterBtn.Click += registerBtn_Start_Click;
-            // 
-            // myScheduleLabel
-            // 
-            myScheduleLabel.AutoSize = true;
-            myScheduleLabel.Font = new System.Drawing.Font("Cambria", 33F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            myScheduleLabel.Location = new System.Drawing.Point(656, 200);
-            myScheduleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            myScheduleLabel.Name = "myScheduleLabel";
-            myScheduleLabel.Size = new System.Drawing.Size(264, 52);
-            myScheduleLabel.TabIndex = 2;
-            myScheduleLabel.Text = "MySchedule";
+            registerBtn_Start.AutoSize = true;
+            registerBtn_Start.Cursor = System.Windows.Forms.Cursors.Hand;
+            registerBtn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            registerBtn_Start.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, 0);
+            registerBtn_Start.Location = new System.Drawing.Point(774, 10);
+            registerBtn_Start.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            registerBtn_Start.Name = "registerBtn_Start";
+            registerBtn_Start.Size = new System.Drawing.Size(67, 18);
+            registerBtn_Start.TabIndex = 1;
+            registerBtn_Start.Text = "Register";
+            registerBtn_Start.Click += registerBtn_Start_Click;
             // 
             // enterBtn
             // 
@@ -103,6 +92,17 @@
             enterBtn.UseVisualStyleBackColor = false;
             enterBtn.Click += enterBtn_Start_Click;
             // 
+            // myScheduleLabel
+            // 
+            myScheduleLabel.AutoSize = true;
+            myScheduleLabel.Font = new System.Drawing.Font("Cambria", 33F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            myScheduleLabel.Location = new System.Drawing.Point(656, 200);
+            myScheduleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            myScheduleLabel.Name = "myScheduleLabel";
+            myScheduleLabel.Size = new System.Drawing.Size(264, 52);
+            myScheduleLabel.TabIndex = 2;
+            myScheduleLabel.Text = "MySchedule";
+            // 
             // Start
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -111,8 +111,8 @@
             ClientSize = new System.Drawing.Size(933, 519);
             Controls.Add(enterBtn);
             Controls.Add(myScheduleLabel);
-            Controls.Add(welcomeRegisterBtn);
-            Controls.Add(welcomeLoginBtn);
+            Controls.Add(registerBtn_Start);
+            Controls.Add(loginBtn_Start);
             Controls.Add(welcomePic);
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             Name = "Start";
@@ -126,10 +126,10 @@
         #endregion
 
         private System.Windows.Forms.PictureBox welcomePic;
-        private System.Windows.Forms.Label welcomeLoginBtn;
-        private System.Windows.Forms.Label welcomeRegisterBtn;
-        private System.Windows.Forms.Label myScheduleLabel;
+        private System.Windows.Forms.Label loginBtn_Start;
+        private System.Windows.Forms.Label registerBtn_Start;
         private System.Windows.Forms.Button enterBtn;
+        private System.Windows.Forms.Label myScheduleLabel;
     }
 }
 
