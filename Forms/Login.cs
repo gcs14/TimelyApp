@@ -16,27 +16,22 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class Login : Form
     {
-        string language;
+        RegionInfo ri;
         public Login()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        public Login(string language)
+        public Login(RegionInfo ri)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.language = language;
+            this.ri = ri;
 
-            if (language.Equals("spa"))
+            if (Language.SpanishSpeaking.Contains(ri.EnglishName))
             {
-                startBtn_Login.Text = "Comenzar";
-                registerBtn_Login.Text = "Registrar";
-                welcomeLabel_Login.Text = "¡Bienvenido de nuevo!";
-                usernameLabel_Login.Text = "Nombre de usuario";
-                passwordLabel_Login.Text = "Contraseña";
-                loginSubmitBtn.Text = "Enviar";
+                TranslateToSpanish_Login();
             }
         }
 
@@ -50,13 +45,25 @@ namespace DesktopSchedulingApp.Forms
         private void registerBtn_Login_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Register().ShowDialog();
+            new Register(ri).ShowDialog();
             this.Close();
         }
 
         private void loginSubmitBtn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void TranslateToSpanish_Login()
+        {
+            startBtn_Login.Text = "< Comenzar";
+            registerBtn_Login.Text = "Registrar";
+            welcomeLabel_Login.Text = "¡Bienvenido \nDe Nuevo!";
+            welcomeLabel_Login.Font = new Font("Cambria", 30, FontStyle.Bold);
+            welcomeLabel_Login.Location = new Point(656, 70);
+            usernameLabel_Login.Text = "Nombre de usuario";
+            passwordLabel_Login.Text = "Contraseña";
+            loginSubmitBtn.Text = "Enviar";
         }
     }
 }

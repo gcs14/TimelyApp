@@ -16,6 +16,7 @@ namespace DesktopSchedulingApp
 {
     public partial class Start : Form
     {
+        RegionInfo currentRegion = RegionInfo.CurrentRegion;
         public Start()
         {
             InitializeComponent();
@@ -31,32 +32,28 @@ namespace DesktopSchedulingApp
         private void enterBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login(CultureInfo.CurrentCulture.ThreeLetterISOLanguageName).ShowDialog();
+            new Login(currentRegion).ShowDialog();
             this.Close();
         }
 
         private void loginBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login(CultureInfo.CurrentCulture.ThreeLetterISOLanguageName).ShowDialog();
+            new Login(currentRegion).ShowDialog();
             this.Close();
         }
 
         private void registerBtn_Start_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Register().ShowDialog();
+            new Register(currentRegion).ShowDialog();
             this.Close();
         }
 
         private void FindRegion()
         {
             string regionName = RegionInfo.CurrentRegion.EnglishName;
-            List<string> spanishSpeakingRegions = ["Spain","Mexico", "Puerto Rico", 
-                "Dominican Republic", "Costa Rico", "Columbia", "Argentina", "Chile", 
-                "Peru", "Venezuela", "Guatemala", "Ecudaor", "Bolivia", "Cuba", "Honduras", 
-                "Paraguay", "El Salvador", "Nicaragua", "Panama", "Uruguay", "Equitorial Guniea"];
-            if (spanishSpeakingRegions.Contains(regionName))
+            if (Language.SpanishSpeaking.Contains(regionName))
             {
                 TranslateToSpanish();
             }
