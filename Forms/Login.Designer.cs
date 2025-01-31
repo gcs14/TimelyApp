@@ -38,7 +38,9 @@
             registerBtn_Login = new System.Windows.Forms.Label();
             welcomePic_Login = new System.Windows.Forms.PictureBox();
             startBtn_Login = new System.Windows.Forms.Label();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)welcomePic_Login).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // welcomeLabel_Login
@@ -61,7 +63,7 @@
             username_Login.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             username_Login.Name = "username_Login";
             username_Login.Size = new System.Drawing.Size(209, 27);
-            username_Login.TabIndex = 4;
+            username_Login.TabIndex = 1;
             // 
             // password_Login
             // 
@@ -73,7 +75,7 @@
             password_Login.Name = "password_Login";
             password_Login.PasswordChar = '*';
             password_Login.Size = new System.Drawing.Size(209, 27);
-            password_Login.TabIndex = 4;
+            password_Login.TabIndex = 2;
             // 
             // loginSubmitBtn
             // 
@@ -85,7 +87,7 @@
             loginSubmitBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             loginSubmitBtn.Name = "loginSubmitBtn";
             loginSubmitBtn.Size = new System.Drawing.Size(82, 33);
-            loginSubmitBtn.TabIndex = 5;
+            loginSubmitBtn.TabIndex = 3;
             loginSubmitBtn.Text = "Submit";
             loginSubmitBtn.UseVisualStyleBackColor = false;
             loginSubmitBtn.Click += loginSubmitBtn_Click;
@@ -122,7 +124,7 @@
             registerBtn_Login.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             registerBtn_Login.Name = "registerBtn_Login";
             registerBtn_Login.Size = new System.Drawing.Size(67, 18);
-            registerBtn_Login.TabIndex = 8;
+            registerBtn_Login.TabIndex = 5;
             registerBtn_Login.Text = "Register";
             registerBtn_Login.Click += registerBtn_Login_Click;
             // 
@@ -148,9 +150,21 @@
             startBtn_Login.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             startBtn_Login.Name = "startBtn_Login";
             startBtn_Login.Size = new System.Drawing.Size(54, 18);
-            startBtn_Login.TabIndex = 8;
+            startBtn_Login.TabIndex = 4;
             startBtn_Login.Text = "< Start";
             startBtn_Login.Click += startBtn_Login_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            pictureBox1.Image = Properties.Resources.hidden;
+            pictureBox1.Location = new System.Drawing.Point(885, 286);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(32, 27);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 7;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += passwordHide_Login_Click;
             // 
             // Login
             // 
@@ -158,6 +172,7 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Cornsilk;
             ClientSize = new System.Drawing.Size(933, 519);
+            Controls.Add(pictureBox1);
             Controls.Add(startBtn_Login);
             Controls.Add(registerBtn_Login);
             Controls.Add(passwordLabel_Login);
@@ -171,6 +186,7 @@
             Name = "Login";
             Text = "Login";
             ((System.ComponentModel.ISupportInitialize)welcomePic_Login).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -186,5 +202,6 @@
         private System.Windows.Forms.Label passwordLabel_Login;
         private System.Windows.Forms.Label registerBtn_Login;
         private System.Windows.Forms.Label startBtn_Login;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

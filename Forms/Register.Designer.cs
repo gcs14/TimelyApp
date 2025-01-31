@@ -38,7 +38,9 @@
             username_Register = new System.Windows.Forms.TextBox();
             createAccountLabel = new System.Windows.Forms.Label();
             startBtn_Register = new System.Windows.Forms.Label();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)welcomePic_Register).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // welcomePic_Register
@@ -151,12 +153,25 @@
             startBtn_Register.Text = "< Start";
             startBtn_Register.Click += startBtn_Register_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            pictureBox1.Image = Properties.Resources.hidden;
+            pictureBox1.Location = new System.Drawing.Point(885, 286);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(32, 27);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 18;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += passwordHide_Register_Click;
+            // 
             // Register
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Cornsilk;
             ClientSize = new System.Drawing.Size(933, 519);
+            Controls.Add(pictureBox1);
             Controls.Add(startBtn_Register);
             Controls.Add(passwordLabel_Register);
             Controls.Add(usernameLabel_Register);
@@ -170,6 +185,7 @@
             Name = "Register";
             Text = "Register";
             ((System.ComponentModel.ISupportInitialize)welcomePic_Register).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -185,5 +201,6 @@
         private System.Windows.Forms.TextBox username_Register;
         private System.Windows.Forms.Label createAccountLabel;
         private System.Windows.Forms.Label startBtn_Register;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

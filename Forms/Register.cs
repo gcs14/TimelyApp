@@ -14,6 +14,7 @@ namespace DesktopSchedulingApp.Forms
     public partial class Register : Form
     {
         RegionInfo ri;
+        bool passwordHidden;
         public Register()
         {
             InitializeComponent();
@@ -49,6 +50,21 @@ namespace DesktopSchedulingApp.Forms
         private void registerSubmitBtn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void passwordHide_Register_Click(object sender, EventArgs e)
+        {
+            if (passwordHidden)
+            {
+                pictureBox1.Image = DesktopSchedulingApp.Properties.Resources.hidden;
+                password_Register.PasswordChar = '*';
+            }
+            else
+            {
+                pictureBox1.Image = DesktopSchedulingApp.Properties.Resources.show;
+                password_Register.PasswordChar = '\0';
+            }
+            passwordHidden = !passwordHidden;
         }
 
         private void TranslateToSpnaish_Register()

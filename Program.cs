@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesktopSchedulingApp.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ namespace DesktopSchedulingApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            DBConnection.StartConnection();
             Application.Run(new Start());
+            DBConnection.CloseConnection();
         }
     }
 }
