@@ -22,6 +22,8 @@ namespace DesktopSchedulingApp.Forms
         string username;
         string password;
         bool passwordHidden;
+        bool isSpanish = false;
+        int loginCount = 0;
 
         public Login()
         {
@@ -37,6 +39,7 @@ namespace DesktopSchedulingApp.Forms
 
             if (Language.SpanishSpeaking.Contains(ri.EnglishName))
             {
+                isSpanish = true;
                 TranslateToSpanish_Login();
             }
         }
@@ -57,27 +60,17 @@ namespace DesktopSchedulingApp.Forms
 
         private void loginSubmitBtn_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT Username, Password FROM User";
-            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-
-            if (rdr.HasRows)
+            if (loginCount <= 1)
             {
-                while (rdr.Read())
+                LoginValidation();
+            }
+            else
+            {
+                if (isSpanish)
                 {
-                    username = rdr["username"].ToString();
-                    password = rdr["password"].ToString();
-                    //MessageBox.Show($"Username: {username}, Password: {password}");
+                    MessageBox.Show("Un usuario ya ha iniciado sesión.");
                 }
-                rdr.Close();
-                if (username_Login.Text.Equals(username) && password_Login.Text.Equals(password))
-                {
-                    MessageBox.Show("Your username and password worked. You made it in bruv!");
-                }
-                else
-                {
-                    MessageBox.Show("You Wasteman! Thats not it!");
-                }
+                MessageBox.Show("A user is already logged in.");
             }
         }
 
@@ -106,6 +99,71 @@ namespace DesktopSchedulingApp.Forms
                 password_Login.PasswordChar = '\0';
             }
             passwordHidden = !passwordHidden;
+        }
+
+        private bool InputEvaluation(string username, string password)
+        {
+            bool validated = false;
+            if (!username_Login.Text.Equals("") && !password_Login.Text.Equals(""))
+            {
+                if (username_Login.Text.Equals(username) && password_Login.Text.Equals(password))
+                {
+                    if (isSpanish)
+                    {
+                        MessageBox.Show("Inicio de sesión exitoso.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Login successful.");
+                    }
+                    validated = true;
+                }
+                else
+                {
+                    if (isSpanish)
+                    {
+                        MessageBox.Show("Ha ingresado un nombre de usuario y contraseña no válidos.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("You've entered an invalid username or password.");
+                    }
+                }
+            }
+            else
+            {
+                if (isSpanish)
+                {
+                    MessageBox.Show("El nombre de usuario y/o contraseña no pueden estar vacíos.");
+                }
+                MessageBox.Show("Username and/or password can not be empty.");
+            }
+            return validated;
+        }
+
+        private void LoginValidation()
+        {
+            string sql = "SELECT Username, Password FROM User WHERE Username =@Username AND Password =@Password";
+            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@Username", username_Login.Text);
+            cmd.Parameters.AddWithValue("@Password", password_Login.Text);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                //MessageBox.Show(rdr["Username"] + "---" + rdr["Password"]);
+                username = rdr["username"].ToString();
+                password = rdr["password"].ToString();
+            }
+            rdr.Close();
+            if (InputEvaluation(username, password))
+            {
+                //loginCount++;
+                this.Hide();
+                new Dashboard().ShowDialog();
+                this.Close();
+            }
+            
         }
     }
 }

@@ -104,6 +104,7 @@
             RegisterSubmitBtn.TabIndex = 14;
             RegisterSubmitBtn.Text = "Submit";
             RegisterSubmitBtn.UseVisualStyleBackColor = false;
+            RegisterSubmitBtn.Click += registerSubmitBtn_Click;
             // 
             // password_Register
             // 
