@@ -76,6 +76,7 @@ namespace DesktopSchedulingApp.Forms
 
         private void TranslateToSpanish_Login()
         {
+            // need to use CultureInfo.CurrentCulture.TwoLetterISOLanguageName
             startBtn_Login.Text = "< Comenzar";
             registerBtn_Login.Text = "Registrar";
             welcomeLabel_Login.Text = "¡Bienvenido \nDe Nuevo!";

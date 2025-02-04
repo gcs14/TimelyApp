@@ -65,9 +65,9 @@
             loginBtn_Register.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             loginBtn_Register.Name = "loginBtn_Register";
             loginBtn_Register.Size = new System.Drawing.Size(47, 18);
-            loginBtn_Register.TabIndex = 10;
+            loginBtn_Register.TabIndex = 5;
             loginBtn_Register.Text = "Login";
-            loginBtn_Register.Click += loginBtn_Register_Click;
+            loginBtn_Register.Click += LoginBtn_Click;
             // 
             // passwordLabel_Register
             // 
@@ -101,10 +101,10 @@
             RegisterSubmitBtn.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             RegisterSubmitBtn.Name = "RegisterSubmitBtn";
             RegisterSubmitBtn.Size = new System.Drawing.Size(82, 33);
-            RegisterSubmitBtn.TabIndex = 14;
+            RegisterSubmitBtn.TabIndex = 3;
             RegisterSubmitBtn.Text = "Submit";
             RegisterSubmitBtn.UseVisualStyleBackColor = false;
-            RegisterSubmitBtn.Click += registerSubmitBtn_Click;
+            RegisterSubmitBtn.Click += SubmitBtn_Click;
             // 
             // password_Register
             // 
@@ -116,7 +116,7 @@
             password_Register.Name = "password_Register";
             password_Register.PasswordChar = '*';
             password_Register.Size = new System.Drawing.Size(209, 27);
-            password_Register.TabIndex = 12;
+            password_Register.TabIndex = 2;
             // 
             // username_Register
             // 
@@ -127,7 +127,7 @@
             username_Register.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             username_Register.Name = "username_Register";
             username_Register.Size = new System.Drawing.Size(209, 27);
-            username_Register.TabIndex = 13;
+            username_Register.TabIndex = 1;
             // 
             // createAccountLabel
             // 
@@ -150,9 +150,9 @@
             startBtn_Register.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             startBtn_Register.Name = "startBtn_Register";
             startBtn_Register.Size = new System.Drawing.Size(54, 18);
-            startBtn_Register.TabIndex = 17;
+            startBtn_Register.TabIndex = 4;
             startBtn_Register.Text = "< Start";
-            startBtn_Register.Click += startBtn_Register_Click;
+            startBtn_Register.Click += StartBtn_Click;
             // 
             // pictureBox1
             // 

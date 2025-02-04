@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using DesktopSchedulingApp.Repository;
-using MySql.Data.MySqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using DesktopSchedulingApp.Models;
 
 namespace DesktopSchedulingApp.Forms
 {
@@ -23,6 +24,7 @@ namespace DesktopSchedulingApp.Forms
         bool passwordHidden;
         bool isSpanish = false;
         Dictionary<string, string> userCredentials = new Dictionary<string, string>();
+        List<User> allUsers = new List<User>();
 
         public Register()
         {
@@ -38,59 +40,42 @@ namespace DesktopSchedulingApp.Forms
 
             if (Language.SpanishSpeaking.Contains(ri.EnglishName))
             {
+                isSpanish = true;
                 TranslateToSpnaish_Register();
             }
         }
 
-        private void startBtn_Register_Click(object sender, EventArgs e)
+        private void TranslateToSpnaish_Register()
         {
-            this.Hide();
-            new Start().ShowDialog();
-            this.Close();
+            startBtn_Register.Text = "< Comenzar";
+            loginBtn_Register.Text = "Acceder";
+            loginBtn_Register.Location = new Point(853, 10);
+            createAccountLabel.Text = "Crear Cuenta";
+            createAccountLabel.Font = new Font("Cambria", 32, FontStyle.Bold);
+            usernameLabel_Register.Text = "Nombre de usuario";
+            passwordLabel_Register.Text = "Contraseña";
+            RegisterSubmitBtn.Text = "Enviar";
         }
 
-        private void loginBtn_Register_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            new Login(ri).ShowDialog();
-            this.Close();
-        }
+        //private void ReadUserTable(string sql)
+        //{
+        //    MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+        //    MySqlDataReader rdr = cmd.ExecuteReader();
 
-        private void registerSubmitBtn_Click(object sender, EventArgs e)
-        {
-            string sql = "SELECT Username, Password FROM User";
-            ReadUserTable(sql);
-            //MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            //MySqlDataReader rdr = cmd.ExecuteReader();
-
-            //if (rdr.HasRows)
-            //{
-            //    while (rdr.Read())
-            //    {
-            //        username = rdr["username"].ToString();
-            //        password = rdr["password"].ToString();
-            //        userCredentials.Add(username, password);
-            //    }
-            //    rdr.Close();
-            //}
-                string x = "";
-                foreach (var user in userCredentials)
-                {
-                    x += user.Value + ", " + user.Key + "\n";
-                }
-                MessageBox.Show(x);
-
-                try
-                {
-                    userCredentials.ContainsKey(username_Register.Text);
-                    MessageBox.Show("Success");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Username is already in use.");
-                }
-            //}
-        }
+        //    if (rdr.HasRows)
+        //    {
+        //        while (rdr.Read())
+        //        {
+        //            username = rdr["username"].ToString();
+        //            password = rdr["password"].ToString();
+        //            if (!userCredentials.ContainsKey(username))
+        //            {
+        //                userCredentials.Add(username, password);
+        //            }
+        //        }
+        //        rdr.Close();
+        //    }
+        //}
 
         private void ReadUserTable(string sql)
         {
@@ -101,15 +86,33 @@ namespace DesktopSchedulingApp.Forms
             {
                 while (rdr.Read())
                 {
-                    username = rdr["username"].ToString();
-                    password = rdr["password"].ToString();
-                    if (!userCredentials.ContainsKey(username))
-                    {
-                        userCredentials.Add(username, password);
-                    }
+                    allUsers.Add(new User(
+                        (int)cmd.LastInsertedId + 1, 
+                        rdr["username"].ToString(),
+                        rdr["password"].ToString(),
+                        (byte)rdr["active"],
+                        (DateTime)rdr["createTime"],
+                        rdr["createdBy"].ToString(),
+                        (DateTime)rdr["lastUpdate"],
+                        rdr["lastUpdatedBy"].ToString()
+                        ));
                 }
                 rdr.Close();
             }
+        }
+
+        private void StartBtn_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new Start().ShowDialog();
+            this.Close();
+        }
+
+        private void LoginBtn_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new Login(ri).ShowDialog();
+            this.Close();
         }
 
         private void passwordHide_Register_Click(object sender, EventArgs e)
@@ -127,40 +130,79 @@ namespace DesktopSchedulingApp.Forms
             passwordHidden = !passwordHidden;
         }
 
-        private void TranslateToSpnaish_Register()
+        private void SubmitBtn_Click(object sender, EventArgs e)
         {
-            startBtn_Register.Text = "< Comenzar";
-            loginBtn_Register.Text = "Acceder";
-            loginBtn_Register.Location = new Point(853, 10);
-            createAccountLabel.Text = "Crear Cuenta";
-            createAccountLabel.Font = new Font("Cambria", 32, FontStyle.Bold);
-            usernameLabel_Register.Text = "Nombre de usuario";
-            passwordLabel_Register.Text = "Contraseña";
-            RegisterSubmitBtn.Text = "Enviar";
-        }
+            string sql = "SELECT * FROM User";
+            ReadUserTable(sql);
+            foreach (var user in allUsers)
+            {
+                MessageBox.Show($"{user.UserID}, {user.UserName}, {user.Password}");
+            }
+            //string sql = "SELECT Username, Password FROM User";
+            //ReadUserTable(sql);
+            //string x = "";
 
-        private bool RegisterInputEvaluation(string username, string password)
+            //string cmdInsert = "INSERT INTO inf(name, surname) VALUES (@username, @password)";
+            //MySqlCommand cmd = new MySqlCommand(cmdInsert, DBConnection.conn);
+            //cmd.Parameters.AddWithValue("@id", cmd.LastInsertedId + 1);
+            //cmd.Parameters.AddWithValue("@username", username_Register.Text);
+            //cmd.Parameters.AddWithValue("@password", password_Register.Text);
+            //cmd.Parameters.AddWithValue("@active", 1);
+            //cmd.Parameters.AddWithValue("@active", 1);
+            //cmd.ExecuteNonQuery();
+
+            //if (!userCredentials.ContainsKey(username_Register.Text))
+            //{
+            //    ValidateInput();
+            //}
+            //MessageBox.Show("Username is already in use.");
+        }
+        
+        private bool ValidateInput()
         {
             bool validated = false;
-            if (!username_Register.Text.Equals("") && !password_Register.Text.Equals(""))
+            switch (isSpanish)
             {
-                if (isSpanish)
-                {
-                    MessageBox.Show("User successfully registered.");
-                }
-                else
-                {
-                    MessageBox.Show("Usuario registrado exitosamente.");
-                }
-                validated = true;
-            }
-            else
-            {
-                if (isSpanish)
-                {
+                case true:
+                    if (!username_Register.Text.Equals("") && !password_Register.Text.Equals(""))
+                    {
+                        if (int.TryParse(username_Register.Text, out _))
+                        {
+                            MessageBox.Show("El nombre de usuario no puede ser un número.");
+                        }
+                        if (password_Register.Text.Length < 3)
+                        {
+                            MessageBox.Show("La contraseña debe tener más de tres caracteres.");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Usuario registrado exitosamente.");
+                            validated = true;
+                        }
+                        break;
+                    }
                     MessageBox.Show("El nombre de usuario y/o contraseña no pueden estar vacíos.");
-                }
-                MessageBox.Show("Username and/or password can not be empty.");
+                    break;
+                case false:
+                    if (!username_Register.Text.Equals("") && !password_Register.Text.Equals(""))
+                    {
+                        if (int.TryParse(username_Register.Text, out _))
+                        {
+                            MessageBox.Show("Username can not be a number.");
+                        }
+                        if (password_Register.Text.Length < 3)
+                        {
+                            MessageBox.Show("Password must be longer than three characters.");
+                        }
+                        else
+                        {
+                            MessageBox.Show("User successfully registered.");
+                        }
+                        break;
+                    }
+                    MessageBox.Show("Username and/or password can not be empty.");
+                    validated = true;
+                    break;
             }
             return validated;
         }
