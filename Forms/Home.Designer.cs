@@ -1,6 +1,6 @@
 ﻿namespace DesktopSchedulingApp.Forms
 {
-    partial class Dashboard
+    partial class Home
     {
         /// <summary>
         /// Required designer variable.

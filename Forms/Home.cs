@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
 {
-    public partial class Dashboard : Form
+    public partial class Home : Form
     {
-        public Dashboard()
+        public Home()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;

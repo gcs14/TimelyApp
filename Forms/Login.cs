@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,13 +7,9 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DesktopSchedulingApp.Forms;
 using DesktopSchedulingApp.Repository;
-using Microsoft.Win32;
-using MySql.Data.MySqlClient;
 
 namespace DesktopSchedulingApp.Forms
 {
@@ -44,21 +41,7 @@ namespace DesktopSchedulingApp.Forms
             }
         }
 
-        private void startBtn_Login_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            new Start().ShowDialog();
-            this.Close();
-        }
-
-        private void registerBtn_Login_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            new Register(ri).ShowDialog();
-            this.Close();
-        }
-
-        private void loginSubmitBtn_Click(object sender, EventArgs e)
+        private void EnterBtn_Click(object sender, EventArgs e)
         {
             if (loginCount <= 1)
             {
@@ -77,27 +60,23 @@ namespace DesktopSchedulingApp.Forms
         private void TranslateToSpanish_Login()
         {
             // need to use CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-            startBtn_Login.Text = "< Comenzar";
-            registerBtn_Login.Text = "Registrar";
-            welcomeLabel_Login.Text = "¡Bienvenido \nDe Nuevo!";
-            welcomeLabel_Login.Font = new Font("Cambria", 30, FontStyle.Bold);
-            welcomeLabel_Login.Location = new Point(656, 70);
-            usernameLabel_Login.Text = "Nombre de usuario";
-            passwordLabel_Login.Text = "Contraseña";
-            loginSubmitBtn.Text = "Enviar";
+            loginLabel.Text = "ACCEDAR";
+            usernameLabel.Text = "NOMBRE DE USUARIO";
+            passwordLabel.Text = "CONTRASEÑA";
+            enterBtn.Text = "ENVIAR";
         }
 
-        private void passwordHide_Login_Click(object sender, EventArgs e)
+        private void passwordHide_Click(object sender, EventArgs e)
         {
             if (passwordHidden)
             {
                 pictureBox1.Image = DesktopSchedulingApp.Properties.Resources.hidden;
-                password_Login.PasswordChar = '*';
+                passwordText.PasswordChar = '*';
             }
             else
             {
                 pictureBox1.Image = DesktopSchedulingApp.Properties.Resources.show;
-                password_Login.PasswordChar = '\0';
+                passwordText.PasswordChar = '\0';
             }
             passwordHidden = !passwordHidden;
         }
@@ -105,9 +84,9 @@ namespace DesktopSchedulingApp.Forms
         private bool InputEvaluation(string username, string password)
         {
             bool validated = false;
-            if (!username_Login.Text.Equals("") && !password_Login.Text.Equals(""))
+            if (!usernameText.Text.Equals("") && !passwordText.Text.Equals(""))
             {
-                if (username_Login.Text.Equals(username) && password_Login.Text.Equals(password))
+                if (usernameText.Text.Equals(username) && passwordText.Text.Equals(password))
                 {
                     if (isSpanish)
                     {
@@ -146,8 +125,8 @@ namespace DesktopSchedulingApp.Forms
         {
             string sql = "SELECT Username, Password FROM User WHERE Username =@Username AND Password =@Password";
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@Username", username_Login.Text);
-            cmd.Parameters.AddWithValue("@Password", password_Login.Text);
+            cmd.Parameters.AddWithValue("@Username", usernameText.Text);
+            cmd.Parameters.AddWithValue("@Password", passwordText.Text);
             MySqlDataReader rdr = cmd.ExecuteReader();
 
             while (rdr.Read())
@@ -161,10 +140,9 @@ namespace DesktopSchedulingApp.Forms
             {
                 //loginCount++;
                 this.Hide();
-                new Dashboard().ShowDialog();
+                new Home().ShowDialog();
                 this.Close();
             }
-            
         }
     }
 }
