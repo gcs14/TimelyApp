@@ -34,7 +34,12 @@ namespace DesktopSchedulingApp.Forms
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ri = ri;
 
-            if (Language.SpanishSpeaking.Contains(ri.EnglishName))
+            //if (Language.SpanishSpeaking.Contains(ri.EnglishName))
+            //{
+            //    isSpanish = true;
+            //    TranslateToSpanish_Login();
+            //}
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
             {
                 isSpanish = true;
                 TranslateToSpanish_Login();
@@ -60,6 +65,7 @@ namespace DesktopSchedulingApp.Forms
         private void TranslateToSpanish_Login()
         {
             // need to use CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+            //CultureInfo currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
             loginLabel.Text = "ACCEDAR";
             usernameLabel.Text = "NOMBRE DE USUARIO";
             passwordLabel.Text = "CONTRASEÑA";
@@ -108,6 +114,7 @@ namespace DesktopSchedulingApp.Forms
                     {
                         MessageBox.Show("You've entered an invalid username or password.");
                     }
+                    ClearText(2);
                 }
             }
             else
@@ -116,7 +123,12 @@ namespace DesktopSchedulingApp.Forms
                 {
                     MessageBox.Show("El nombre de usuario y/o contraseña no pueden estar vacíos.");
                 }
-                MessageBox.Show("Username and/or password can not be empty.");
+                else
+                {
+                    MessageBox.Show("Username and/or password can not be empty.");
+                }
+                usernameError.Visible = true;
+                passwordError.Visible = true;
             }
             return validated;
         }
@@ -131,17 +143,32 @@ namespace DesktopSchedulingApp.Forms
 
             while (rdr.Read())
             {
-                //MessageBox.Show(rdr["Username"] + "---" + rdr["Password"]);
                 username = rdr["username"].ToString();
                 password = rdr["password"].ToString();
             }
             rdr.Close();
             if (InputEvaluation(username, password))
             {
-                //loginCount++;
                 this.Hide();
                 new Home().ShowDialog();
                 this.Close();
+            }
+        }
+
+        private void ClearText(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    usernameText.Text = "";
+                    break;
+                case 1:
+                    passwordText.Text = "";
+                    break;
+                case 2:
+                    usernameText.Text = "";
+                    passwordText.Text = "";
+                    break;
             }
         }
     }

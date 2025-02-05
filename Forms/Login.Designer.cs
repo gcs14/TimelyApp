@@ -32,8 +32,8 @@
             passwordLabel = new System.Windows.Forms.Label();
             enterBtn = new System.Windows.Forms.Button();
             pictureBox1 = new System.Windows.Forms.PictureBox();
-            label4 = new System.Windows.Forms.Label();
-            label5 = new System.Windows.Forms.Label();
+            passwordError = new System.Windows.Forms.Label();
+            usernameError = new System.Windows.Forms.Label();
             passwordText = new System.Windows.Forms.TextBox();
             usernameText = new System.Windows.Forms.TextBox();
             loginLabel = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             // 
             enterBtn.AutoSize = true;
             enterBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            enterBtn.BackColor = System.Drawing.Color.MediumSeaGreen;
+            enterBtn.BackColor = System.Drawing.Color.Silver;
             enterBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             enterBtn.Font = new System.Drawing.Font("Arial", 11F);
             enterBtn.Location = new System.Drawing.Point(202, 345);
@@ -92,27 +92,29 @@
             pictureBox1.TabStop = false;
             pictureBox1.Click += passwordHide_Click;
             // 
-            // label4
+            // passwordError
             // 
-            label4.AutoSize = true;
-            label4.Font = new System.Drawing.Font("Arial Black", 12F);
-            label4.ForeColor = System.Drawing.Color.Red;
-            label4.Location = new System.Drawing.Point(219, 252);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(19, 23);
-            label4.TabIndex = 4;
-            label4.Text = "*";
+            passwordError.AutoSize = true;
+            passwordError.Font = new System.Drawing.Font("Arial Black", 12F);
+            passwordError.ForeColor = System.Drawing.Color.Red;
+            passwordError.Location = new System.Drawing.Point(219, 252);
+            passwordError.Name = "passwordError";
+            passwordError.Size = new System.Drawing.Size(19, 23);
+            passwordError.TabIndex = 4;
+            passwordError.Text = "*";
+            passwordError.Visible = false;
             // 
-            // label5
+            // usernameError
             // 
-            label5.AutoSize = true;
-            label5.Font = new System.Drawing.Font("Arial Black", 12F);
-            label5.ForeColor = System.Drawing.Color.Red;
-            label5.Location = new System.Drawing.Point(219, 168);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(19, 23);
-            label5.TabIndex = 4;
-            label5.Text = "*";
+            usernameError.AutoSize = true;
+            usernameError.Font = new System.Drawing.Font("Arial Black", 12F);
+            usernameError.ForeColor = System.Drawing.Color.Red;
+            usernameError.Location = new System.Drawing.Point(219, 168);
+            usernameError.Name = "usernameError";
+            usernameError.Size = new System.Drawing.Size(19, 23);
+            usernameError.TabIndex = 4;
+            usernameError.Text = "*";
+            usernameError.Visible = false;
             // 
             // passwordText
             // 
@@ -133,14 +135,15 @@
             // 
             // loginLabel
             // 
-            loginLabel.AutoSize = true;
-            loginLabel.Font = new System.Drawing.Font("Arial Black", 35F);
+            loginLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            loginLabel.Font = new System.Drawing.Font("Arial Black", 40F);
             loginLabel.ForeColor = System.Drawing.Color.MediumPurple;
-            loginLabel.Location = new System.Drawing.Point(145, 65);
+            loginLabel.Location = new System.Drawing.Point(0, 0);
             loginLabel.Name = "loginLabel";
-            loginLabel.Size = new System.Drawing.Size(194, 67);
+            loginLabel.Size = new System.Drawing.Size(484, 149);
             loginLabel.TabIndex = 6;
             loginLabel.Text = "LOGIN";
+            loginLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // Login
             // 
@@ -151,8 +154,8 @@
             Controls.Add(loginLabel);
             Controls.Add(usernameText);
             Controls.Add(passwordText);
-            Controls.Add(label5);
-            Controls.Add(label4);
+            Controls.Add(usernameError);
+            Controls.Add(passwordError);
             Controls.Add(pictureBox1);
             Controls.Add(enterBtn);
             Controls.Add(passwordLabel);
@@ -172,8 +175,8 @@
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Button enterBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label passwordError;
+        private System.Windows.Forms.Label usernameError;
         private System.Windows.Forms.TextBox passwordText;
         private System.Windows.Forms.TextBox usernameText;
         private System.Windows.Forms.Label loginLabel;
