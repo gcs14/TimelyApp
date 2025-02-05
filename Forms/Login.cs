@@ -26,6 +26,12 @@ namespace DesktopSchedulingApp.Forms
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
+            {
+                isSpanish = true;
+                TranslateToSpanish_Login();
+            }
         }
 
         public Login(RegionInfo ri)
@@ -39,6 +45,7 @@ namespace DesktopSchedulingApp.Forms
             //    isSpanish = true;
             //    TranslateToSpanish_Login();
             //}
+            MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
             if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
             {
                 isSpanish = true;
