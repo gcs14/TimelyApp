@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesktopSchedulingApp.Service;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +13,20 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class Home : Form
     {
-        public Home()
+        string username;
+        public Home(string currentUserName)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            username = currentUserName;
+            CustomerService.LoadCustomers();
+        }
+
+        private void CustomerBtn_Click(object sender, EventArgs e)
+        {
+            var viewCustomers = new ViewCustomers(username);
+            viewCustomers.MdiParent = this;
+            viewCustomers.Show();
         }
     }
 }

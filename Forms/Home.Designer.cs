@@ -28,33 +28,69 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new System.Windows.Forms.Label();
+            menuStrip1 = new System.Windows.Forms.MenuStrip();
+            customerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            appointmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // label1
+            // menuStrip1
             // 
-            label1.AutoSize = true;
-            label1.Font = new System.Drawing.Font("Segoe UI", 30F);
-            label1.Location = new System.Drawing.Point(413, 226);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(216, 54);
-            label1.TabIndex = 0;
-            label1.Text = "Dashboard";
+            menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { customerToolStripMenuItem, appointmentsToolStripMenuItem, calendarToolStripMenuItem, reportsToolStripMenuItem });
+            menuStrip1.Location = new System.Drawing.Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new System.Drawing.Size(1165, 24);
+            menuStrip1.TabIndex = 1;
+            menuStrip1.Text = "menuStrip1";
             // 
-            // Dashboard
+            // customerToolStripMenuItem
+            // 
+            customerToolStripMenuItem.Name = "customerToolStripMenuItem";
+            customerToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            customerToolStripMenuItem.Text = "Customers";
+            customerToolStripMenuItem.Click += CustomerBtn_Click;
+            // 
+            // appointmentsToolStripMenuItem
+            // 
+            appointmentsToolStripMenuItem.Name = "appointmentsToolStripMenuItem";
+            appointmentsToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
+            appointmentsToolStripMenuItem.Text = "Appointments";
+            // 
+            // calendarToolStripMenuItem
+            // 
+            calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
+            calendarToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            calendarToolStripMenuItem.Text = "Calendar";
+            // 
+            // reportsToolStripMenuItem
+            // 
+            reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
+            reportsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            reportsToolStripMenuItem.Text = "Reports";
+            // 
+            // Home
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1035, 507);
-            Controls.Add(label1);
-            Name = "Dashboard";
+            ClientSize = new System.Drawing.Size(1165, 751);
+            Controls.Add(menuStrip1);
+            IsMdiContainer = true;
+            MainMenuStrip = menuStrip1;
+            Name = "Home";
             Text = "Dashboard";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem customerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem appointmentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportsToolStripMenuItem;
     }
 }
