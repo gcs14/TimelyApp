@@ -10,42 +10,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DesktopSchedulingApp.Repository;
+using DesktopSchedulingApp.Models;
+using DesktopSchedulingApp.Service;
 
 namespace DesktopSchedulingApp.Forms
 {
     public partial class Login : Form
     {
         RegionInfo ri;
-        string username;
+        static string username;
         string password;
         bool passwordHidden;
         bool isSpanish = false;
-        int loginCount = 0;
+        int loginCount;
+        User CurrentUser;
 
         public Login()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
-            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
-            {
-                isSpanish = true;
-                TranslateToSpanish_Login();
-            }
-        }
-
-        public Login(RegionInfo ri)
-        {
-            InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.ri = ri;
-
-            //if (Language.SpanishSpeaking.Contains(ri.EnglishName))
-            //{
-            //    isSpanish = true;
-            //    TranslateToSpanish_Login();
-            //}
-            MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
+            //MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
             if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
             {
                 isSpanish = true;
@@ -71,8 +55,6 @@ namespace DesktopSchedulingApp.Forms
 
         private void TranslateToSpanish_Login()
         {
-            // need to use CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-            //CultureInfo currentCulture = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
             loginLabel.Text = "ACCEDAR";
             usernameLabel.Text = "NOMBRE DE USUARIO";
             passwordLabel.Text = "CONTRASEÑA";
@@ -157,7 +139,7 @@ namespace DesktopSchedulingApp.Forms
             if (InputEvaluation(username, password))
             {
                 this.Hide();
-                new Home().ShowDialog();
+                new Home(username).ShowDialog();
                 this.Close();
             }
         }
