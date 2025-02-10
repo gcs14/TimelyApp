@@ -19,7 +19,7 @@ namespace DesktopSchedulingApp.Forms
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             username = currentUserName;
-            CustomerService.LoadCustomers();
+            //CustomerService.LoadCustomers();
         }
 
         private void CustomerBtn_Click(object sender, EventArgs e)

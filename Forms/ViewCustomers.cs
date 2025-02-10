@@ -28,15 +28,28 @@ namespace DesktopSchedulingApp.Forms
 
         private void PopulateCustomerTable()
         {
-            dataGridView1.DataSource = customers;
+            //string sql = "SELECT customer.customerId, customer.customerName, customer.active, address.addressId, address.address, " +
+            //    "address.address2, address.postalCode, address.phone, city.cityId, city.city, country.countryId, country.country " +
+            //    "FROM customer " +
+            //    "JOIN address ON address.addressId = customer.addressId " +
+            //    "JOIN city ON city.cityId = address.cityId " +
+            //    "JOIN country ON country.countryId = city.countryId";
+            //MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            //DataTable dt = new DataTable();
+            //adapter.Fill(dt);
+            //dataGridView1.DataSource = dt;
+
+            CustomerService.LoadCustomers(this);
+
+            //dataGridView1.DataSource = customers;
             dataGridView1.Columns["customerID"].HeaderText = "ID";
             dataGridView1.Columns["customerName"].HeaderText = "Name";
             dataGridView1.Columns["addressId"].HeaderText = "Address ID";
-            dataGridView1.Columns["streetAddress"].HeaderText = "Address";
+            //dataGridView1.Columns["streetAddress"].HeaderText = "Address";
             dataGridView1.Columns["address2"].HeaderText = "Address 2";
             dataGridView1.Columns["postalCode"].HeaderText = "Zip";
-            dataGridView1.Columns["cityName"].HeaderText = "City";
-            dataGridView1.Columns["countryName"].HeaderText = "Country";
+            //dataGridView1.Columns["cityName"].HeaderText = "City";
+            //dataGridView1.Columns["countryName"].HeaderText = "Country";
             //dataGridView1.Columns["active"].Visible = false;
             //dataGridView1.Columns["addressId"].Visible = false;
             //dataGridView1.Columns["address2"].Visible = false;
@@ -62,9 +75,9 @@ namespace DesktopSchedulingApp.Forms
             CustomerService.DeleteCustomer(selectedCustomer);
         }
 
-        private void CustomerSelection (object sender, EventArgs e)
-        {
-            selectedCustomer = (Customer)dataGridView1.CurrentRow.DataBoundItem;
-        }
+        //private void CustomerSelection (object sender, EventArgs e)
+        //{
+        //    selectedCustomer = (Customer)dataGridView1.CurrentRow.DataBoundItem;
+        //}
     }
 }
