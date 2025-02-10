@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Service;
+using System.Drawing.Drawing2D;
 
 namespace DesktopSchedulingApp.Forms
 {
@@ -42,6 +43,7 @@ namespace DesktopSchedulingApp.Forms
             if (loginCount <= 1)
             {
                 LoginValidation();
+
             }
             else
             {
@@ -83,14 +85,14 @@ namespace DesktopSchedulingApp.Forms
             {
                 if (usernameText.Text.Equals(username) && passwordText.Text.Equals(password))
                 {
-                    if (isSpanish)
-                    {
-                        MessageBox.Show("Inicio de sesión exitoso.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Login successful.");
-                    }
+                    //if (isSpanish)
+                    //{
+                    //    MessageBox.Show("Inicio de sesión exitoso.");
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Login successful.");
+                    //}
                     validated = true;
                 }
                 else

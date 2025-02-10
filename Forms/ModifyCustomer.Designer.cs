@@ -41,6 +41,10 @@
             countryComboBox = new System.Windows.Forms.ComboBox();
             activeCheckBtn = new System.Windows.Forms.CheckBox();
             modifyCustomerSubmitBtn = new System.Windows.Forms.Button();
+            address2Text = new System.Windows.Forms.TextBox();
+            address2Label = new System.Windows.Forms.Label();
+            addressText = new System.Windows.Forms.TextBox();
+            addressLabel = new System.Windows.Forms.Label();
             SuspendLayout();
             // 
             // addCustomerLabel
@@ -70,14 +74,14 @@
             customerNameText.Location = new System.Drawing.Point(27, 108);
             customerNameText.Name = "customerNameText";
             customerNameText.Size = new System.Drawing.Size(170, 23);
-            customerNameText.TabIndex = 4;
+            customerNameText.TabIndex = 1;
             // 
             // phoneLabel
             // 
             phoneLabel.AutoSize = true;
             phoneLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             phoneLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            phoneLabel.Location = new System.Drawing.Point(27, 143);
+            phoneLabel.Location = new System.Drawing.Point(227, 81);
             phoneLabel.Name = "phoneLabel";
             phoneLabel.Size = new System.Drawing.Size(108, 20);
             phoneLabel.TabIndex = 5;
@@ -85,10 +89,10 @@
             // 
             // phoneText
             // 
-            phoneText.Location = new System.Drawing.Point(27, 170);
+            phoneText.Location = new System.Drawing.Point(227, 108);
             phoneText.Name = "phoneText";
             phoneText.Size = new System.Drawing.Size(170, 23);
-            phoneText.TabIndex = 6;
+            phoneText.TabIndex = 2;
             // 
             // cityLabel
             // 
@@ -117,14 +121,14 @@
             cityText.Location = new System.Drawing.Point(27, 235);
             cityText.Name = "cityText";
             cityText.Size = new System.Drawing.Size(170, 23);
-            cityText.TabIndex = 9;
+            cityText.TabIndex = 5;
             // 
             // postalText
             // 
             postalText.Location = new System.Drawing.Point(227, 235);
             postalText.Name = "postalText";
             postalText.Size = new System.Drawing.Size(170, 23);
-            postalText.TabIndex = 10;
+            postalText.TabIndex = 6;
             // 
             // countryLabel
             // 
@@ -143,7 +147,7 @@
             countryComboBox.Location = new System.Drawing.Point(27, 298);
             countryComboBox.Name = "countryComboBox";
             countryComboBox.Size = new System.Drawing.Size(121, 23);
-            countryComboBox.TabIndex = 12;
+            countryComboBox.TabIndex = 7;
             // 
             // activeCheckBtn
             // 
@@ -153,7 +157,7 @@
             activeCheckBtn.Location = new System.Drawing.Point(232, 295);
             activeCheckBtn.Name = "activeCheckBtn";
             activeCheckBtn.Size = new System.Drawing.Size(69, 24);
-            activeCheckBtn.TabIndex = 13;
+            activeCheckBtn.TabIndex = 8;
             activeCheckBtn.Text = "Active";
             activeCheckBtn.UseVisualStyleBackColor = true;
             // 
@@ -166,10 +170,46 @@
             modifyCustomerSubmitBtn.Location = new System.Drawing.Point(165, 347);
             modifyCustomerSubmitBtn.Name = "modifyCustomerSubmitBtn";
             modifyCustomerSubmitBtn.Size = new System.Drawing.Size(75, 32);
-            modifyCustomerSubmitBtn.TabIndex = 14;
+            modifyCustomerSubmitBtn.TabIndex = 9;
             modifyCustomerSubmitBtn.Text = "Submit";
             modifyCustomerSubmitBtn.UseVisualStyleBackColor = false;
             modifyCustomerSubmitBtn.Click += ModifyCustomerSubmitBtn_Click;
+            // 
+            // address2Text
+            // 
+            address2Text.Location = new System.Drawing.Point(227, 170);
+            address2Text.Name = "address2Text";
+            address2Text.Size = new System.Drawing.Size(170, 23);
+            address2Text.TabIndex = 4;
+            // 
+            // address2Label
+            // 
+            address2Label.AutoSize = true;
+            address2Label.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            address2Label.ForeColor = System.Drawing.SystemColors.HighlightText;
+            address2Label.Location = new System.Drawing.Point(227, 147);
+            address2Label.Name = "address2Label";
+            address2Label.Size = new System.Drawing.Size(70, 20);
+            address2Label.TabIndex = 16;
+            address2Label.Text = "Address2";
+            // 
+            // addressText
+            // 
+            addressText.Location = new System.Drawing.Point(27, 170);
+            addressText.Name = "addressText";
+            addressText.Size = new System.Drawing.Size(170, 23);
+            addressText.TabIndex = 3;
+            // 
+            // addressLabel
+            // 
+            addressLabel.AutoSize = true;
+            addressLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            addressLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
+            addressLabel.Location = new System.Drawing.Point(27, 147);
+            addressLabel.Name = "addressLabel";
+            addressLabel.Size = new System.Drawing.Size(62, 20);
+            addressLabel.TabIndex = 16;
+            addressLabel.Text = "Address";
             // 
             // ModifyCustomer
             // 
@@ -177,6 +217,10 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
             ClientSize = new System.Drawing.Size(418, 412);
+            Controls.Add(addressLabel);
+            Controls.Add(address2Label);
+            Controls.Add(addressText);
+            Controls.Add(address2Text);
             Controls.Add(modifyCustomerSubmitBtn);
             Controls.Add(activeCheckBtn);
             Controls.Add(countryComboBox);
@@ -212,5 +256,9 @@
         private System.Windows.Forms.ComboBox countryComboBox;
         private System.Windows.Forms.CheckBox activeCheckBtn;
         private System.Windows.Forms.Button modifyCustomerSubmitBtn;
+        internal System.Windows.Forms.TextBox address2Text;
+        private System.Windows.Forms.Label address2Label;
+        internal System.Windows.Forms.TextBox addressText;
+        private System.Windows.Forms.Label addressLabel;
     }
 }

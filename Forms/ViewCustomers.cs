@@ -1,7 +1,10 @@
 ﻿using DesktopSchedulingApp.Models;
+using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
+using MySql.Data.MySqlClient;
 using System;
 using System.ComponentModel;
+using System.Data;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
@@ -11,15 +14,16 @@ namespace DesktopSchedulingApp.Forms
         Customer selectedCustomer;
         BindingList<Customer> customers = CustomerService.customers;
         string username;
+
         public ViewCustomers(string currentUserName)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             AddressService.ViewAddresses();
+            CityService.ViewCities();
             PopulateCustomerTable();
             username = currentUserName;
-            Customer c = new Customer();
         }
 
         private void PopulateCustomerTable()
@@ -33,10 +37,11 @@ namespace DesktopSchedulingApp.Forms
             dataGridView1.Columns["postalCode"].HeaderText = "Zip";
             dataGridView1.Columns["cityName"].HeaderText = "City";
             dataGridView1.Columns["countryName"].HeaderText = "Country";
+            //dataGridView1.Columns["active"].Visible = false;
             //dataGridView1.Columns["addressId"].Visible = false;
-            dataGridView1.Columns["address2"].Visible = false;
-            dataGridView1.Columns["cityId"].Visible = false;
-            dataGridView1.Columns["countryId"].Visible = false;
+            //dataGridView1.Columns["address2"].Visible = false;
+            //dataGridView1.Columns["cityId"].Visible = false;
+            //dataGridView1.Columns["countryId"].Visible = false;
             dataGridView1.CurrentCell = null;
         }
 

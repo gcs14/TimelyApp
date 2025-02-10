@@ -46,5 +46,17 @@ namespace DesktopSchedulingApp.Models
             CityName = city;
             CountryName = country;
         }
+
+        public Address(int addressId, string address, string address2, string postalCode, string phone, int cityId, string city, string country)
+        {
+            AddressId = addressId;
+            StreetAddress = address;
+            Address2 = address2;
+            PostalCode = postalCode;
+            Phone= phone;
+            CityId = cityId;
+            CityName = city;
+            CountryName = country;
+        }
     }
 }

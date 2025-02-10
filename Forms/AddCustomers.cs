@@ -26,11 +26,16 @@ namespace DesktopSchedulingApp.Forms
         {
             Customer newCustomer = new
                 (
+                CustomerService.GetNewCustomerID(),
                 customerNameText.Text,
+                AddressService.GetNewAddressID(),
                 addressText.Text,
+                address2Text.Text,
                 postalText.Text,
                 phoneText.Text,
+                CityService.GetCityID(cityText.Text),
                 cityText.Text,
+                3,
                 countryComboBox.Text,
                 activeCheckBtn.Checked
                 );
@@ -38,7 +43,7 @@ namespace DesktopSchedulingApp.Forms
 
             AddressService.AddAddress(new Address(
                 newCustomer.AddressId,
-                addressText.Text,
+                address2Text.Text,
                 postalText.Text,
                 phoneText.Text,
                 cityText.Text,
