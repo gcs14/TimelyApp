@@ -15,9 +15,9 @@ namespace DesktopSchedulingApp.Models
 
         public City(int cityId, string city, int countryId)
         {
-            this.CityId = cityId;
-            this.CityName = city;
-            this.CountryId = countryId;
+            CityId = cityId;
+            CityName = city;
+            CountryId = countryId;
         }
     }
 }

@@ -14,9 +14,11 @@ namespace DesktopSchedulingApp.Service
 {
     internal static class AddressService
     {
-        public static BindingList<Address> addresses = [];
+        public static BindingList<Address> Addresses = [];
+        public static List<int> IdList = [];
         //public static Dictionary<int, Address> addressDict = new Dictionary<int, Address>();
-        private static int highestID = -1;
+        private static int highestID = 0;
+        private static int targetId = 0;
 
         private static void ReadAddressData()
         {
@@ -30,13 +32,12 @@ namespace DesktopSchedulingApp.Service
                     (
                         rdr.GetInt32("addressId"),
                         rdr.GetString("address"),
-                        rdr.GetString("address2"),
-                        rdr.GetInt32("cityId"),
-                        rdr.GetString("postalCode"),
-                        rdr.GetString("phone")
+                        rdr.GetString("phone"),
+                        rdr.GetInt32("cityId")
                     );
 
-                addresses.Add(address);
+                Addresses.Add(address);
+                IdList.Add(address.AddressId);
                 if (address.AddressId > highestID)
                 {
                     highestID = address.AddressId;
@@ -50,9 +51,10 @@ namespace DesktopSchedulingApp.Service
             ReadAddressData();
         }
 
+        // Questionable if this is need or relevant
         public static bool AddressIdExisits(int id)
         {
-            foreach (Address address in addresses)
+            foreach (Address address in Addresses)
             {
                 if (address.AddressId == id)
                 {
@@ -62,17 +64,39 @@ namespace DesktopSchedulingApp.Service
             GetNewAddressID();
             return false;
         }
+
+        private static bool AddressExists(Address address)
+        {
+            Boolean exists = false;
+            for (int i = 0; i < Addresses.Count; i++)
+            {
+                if (Addresses[i].AddressId != address.AddressId)
+                {
+                    if (Addresses[i].StreetAddress == address.StreetAddress
+                        && Addresses[i].Phone == address.Phone
+                        && Addresses[i].CityId == address.CityId
+                        && AddressIdExisits(address.AddressId))
+                    {
+                        exists = true;
+                    }
+                }
+            }
+            return exists;
+        }
         
         public static bool DuplicateAddress(Address address)
         {
-            if (addresses.Contains(address))
+            //if (IdList.Contains(address.AddressId))
+            //{
+            //    return true;
+            //}
+            if (Addresses.Contains(address))
             {
                 return true;
             }
-            foreach (Address a in addresses)
+            foreach (Address a in Addresses)
             {
                 if (a.StreetAddress.Equals(address.StreetAddress)
-                    && a.Address2.Equals(address.Address2)
                     && a.Phone.Equals(address.Phone))
                 {
                     return true;
@@ -81,11 +105,11 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
-        public static Address FindByStreetName(string streetName, string address2)
+        public static Address FindByStreetName(string streetName)
         {
-            foreach (Address address in addresses)
+            foreach (Address address in Addresses)
             {
-                if (address.StreetAddress.Equals(streetName) && address.Address2.Equals(address2))
+                if (address.StreetAddress.Equals(streetName))
                 {
                     return address;
                 }
@@ -93,26 +117,27 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
-        public static int GetNewAddressID()
+        public static int GetAddressID(string streetName)
         {
-            return ++highestID;
+            if (FindByStreetName(streetName) != null)
+            {
+                return FindByStreetName(streetName).AddressId;
+            }
+            return GetNewAddressID();
+        }
+
+        private static int GetNewAddressID()
+        {
+            return highestID += 1;
         }
 
         public static void AddAddress(Address address)
         {
-            for (int i = 0; i < addresses.Count; i++)
+            if (AddressExists(address))
             {
-                if (addresses[i].AddressId != address.AddressId)
-                {
-                    if (!(addresses[i].StreetAddress ==  address.StreetAddress
-                        && addresses[i].PostalCode == address.PostalCode
-                        && addresses[i].CityName == address.CityName
-                        && addresses[i].CountryName == address.CountryName))
-                    {
-                        addresses.Add(address);
-                    }
-                }
+                MessageBox.Show("Error: This address already exists.");
             }
+            Addresses.Add(address);
         }
     }
 }

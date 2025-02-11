@@ -85,14 +85,14 @@ namespace DesktopSchedulingApp.Forms
             {
                 if (usernameText.Text.Equals(username) && passwordText.Text.Equals(password))
                 {
-                    //if (isSpanish)
-                    //{
-                    //    MessageBox.Show("Inicio de sesión exitoso.");
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Login successful.");
-                    //}
+                    if (isSpanish)
+                    {
+                        MessageBox.Show("Inicio de sesión exitoso.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Login successful.");
+                    }
                     validated = true;
                 }
                 else
@@ -118,8 +118,7 @@ namespace DesktopSchedulingApp.Forms
                 {
                     MessageBox.Show("Username and/or password can not be empty.");
                 }
-                usernameError.Visible = true;
-                passwordError.Visible = true;
+                ClearText(2);
             }
             return validated;
         }
@@ -152,13 +151,17 @@ namespace DesktopSchedulingApp.Forms
             {
                 case 0:
                     usernameText.Text = "";
+                    usernameError.Visible = true;
                     break;
                 case 1:
                     passwordText.Text = "";
+                    passwordError.Visible = true;
                     break;
                 case 2:
                     usernameText.Text = "";
                     passwordText.Text = "";
+                    usernameError.Visible = true;
+                    passwordError.Visible = true;
                     break;
             }
         }

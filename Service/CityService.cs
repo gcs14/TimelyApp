@@ -12,13 +12,14 @@ namespace DesktopSchedulingApp.Service
 {
     internal static class CityService
     {
-        public static List<City> Cities = new List<City>();
+        public static List<City> Cities = [];
         private static int highestID = 0;
+        private static int targetId = 0;
 
         private static void ReadCityData()
         {
             string sql = "SELECT * FROM city";
-            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+            MySqlCommand cmd = new(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
 
             while (rdr.Read())
@@ -48,41 +49,36 @@ namespace DesktopSchedulingApp.Service
         {
             for (int i = 0; i < Cities.Count; i++)
             {
-                if (Cities[i].CityName == cityName)
+                if (Cities[i].CityName.Equals(cityName))
                 {
+                    targetId = i;
                     return true;
                 }
             }
             return false;
         }
 
-        public static int GetCityID(string cityName)
+        public static int GetCityID(string cityName, int countryId)
         {
-            for (int i = 0; i < Cities.Count; i++)
+            if (CityExists(cityName))
             {
-                if (Cities[i].CityName == cityName)
-                {
-                    return Cities[i].CityId;
-                }
+                return targetId;
             }
             return GetNewCityID();
         }
 
         private static int GetNewCityID()
         {
-            return ++highestID;
+            return highestID += 1;
         }
 
-        public static void AddCity(Address address)
+        public static void AddCity(City city)
         {
-            if (!CityExists(address.CityName))
+            if (CityExists(city.CityName))
             {
-                Cities.Add(new City(
-                    GetNewCityID(),
-                    address.CityName,
-                    address.CountryId
-                    ));
+                MessageBox.Show("Error: This city already exists.");
             }
+            Cities.Add(city);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace DesktopSchedulingApp.Models
 
         public Country(int countryId, string country)
         {
-            this.CountryId = countryId;
-            this.CountryName = country;
+            CountryId = countryId;
+            CountryName = country;
         }
     }
 }

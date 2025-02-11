@@ -24,30 +24,46 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
-            Customer newCustomer = new
-                (
-                CustomerService.GetNewCustomerID(),
-                customerNameText.Text,
-                AddressService.GetNewAddressID(),
-                addressText.Text,
-                phoneText.Text,
-                CityService.GetCityID(cityText.Text),
-                cityText.Text,
-                3,
+            // Validate input through exceptions handling
+            
+
+            // Take care of country info first
+            Country country = new(
+                CountryService.GetCountryID(countryComboBox.Text),
                 countryComboBox.Text
                 );
-            //CustomerService.CreateCustomer("Garrett", AddressService.GetNewAddressID(), 1, DateTime.Now, "no");
-            CustomerService.AddCustomerData(newCustomer);
+            CountryService.AddCountry(country);
 
-            AddressService.AddAddress(new Address(
-                newCustomer.AddressId,
-                address2Text.Text,
-                postalText.Text,
-                phoneText.Text,
+            // Next city info
+            City city = new(
+                CityService.GetCityID(cityText.Text, country.CountryId),
                 cityText.Text,
-                countryComboBox.Text
-                )
-            );
+                country.CountryId
+                );
+            CityService.AddCity(city);
+
+            // Next address info
+            Address address = new(
+                AddressService.GetAddressID(addressText.Text),
+                addressText.Text,
+                phoneText.Text,
+                city.CityId
+                );
+            AddressService.AddAddress(address);
+
+            // Finally customer info
+            Customer customer = new(
+                CustomerService.GetCustomerID(customerNameText.Text),
+                customerNameText.Text,
+                address.AddressId
+                );
+            CustomerService.AddCustomer(customer);
+
+            CustomerService.InsertCountryData(country);
+            CustomerService.InsertCityData(city);
+            CustomerService.InsertAddressData(address);
+            CustomerService.InsertCustomerData(customer);
+
 
             this.Close();
         }

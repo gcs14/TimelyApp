@@ -12,7 +12,7 @@ namespace DesktopSchedulingApp.Forms
     public partial class ViewCustomers : Form
     {
         Customer selectedCustomer;
-        BindingList<Customer> customers = CustomerService.customers;
+        BindingList<Customer> customers = CustomerService.Customers;
         string username;
 
         public ViewCustomers(string currentUserName)
@@ -22,6 +22,7 @@ namespace DesktopSchedulingApp.Forms
 
             AddressService.ViewAddresses();
             CityService.ViewCities();
+            CountryService.ViewCountries();
             PopulateCustomerTable();
             username = currentUserName;
         }
@@ -72,7 +73,14 @@ namespace DesktopSchedulingApp.Forms
 
         private void DeleteCustomerBtn_Click(object sender, EventArgs e)
         {
-            CustomerService.DeleteCustomer(selectedCustomer);
+            //CustomerService.DeleteCustomer(selectedCustomer);
+
+            string deleteQuery = "DELETE FROM your_table WHERE id = @id";
+
+            MySqlConnection conn = new MySqlConnection(deleteQuery);
+            MySqlCommand cmd = new MySqlCommand(deleteQuery, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@id", 1);
+            cmd.ExecuteNonQuery();
         }
 
         //private void CustomerSelection (object sender, EventArgs e)
