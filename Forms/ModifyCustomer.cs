@@ -45,7 +45,7 @@ namespace DesktopSchedulingApp.Forms
             phoneText.Text = currentCustomer.Phone;
             cityText.Text = currentCustomer.CityName;
             postalText.Text = currentCustomer.PostalCode;
-            activeCheckBtn.Checked = currentCustomer.Active;
+            //activeCheckBtn.Checked = currentCustomer.Active;
             countryComboBox.DataSource = ResourceInfo.Countries;
             countryComboBox.Text = currentCustomer.CountryName;
         }
@@ -72,14 +72,11 @@ namespace DesktopSchedulingApp.Forms
                     customerNameText.Text,
                     newAddress.AddressId,
                     newAddress.StreetAddress,
-                    newAddress.Address2,
-                    newAddress.PostalCode,
                     newAddress.Phone,
                     newAddress.CityId,
                     newAddress.CityName,
                     newAddress.CountryId,
-                    newAddress.CountryName,
-                    activeCheckBtn.Checked
+                    newAddress.CountryName
                     );
                 if (AddressService.DuplicateAddress(newAddress))
                 {
@@ -99,14 +96,11 @@ namespace DesktopSchedulingApp.Forms
                     customerNameText.Text,
                     currentCustomer.AddressId,
                     currentCustomer.StreetAddress,
-                    currentCustomer.Address2,
-                    currentCustomer.PostalCode,
                     currentCustomer.Phone,
                     currentCustomer.CityId,
                     currentCustomer.CityName,
                     currentCustomer.CountryId,
-                    currentCustomer.CountryName,
-                    activeCheckBtn.Checked
+                    currentCustomer.CountryName
                     );
                 CustomerService.ModifyCustomer(currentCustomer, newCustomer);
             }

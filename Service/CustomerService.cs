@@ -19,22 +19,47 @@ namespace DesktopSchedulingApp.Service
         public static BindingList<Customer> customers = [];
         private static int customerCount = 0;
 
-        public static void LoadCustomers(ViewCustomers view)
+        public static void LoadCustomerData(ViewCustomers view)
         {
-            //ReadCustomerData();
-
-            string sql = "SELECT customer.customerId, customer.customerName, customer.active, address.addressId, address.address, " +
-                "address.address2, address.postalCode, address.phone, city.cityId, city.city, country.countryId, country.country " +
+            string sql = "SELECT customer.customerId, customer.customerName, address.addressId, address.address, " +
+                "address.phone, city.cityId, city.city, country.countryId, country.country " +
                 "FROM customer " +
                 "JOIN address ON address.addressId = customer.addressId " +
                 "JOIN city ON city.cityId = address.cityId " +
                 "JOIN country ON country.countryId = city.countryId";
 
-            //MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
             view.dataGridView1.DataSource = dt;
+            ReadCustomerData(sql);
+        }
+
+        private static void ReadCustomerData(string sql)
+        {
+            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+
+
+            while (rdr.Read())
+            {
+                Customer c = new Customer
+                    (
+                        rdr.GetInt32("customerId"),
+                        rdr.GetString("customerName"),
+                        rdr.GetInt32("addressId"),
+                        rdr.GetString("address"),
+                        rdr.GetString("phone"),
+                        rdr.GetInt32("cityId"),
+                        rdr.GetString("city"),
+                        rdr.GetInt32("countryId"),
+                        rdr.GetString("country")
+                    );
+                customers.Add(c);
+                customerCount++;
+            }
+            rdr.Close();
         }
 
         //private static void ReadCustomerData()
@@ -46,79 +71,118 @@ namespace DesktopSchedulingApp.Service
         //        "JOIN city ON city.cityId = address.cityId " +
         //        "JOIN country ON country.countryId = city.countryId";
 
-        //    //MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-        //    MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
-        //    DataTable dt = new DataTable();
-        //    adapter.Fill(dt);
-        //    dataGridView1.DataSource = dt;
+            //    //MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+            //    MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            //    DataTable dt = new DataTable();
+            //    adapter.Fill(dt);
+            //    dataGridView1.DataSource = dt;
 
 
-        //    while (rdr.Read())
-        //    {
-        //        Customer c = new Customer
-        //            (
-        //                rdr.GetInt32("customerId"),
-        //                rdr.GetString("customerName"),
-        //                rdr.GetInt32("addressId"),
-        //                rdr.GetString("address"),
-        //                rdr.GetString("address2"),
-        //                rdr.GetString("postalCode"),
-        //                rdr.GetString("phone"),
-        //                rdr.GetInt32("cityId"),
-        //                rdr.GetString("city"),
-        //                rdr.GetInt32("countryId"),
-        //                rdr.GetString("country"),
-        //                rdr.GetBoolean("active")
-        //            );
-        //        customers.Add(c);
-        //        customerCount++;
-        //    }
-        //    rdr.Close();
+            //    while (rdr.Read())
+            //    {
+            //        Customer c = new Customer
+            //            (
+            //                rdr.GetInt32("customerId"),
+            //                rdr.GetString("customerName"),
+            //                rdr.GetInt32("addressId"),
+            //                rdr.GetString("address"),
+            //                rdr.GetString("address2"),
+            //                rdr.GetString("postalCode"),
+            //                rdr.GetString("phone"),
+            //                rdr.GetInt32("cityId"),
+            //                rdr.GetString("city"),
+            //                rdr.GetInt32("countryId"),
+            //                rdr.GetString("country"),
+            //                rdr.GetBoolean("active")
+            //            );
+            //        customers.Add(c);
+            //        customerCount++;
+            //    }
+            //    rdr.Close();
 
-        //    Customer cust = new Customer();
-        //    string sql = "SELECT customer.customerId, customer.customerName, customer.active, address.addressId, address.address, " +
-        //        "address.address2, address.postalCode, address.phone, city.cityId, city.city, country.countryId, country.country " +
-        //        "FROM customer " +
-        //        "JOIN address ON address.addressId = customer.addressId " +
-        //        "JOIN city ON city.cityId = address.cityId " +
-        //        "JOIN country ON country.countryId = city.countryId";
-        //    MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-        //    MySqlDataReader rdr = cmd.ExecuteReader();
+            //    Customer cust = new Customer();
+            //    string sql = "SELECT customer.customerId, customer.customerName, customer.active, address.addressId, address.address, " +
+            //        "address.address2, address.postalCode, address.phone, city.cityId, city.city, country.countryId, country.country " +
+            //        "FROM customer " +
+            //        "JOIN address ON address.addressId = customer.addressId " +
+            //        "JOIN city ON city.cityId = address.cityId " +
+            //        "JOIN country ON country.countryId = city.countryId";
+            //    MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
+            //    MySqlDataReader rdr = cmd.ExecuteReader();
 
-        //    while (rdr.Read())
-        //    {
-        //        Customer c = new Customer
-        //            (
-        //                rdr.GetInt32("customerId"),
-        //                rdr.GetString("customerName"),
-        //                rdr.GetInt32("addressId"),
-        //                rdr.GetString("address"),
-        //                rdr.GetString("address2"),
-        //                rdr.GetString("postalCode"),
-        //                rdr.GetString("phone"),
-        //                rdr.GetInt32("cityId"),
-        //                rdr.GetString("city"),
-        //                rdr.GetInt32("countryId"),
-        //                rdr.GetString("country"),
-        //                rdr.GetBoolean("active")
-        //            );
-        //        customers.Add(c);
-        //        customerCount++;
-        //    }
-        //    rdr.Close();
-        //}
+            //    while (rdr.Read())
+            //    {
+            //        Customer c = new Customer
+            //            (
+            //                rdr.GetInt32("customerId"),
+            //                rdr.GetString("customerName"),
+            //                rdr.GetInt32("addressId"),
+            //                rdr.GetString("address"),
+            //                rdr.GetString("address2"),
+            //                rdr.GetString("postalCode"),
+            //                rdr.GetString("phone"),
+            //                rdr.GetInt32("cityId"),
+            //                rdr.GetString("city"),
+            //                rdr.GetInt32("countryId"),
+            //                rdr.GetString("country"),
+            //                rdr.GetBoolean("active")
+            //            );
+            //        customers.Add(c);
+            //        customerCount++;
+            //    }
+            //    rdr.Close();
+            //}
 
         public static int GetNewCustomerID()
         {
             return ++customerCount;
         }
-        
-        public static void AddCustomer(Customer c)
+
+        public static void CreateCustomer(string name, int addressId, int active, DateTime time, string username)
         {
-            //c.CustomerId = GetNewCustomerID();
-            //c.CityId = CityService.GetCityID(c.CityName);
-            customers.Add(c);
+            MySqlTransaction transaction = DBConnection.conn.BeginTransaction();
+
+            string query = $"INSERT into customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy)" +
+                $"VALUES ('{name}', '{addressId}', {active}, CURRENT_TIMESTAMP, '{username}', '{username}')";
+
+            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Transaction = transaction;
+            cmd.ExecuteNonQuery();
+            transaction.Commit();
+            //conn.Close();
         }
+
+        public static void AddCustomerData(Customer c)
+        {
+            string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
+
+            MySqlCommand cmd = new MySqlCommand(insertCustomerQuery, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@custId", c.CustomerId);
+            cmd.Parameters.AddWithValue("@custName", c.CustomerName);
+            cmd.Parameters.AddWithValue("@addressId", c.AddressId);
+            cmd.Parameters.AddWithValue("@active", false);
+            cmd.Parameters.AddWithValue("@created", "2000-01-01");
+            cmd.Parameters.AddWithValue("@createdBy", "nobody");
+            cmd.Parameters.AddWithValue("@update", "2000-01-01");
+            cmd.Parameters.AddWithValue("@updateBy", "nobody");
+
+            cmd.ExecuteNonQuery();
+
+            //string insertAddressQuery = "INSERT INTO Address (addressId, address) VALUES (@custId, @custName)";
+
+            //MySqlCommand cmd = new MySqlCommand(insertQuery, DBConnection.conn);
+            //cmd.Parameters.AddWithValue("@custId", c.CustomerId);
+            //cmd.Parameters.AddWithValue("@custName", c.CustomerName);
+
+            //int rowsAffected = cmd.ExecuteNonQuery();
+            //MessageBox.Show($"{rowsAffected} row(s) inserted.");
+        }
+
+        //public static void AddCustomer(Customer c)
+        //{
+        //    //customers.Add(c);
+        //}
 
         public static void ModifyCustomer(Customer current, Customer modified)
         {

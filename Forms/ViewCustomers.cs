@@ -39,15 +39,15 @@ namespace DesktopSchedulingApp.Forms
             //adapter.Fill(dt);
             //dataGridView1.DataSource = dt;
 
-            CustomerService.LoadCustomers(this);
+            CustomerService.LoadCustomerData(this);
 
             //dataGridView1.DataSource = customers;
-            dataGridView1.Columns["customerID"].HeaderText = "ID";
-            dataGridView1.Columns["customerName"].HeaderText = "Name";
-            dataGridView1.Columns["addressId"].HeaderText = "Address ID";
+            //dataGridView1.Columns["customerID"].HeaderText = "ID";
+            //dataGridView1.Columns["customerName"].HeaderText = "Name";
+            //dataGridView1.Columns["addressId"].HeaderText = "Address ID";
             //dataGridView1.Columns["streetAddress"].HeaderText = "Address";
-            dataGridView1.Columns["address2"].HeaderText = "Address 2";
-            dataGridView1.Columns["postalCode"].HeaderText = "Zip";
+            //dataGridView1.Columns["address2"].HeaderText = "Address 2";
+            //dataGridView1.Columns["postalCode"].HeaderText = "Zip";
             //dataGridView1.Columns["cityName"].HeaderText = "City";
             //dataGridView1.Columns["countryName"].HeaderText = "Country";
             //dataGridView1.Columns["active"].Visible = false;

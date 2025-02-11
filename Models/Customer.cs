@@ -11,12 +11,11 @@ namespace DesktopSchedulingApp.Models
     {
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public bool Active { get; set; }
 
         public Customer(){ }
 
         // AddCustomer constructor
-        public Customer(string customerName, string address, string postalCode, string phone, string city, string country, bool active)
+        public Customer(string customerName, string address, string postalCode, string phone, string city, string country)
         {
             CustomerId = CustomerService.GetNewCustomerID();
             CustomerName = customerName;
@@ -26,45 +25,36 @@ namespace DesktopSchedulingApp.Models
             Phone = phone;
             CityName = city;
             CountryName = country;
-            Active = active;
         }
 
         //customerID, name, active, address, postal code, phone, city, county
-        public Customer(int customerId, string customerName, int addressId, string address, string address2, string postalCode, string phone, int cityId, string city, int countryId, string country, bool active)
+        public Customer(int customerId, string customerName, int addressId, string address, string phone, int cityId, string city, int countryId, string country)
         {
             CustomerId = customerId;
             CustomerName = customerName;
             AddressId = addressId;
             StreetAddress = address;
-            Address2 = address2;
-            PostalCode = postalCode;
             Phone = phone;
             CityId = cityId;
             CityName = city;
             CountryId = countryId;
             CountryName = country;
-            Active = active;
         }
 
-        public Customer(string customerName, string address, string address2, string postalCode, string phone, string city, string country, bool active)
+        public Customer(string customerName, string address, string phone, string city, string country)
         {
             CustomerName = customerName;
             StreetAddress = address;
-            Address2 = address2;
-            PostalCode = postalCode;
             Phone = phone;
             CityName = city;
             CountryName = country;
-            Active = active;
         }
 
-        public Customer(int customerId, string customerName, string address, string address2, string postalCode, string phone, string city, string country)
+        public Customer(int customerId, string customerName, string address, string phone, string city, string country)
         {
             CustomerId = customerId;
             CustomerName = customerName;
             StreetAddress = address;
-            Address2 = address2;
-            PostalCode = postalCode;
             Phone = phone;
             CityName = city;
             CountryName = country;
