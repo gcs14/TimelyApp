@@ -138,29 +138,30 @@ namespace DesktopSchedulingApp.Service
             return ++customerCount;
         }
 
-        public static void CreateCustomer(string name, int addressId, int active, DateTime time, string username)
-        {
-            MySqlTransaction transaction = DBConnection.conn.BeginTransaction();
+        //public static void CreateCustomer(string name, int addressId, int active, DateTime time, string username)
+        //{
+        //    MySqlTransaction transaction = DBConnection.conn.BeginTransaction();
 
-            string query = $"INSERT into customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy)" +
-                $"VALUES ('{name}', '{addressId}', {active}, CURRENT_TIMESTAMP, '{username}', '{username}')";
+        //    string query = $"INSERT into customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy)" +
+        //        $"VALUES ('{name}', '{addressId}', {active}, CURRENT_TIMESTAMP, '{username}', '{username}')";
 
-            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-            cmd.Transaction = transaction;
-            cmd.ExecuteNonQuery();
-            transaction.Commit();
-            //conn.Close();
-        }
+        //    MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+        //    cmd.Transaction = transaction;
+        //    cmd.ExecuteNonQuery();
+        //    transaction.Commit();
+        //    //conn.Close();
+        //}
 
+        //This is correct but create a Country first then a City then an Address before making a new Customer
         public static void AddCustomerData(Customer c)
         {
-            string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+            string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
 
             MySqlCommand cmd = new MySqlCommand(insertCustomerQuery, DBConnection.conn);
             cmd.Parameters.AddWithValue("@custId", c.CustomerId);
             cmd.Parameters.AddWithValue("@custName", c.CustomerName);
-            cmd.Parameters.AddWithValue("@addressId", c.AddressId);
+            cmd.Parameters.AddWithValue("@addressId", 3);
             cmd.Parameters.AddWithValue("@active", false);
             cmd.Parameters.AddWithValue("@created", "2000-01-01");
             cmd.Parameters.AddWithValue("@createdBy", "nobody");
@@ -168,15 +169,6 @@ namespace DesktopSchedulingApp.Service
             cmd.Parameters.AddWithValue("@updateBy", "nobody");
 
             cmd.ExecuteNonQuery();
-
-            //string insertAddressQuery = "INSERT INTO Address (addressId, address) VALUES (@custId, @custName)";
-
-            //MySqlCommand cmd = new MySqlCommand(insertQuery, DBConnection.conn);
-            //cmd.Parameters.AddWithValue("@custId", c.CustomerId);
-            //cmd.Parameters.AddWithValue("@custName", c.CustomerName);
-
-            //int rowsAffected = cmd.ExecuteNonQuery();
-            //MessageBox.Show($"{rowsAffected} row(s) inserted.");
         }
 
         //public static void AddCustomer(Customer c)

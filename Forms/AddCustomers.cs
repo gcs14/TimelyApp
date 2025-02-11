@@ -36,8 +36,8 @@ namespace DesktopSchedulingApp.Forms
                 3,
                 countryComboBox.Text
                 );
-            CustomerService.CreateCustomer("Garrett", AddressService.GetNewAddressID(), 1, DateTime.Now, "no");
-            //CustomerService.AddCustomerData(newCustomer);
+            //CustomerService.CreateCustomer("Garrett", AddressService.GetNewAddressID(), 1, DateTime.Now, "no");
+            CustomerService.AddCustomerData(newCustomer);
 
             AddressService.AddAddress(new Address(
                 newCustomer.AddressId,
