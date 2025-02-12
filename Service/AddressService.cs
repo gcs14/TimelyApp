@@ -96,8 +96,7 @@ namespace DesktopSchedulingApp.Service
             }
             foreach (Address a in Addresses)
             {
-                if (a.StreetAddress.Equals(address.StreetAddress)
-                    && a.Phone.Equals(address.Phone))
+                if (a.AddressId == address.AddressId)
                 {
                     return true;
                 }

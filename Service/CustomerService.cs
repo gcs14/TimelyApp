@@ -133,37 +133,45 @@ namespace DesktopSchedulingApp.Service
 
         public static void InsertCityData(City city)
         {
-            string insertCityQuery = "INSERT INTO City (cityId, city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+            if (!CityService.DuplicateCity(city))
+            {
+                string insertCityQuery = "INSERT INTO City (cityId, city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES (@cityId, @city, @countryId, @created, @createdBy, @update, @updateBy)";
 
-            MySqlCommand cmd = new MySqlCommand(insertCityQuery, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@cityId", city.CityId);
-            cmd.Parameters.AddWithValue("@city", city.CityName);
-            cmd.Parameters.AddWithValue("@countryId", city.CountryId);
-            cmd.Parameters.AddWithValue("@created", "2000-01-01");
-            cmd.Parameters.AddWithValue("@createdBy", "nobody");
-            cmd.Parameters.AddWithValue("@update", "2000-01-01");
-            cmd.Parameters.AddWithValue("@updateBy", "nobody");
-            cmd.ExecuteNonQuery();
+                MySqlCommand cmd = new MySqlCommand(insertCityQuery, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@cityId", city.CityId);
+                cmd.Parameters.AddWithValue("@city", city.CityName);
+                cmd.Parameters.AddWithValue("@countryId", city.CountryId);
+                cmd.Parameters.AddWithValue("@created", "2000-01-01");
+                cmd.Parameters.AddWithValue("@createdBy", "nobody");
+                cmd.Parameters.AddWithValue("@update", "2000-01-01");
+                cmd.Parameters.AddWithValue("@updateBy", "nobody");
+                cmd.ExecuteNonQuery();
+            }
         }
 
+        // Country and City insert fine but Address is throwing an error (cannot add foriegn key)
+        // Make sure I'm able to add new address into the address table
         public static void InsertAddressData(Address address)
         {
-            string insertAddressQuery = "INSERT INTO Address (addressId, address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+            if (!AddressService.DuplicateAddress(address))
+            {
+                string insertAddressQuery = "INSERT INTO Address (addressId, address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES (@addressId, @address, @address2, @postalCode, @phone, @cityId, @created, @createdBy, @update, @updateBy)";
 
-            MySqlCommand cmd = new MySqlCommand(insertAddressQuery, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@addressId", address.AddressId);
-            cmd.Parameters.AddWithValue("@address", address.StreetAddress);
-            cmd.Parameters.AddWithValue("@address2", "blank");
-            cmd.Parameters.AddWithValue("@postalCode", "blank");
-            cmd.Parameters.AddWithValue("@phone", address.Phone);
-            cmd.Parameters.AddWithValue("@cityId", address.CityId);
-            cmd.Parameters.AddWithValue("@created", "2000-01-01");
-            cmd.Parameters.AddWithValue("@createdBy", "nobody");
-            cmd.Parameters.AddWithValue("@update", "2000-01-01");
-            cmd.Parameters.AddWithValue("@updateBy", "nobody");
-            cmd.ExecuteNonQuery();
+                MySqlCommand cmd = new MySqlCommand(insertAddressQuery, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@addressId", address.AddressId);
+                cmd.Parameters.AddWithValue("@address", address.StreetAddress);
+                cmd.Parameters.AddWithValue("@address2", "blank");
+                cmd.Parameters.AddWithValue("@postalCode", "blank");
+                cmd.Parameters.AddWithValue("@phone", address.Phone);
+                cmd.Parameters.AddWithValue("@cityId", address.CityId);
+                cmd.Parameters.AddWithValue("@created", "2000-01-01");
+                cmd.Parameters.AddWithValue("@createdBy", "nobody");
+                cmd.Parameters.AddWithValue("@update", "2000-01-01");
+                cmd.Parameters.AddWithValue("@updateBy", "nobody");
+                cmd.ExecuteNonQuery();
+            }
         }
 
         

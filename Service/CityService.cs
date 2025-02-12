@@ -58,6 +58,22 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
+        public static bool DuplicateCity(City city)
+        {
+            if (Cities.Contains(city))
+            {
+                return true;
+            }
+            foreach (City c in Cities)
+            {
+                if (c.CityId == city.CityId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static int GetCityID(string cityName, int countryId)
         {
             if (CityExists(cityName))

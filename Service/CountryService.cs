@@ -77,8 +77,7 @@ namespace DesktopSchedulingApp.Service
             }
             foreach (Country c in Countries)
             {
-                if (c.CountryId.Equals(country.CountryId)
-                    || c.CountryName.Equals(country.CountryName))
+                if (c.CountryId == country.CountryId)
                 {
                     return true;
                 }
