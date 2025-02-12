@@ -2,24 +2,17 @@
 using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
 {
     internal static class CustomerService
     {
-        public static BindingList<Customer> Customers = [];
-        private static int customerCount = 0;
-        private static int targetId = 0;
+        public static List<Customer> Customers;
+        public static List<Customer> DBCustomers;
+        private static int highestID = 0;
 
         public static void LoadCustomerData(ViewCustomers view)
         {
@@ -28,7 +21,8 @@ namespace DesktopSchedulingApp.Service
                 "FROM customer " +
                 "JOIN address ON address.addressId = customer.addressId " +
                 "JOIN city ON city.cityId = address.cityId " +
-                "JOIN country ON country.countryId = city.countryId";
+                "JOIN country ON country.countryId = city.countryId " +
+                "ORDER BY customer.customerId";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
@@ -39,10 +33,10 @@ namespace DesktopSchedulingApp.Service
 
         private static void ReadCustomerData(string sql)
         {
+            Customers = [];
+            DBCustomers = [];
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
-
 
             while (rdr.Read())
             {
@@ -51,130 +45,74 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetString("customerName"),
                         rdr.GetInt32("addressId")
                     );
+                DBCustomers.Add(c);
                 Customers.Add(c);
-                customerCount++;
+                if (c.CustomerId > highestID)
+                {
+                    highestID = c.CustomerId;
+                }
             }
             rdr.Close();
         }
 
-        public static bool CustomerExists(string customerName)
+        public static bool CustomerExistsById(int customerId)
         {
-            for (int i = 0; i < Customers.Count; i++)
+            foreach (Customer c in DBCustomers)
             {
-                if (Customers[i].CustomerName.Equals(customerName))
+                if (c.CustomerId == (customerId))
                 {
-                    targetId = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool CustomerExistsByName(string customerName)
+        {
+            foreach (Customer c in Customers)
+            {
+                if (c.CustomerName.Equals(customerName))
+                {
                     return true;
                 }
             }
             return false; 
         }
 
-        public static int GetCustomerID(string customerName)
+        public static Customer FindByCustomerName(string customerName)
         {
-            if (CustomerExists(customerName))
+            foreach (Customer customer in Customers)
             {
-                return targetId;
+                if (customer.CustomerName.Equals(customerName))
+                {
+                    return customer;
+                }
             }
-            return GetNewCustomerID();
+            return null;
         }
 
-        public static int GetNewCustomerID()
+        public static int GetCustomerID(string customerName)
         {
-            return ++customerCount;
+            if (CustomerExistsByName(customerName))
+            {
+                return FindByCustomerName(customerName).CustomerId;
+            }
+            return NewCustomerID();
+        }
+
+        public static int NewCustomerID()
+        {
+            return highestID += 1;
         }
 
         public static void AddCustomer(Customer customer)
         {
-            if (CustomerExists(customer.CustomerName))
+            if (!CustomerExistsByName(customer.CustomerName))
             {
-                MessageBox.Show("Error: This country already exists.");
-            }
-            Customers.Add(customer);
-        }
-
-
-        //This is correct but create a Country first then a City then an Address before making a new Customer
-        public static void InsertCustomerData(Customer customer)
-        {
-            string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
-
-            MySqlCommand cmd = new MySqlCommand(insertCustomerQuery, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@custId", customer.CustomerId);
-            cmd.Parameters.AddWithValue("@custName", customer.CustomerName);
-            cmd.Parameters.AddWithValue("@addressId", customer.AddressId);
-            cmd.Parameters.AddWithValue("@active", false);
-            cmd.Parameters.AddWithValue("@created", "2000-01-01");
-            cmd.Parameters.AddWithValue("@createdBy", "nobody");
-            cmd.Parameters.AddWithValue("@update", "2000-01-01");
-            cmd.Parameters.AddWithValue("@updateBy", "nobody");
-
-            cmd.ExecuteNonQuery();
-        }
-
-        public static void InsertCountryData(Country country)
-        {
-            if (!CountryService.DuplicateCountry(country))
-            {
-                string insertCountryQuery = "INSERT INTO Country (countryId, country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@countryId, @country, @created, @createdBy, @update, @updateBy)";
-
-                MySqlCommand cmd = new MySqlCommand(insertCountryQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@countryId", country.CountryId);
-                cmd.Parameters.AddWithValue("@country", country.CountryName);
-                cmd.Parameters.AddWithValue("@created", "2000-01-01");
-                cmd.Parameters.AddWithValue("@createdBy", "nobody");
-                cmd.Parameters.AddWithValue("@update", "2000-01-01");
-                cmd.Parameters.AddWithValue("@updateBy", "nobody");
-                cmd.ExecuteNonQuery();
+                Customers.Add(customer);
             }
         }
 
-        public static void InsertCityData(City city)
-        {
-            if (!CityService.DuplicateCity(city))
-            {
-                string insertCityQuery = "INSERT INTO City (cityId, city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@cityId, @city, @countryId, @created, @createdBy, @update, @updateBy)";
-
-                MySqlCommand cmd = new MySqlCommand(insertCityQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@cityId", city.CityId);
-                cmd.Parameters.AddWithValue("@city", city.CityName);
-                cmd.Parameters.AddWithValue("@countryId", city.CountryId);
-                cmd.Parameters.AddWithValue("@created", "2000-01-01");
-                cmd.Parameters.AddWithValue("@createdBy", "nobody");
-                cmd.Parameters.AddWithValue("@update", "2000-01-01");
-                cmd.Parameters.AddWithValue("@updateBy", "nobody");
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        // Country and City insert fine but Address is throwing an error (cannot add foriegn key)
-        // Make sure I'm able to add new address into the address table
-        public static void InsertAddressData(Address address)
-        {
-            if (!AddressService.DuplicateAddress(address))
-            {
-                string insertAddressQuery = "INSERT INTO Address (addressId, address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@addressId, @address, @address2, @postalCode, @phone, @cityId, @created, @createdBy, @update, @updateBy)";
-
-                MySqlCommand cmd = new MySqlCommand(insertAddressQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@addressId", address.AddressId);
-                cmd.Parameters.AddWithValue("@address", address.StreetAddress);
-                cmd.Parameters.AddWithValue("@address2", "blank");
-                cmd.Parameters.AddWithValue("@postalCode", "blank");
-                cmd.Parameters.AddWithValue("@phone", address.Phone);
-                cmd.Parameters.AddWithValue("@cityId", address.CityId);
-                cmd.Parameters.AddWithValue("@created", "2000-01-01");
-                cmd.Parameters.AddWithValue("@createdBy", "nobody");
-                cmd.Parameters.AddWithValue("@update", "2000-01-01");
-                cmd.Parameters.AddWithValue("@updateBy", "nobody");
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        
         public static void ModifyCustomer(Customer current, Customer modified)
         {
             if (current.CustomerId == modified.CustomerId)

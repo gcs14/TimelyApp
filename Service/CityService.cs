@@ -1,23 +1,20 @@
 ﻿using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
 {
     internal static class CityService
     {
-        public static List<City> Cities = [];
+        public static List<City> Cities;
+        private static List<City> DBCities;
         private static int highestID = 0;
-        private static int targetId = 0;
 
         private static void ReadCityData()
         {
+            Cities = [];
+            DBCities = [];
             string sql = "SELECT * FROM city";
             MySqlCommand cmd = new(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -31,12 +28,13 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetInt32("countryId")
                     );
 
-                Cities.Add(city);
+                DBCities.Add(city);
                 if (city.CityId > highestID)
                 {
                     highestID = city.CityId;
                 }
             }
+            Cities = DBCities;
             rdr.Close();
         }
 
@@ -45,56 +43,62 @@ namespace DesktopSchedulingApp.Service
             ReadCityData();
         }
 
-        private static bool CityExists(string cityName)
+        public static bool CityExistsById(int cityId)
+        {
+            foreach (City city in DBCities)
+            {
+                if (city.CityId == cityId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool CityExistsByName(string cityName)
         {
             for (int i = 0; i < Cities.Count; i++)
             {
                 if (Cities[i].CityName.Equals(cityName))
                 {
-                    targetId = i;
                     return true;
                 }
             }
             return false;
         }
 
-        public static bool DuplicateCity(City city)
+        public static City FindByCityName(string cityName)
         {
-            if (Cities.Contains(city))
+            foreach (City city in Cities)
             {
-                return true;
-            }
-            foreach (City c in Cities)
-            {
-                if (c.CityId == city.CityId)
+                if (city.CityName.Equals(cityName))
                 {
-                    return true;
+                    return city;
                 }
             }
-            return false;
+            return null;
         }
 
-        public static int GetCityID(string cityName, int countryId)
+        public static int GetCityID(string cityName)
         {
-            if (CityExists(cityName))
+            if (CityExistsByName(cityName))
             {
-                return targetId;
+                return FindByCityName(cityName).CityId;
             }
-            return GetNewCityID();
+            return NewCityID();
         }
 
-        private static int GetNewCityID()
+        private static int NewCityID()
         {
             return highestID += 1;
         }
 
         public static void AddCity(City city)
         {
-            if (CityExists(city.CityName))
+            if (!CityExistsByName(city.CityName))
             {
-                MessageBox.Show("Error: This city already exists.");
+                Cities.Add(city);
             }
-            Cities.Add(city);
         }
     }
 }

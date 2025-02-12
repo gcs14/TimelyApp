@@ -1,4 +1,5 @@
 ﻿using DesktopSchedulingApp.Models;
+using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
 using System;
 using System.Collections.Generic;
@@ -24,25 +25,24 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
+            #region
             // Validate input through exceptions handling
-            
+            #endregion
 
-            // Take care of country info first
+            #region -- creating new objects for Country, City, Address, and Customer tables --
             Country country = new(
                 CountryService.GetCountryID(countryComboBox.Text),
                 countryComboBox.Text
                 );
             CountryService.AddCountry(country);
 
-            // Next city info
             City city = new(
-                CityService.GetCityID(cityText.Text, country.CountryId),
+                CityService.GetCityID(cityText.Text),
                 cityText.Text,
                 country.CountryId
                 );
             CityService.AddCity(city);
 
-            // Next address info
             Address address = new(
                 AddressService.GetAddressID(addressText.Text),
                 addressText.Text,
@@ -51,19 +51,20 @@ namespace DesktopSchedulingApp.Forms
                 );
             AddressService.AddAddress(address);
 
-            // Finally customer info
             Customer customer = new(
                 CustomerService.GetCustomerID(customerNameText.Text),
                 customerNameText.Text,
                 address.AddressId
                 );
             CustomerService.AddCustomer(customer);
+            #endregion
 
-            CustomerService.InsertCountryData(country);
-            CustomerService.InsertCityData(city);
-            CustomerService.InsertAddressData(address);
-            CustomerService.InsertCustomerData(customer);
-
+            #region -- calling database commands to insert data in specified tables --
+            DBCommands.InsertCountryData(country);
+            DBCommands.InsertCityData(city);
+            DBCommands.InsertAddressData(address);
+            DBCommands.InsertCustomerData(customer);
+            #endregion
 
             this.Close();
         }

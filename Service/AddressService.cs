@@ -3,25 +3,19 @@ using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
 {
     internal static class AddressService
     {
-        public static BindingList<Address> Addresses = [];
-        public static List<int> IdList = [];
-        //public static Dictionary<int, Address> addressDict = new Dictionary<int, Address>();
+        public static List<Address> Addresses;
+        private static List<Address> DBAddresses;
         private static int highestID = 0;
-        private static int targetId = 0;
 
         private static void ReadAddressData()
         {
+            Addresses = [];
+            DBAddresses = [];
             string sql = "SELECT * FROM Address";
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -36,13 +30,13 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetInt32("cityId")
                     );
 
-                Addresses.Add(address);
-                IdList.Add(address.AddressId);
+                DBAddresses.Add(address);
                 if (address.AddressId > highestID)
                 {
                     highestID = address.AddressId;
                 }
             }
+            Addresses = DBAddresses;
             rdr.Close();
         }
 
@@ -51,10 +45,9 @@ namespace DesktopSchedulingApp.Service
             ReadAddressData();
         }
 
-        // Questionable if this is need or relevant
-        public static bool AddressIdExisits(int id)
+        public static bool AddressExistsById(int id)
         {
-            foreach (Address address in Addresses)
+            foreach (Address address in DBAddresses)
             {
                 if (address.AddressId == id)
                 {
@@ -68,40 +61,20 @@ namespace DesktopSchedulingApp.Service
         private static bool AddressExists(Address address)
         {
             Boolean exists = false;
-            for (int i = 0; i < Addresses.Count; i++)
+            foreach (Address a in Addresses)
             {
-                if (Addresses[i].AddressId != address.AddressId)
+                if (a.AddressId != address.AddressId)
                 {
-                    if (Addresses[i].StreetAddress == address.StreetAddress
-                        && Addresses[i].Phone == address.Phone
-                        && Addresses[i].CityId == address.CityId
-                        && AddressIdExisits(address.AddressId))
+                    if (a.StreetAddress == address.StreetAddress
+                        && a.Phone == address.Phone
+                        && a.CityId == address.CityId
+                        && AddressExistsById(address.AddressId))
                     {
                         exists = true;
                     }
                 }
             }
             return exists;
-        }
-        
-        public static bool DuplicateAddress(Address address)
-        {
-            //if (IdList.Contains(address.AddressId))
-            //{
-            //    return true;
-            //}
-            if (Addresses.Contains(address))
-            {
-                return true;
-            }
-            foreach (Address a in Addresses)
-            {
-                if (a.AddressId == address.AddressId)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public static Address FindByStreetName(string streetName)
@@ -132,11 +105,10 @@ namespace DesktopSchedulingApp.Service
 
         public static void AddAddress(Address address)
         {
-            if (AddressExists(address))
+            if (!AddressExists(address))
             {
-                MessageBox.Show("Error: This address already exists.");
+                Addresses.Add(address);
             }
-            Addresses.Add(address);
         }
     }
 }
