@@ -1,4 +1,5 @@
-﻿using DesktopSchedulingApp.Repository;
+﻿using DesktopSchedulingApp.Forms;
+using DesktopSchedulingApp.Repository;
 using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
@@ -23,7 +24,7 @@ namespace DesktopSchedulingApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConnection.StartConnection();
-            Application.Run(new Start());
+            Application.Run(new Login());
             DBConnection.CloseConnection();
         }
     }
