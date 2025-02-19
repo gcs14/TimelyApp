@@ -1,31 +1,14 @@
 ﻿using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Service;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+using Org.BouncyCastle.Asn1.Tsp;
+using System.Collections.Generic;
 
 namespace DesktopSchedulingApp.Repository
 {
     internal class DBCommands
     {
-        public static void InsertCustomerData(Customer customer)
-        {
-            if (CustomerService.CustomerExistsById(customer.CustomerId) == false)
-            {
-                string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
-
-                MySqlCommand cmd = new MySqlCommand(insertCustomerQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@custId", customer.CustomerId);
-                cmd.Parameters.AddWithValue("@custName", customer.CustomerName);
-                cmd.Parameters.AddWithValue("@addressId", customer.AddressId);
-                cmd.Parameters.AddWithValue("@active", false);
-                cmd.Parameters.AddWithValue("@created", "2000-01-01");
-                cmd.Parameters.AddWithValue("@createdBy", "");
-                cmd.Parameters.AddWithValue("@update", "2000-01-01");
-                cmd.Parameters.AddWithValue("@updateBy", "");
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         public static void InsertCountryData(Country country)
         {
             if (CountryService.CountryExistsByID(country.CountryId) == false)
@@ -42,6 +25,31 @@ namespace DesktopSchedulingApp.Repository
                 cmd.Parameters.AddWithValue("@updateBy", "");
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public static void UpdateCustomerData(Customer customer, Address address, City city, Country country)
+        {
+            string updateCountryQuery =
+                "UPDATE customer SET customerName = @customerName, addressId = @addressId WHERE customerId = @customerId; " +
+                "UPDATE address SET address = @address, phone = @phone " +
+                "WHERE addressId = @addressId; " +
+                "UPDATE city SET city = @city " +
+                "WHERE cityId = @cityId; " +
+                "UPDATE country SET country = @country " +
+                "WHERE countryId = @countryId;";
+
+            MySqlCommand cmd = new MySqlCommand(updateCountryQuery, DBConnection.conn);
+
+            cmd.Parameters.AddWithValue("@customerId", customer.CustomerId);
+            cmd.Parameters.AddWithValue("@customerName", customer.CustomerName);
+            cmd.Parameters.AddWithValue("@address", address.StreetAddress);
+            cmd.Parameters.AddWithValue("@addressId", address.AddressId);
+            cmd.Parameters.AddWithValue("@phone", address.Phone);
+            cmd.Parameters.AddWithValue("@city", city.CityName);
+            cmd.Parameters.AddWithValue("@cityId", city.CityId);
+            cmd.Parameters.AddWithValue("@country", country.CountryName);
+            cmd.Parameters.AddWithValue("@countryId", country.CountryId);
+            cmd.ExecuteNonQuery();
         }
 
         public static void InsertCityData(City city)
@@ -77,6 +85,26 @@ namespace DesktopSchedulingApp.Repository
                 cmd.Parameters.AddWithValue("@postalCode", "");
                 cmd.Parameters.AddWithValue("@phone", address.Phone);
                 cmd.Parameters.AddWithValue("@cityId", address.CityId);
+                cmd.Parameters.AddWithValue("@created", "2000-01-01");
+                cmd.Parameters.AddWithValue("@createdBy", "");
+                cmd.Parameters.AddWithValue("@update", "2000-01-01");
+                cmd.Parameters.AddWithValue("@updateBy", "");
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void InsertCustomerData(Customer customer)
+        {
+            if (CustomerService.CustomerExistsById(customer.CustomerId) == false)
+            {
+                string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
+
+                MySqlCommand cmd = new MySqlCommand(insertCustomerQuery, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@custId", customer.CustomerId);
+                cmd.Parameters.AddWithValue("@custName", customer.CustomerName);
+                cmd.Parameters.AddWithValue("@addressId", customer.AddressId);
+                cmd.Parameters.AddWithValue("@active", false);
                 cmd.Parameters.AddWithValue("@created", "2000-01-01");
                 cmd.Parameters.AddWithValue("@createdBy", "");
                 cmd.Parameters.AddWithValue("@update", "2000-01-01");

@@ -179,6 +179,7 @@
             Controls.Add(customerNameText);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             Name = "AddCustomers";
+            Load += AddCustomers_Load;
             ResumeLayout(false);
             PerformLayout();
         }

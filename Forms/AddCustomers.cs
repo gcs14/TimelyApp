@@ -25,6 +25,11 @@ namespace DesktopSchedulingApp.Forms
             //currentUserName = n;
         }
 
+        private void AddCustomers_Load(object sender, EventArgs e)
+        {
+            countryComboBox.DataSource = ResourceInfo.Countries;
+        }
+
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
             // Validate input through exceptions handling

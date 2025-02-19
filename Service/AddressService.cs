@@ -53,7 +53,7 @@ namespace DesktopSchedulingApp.Service
                     return true;
                 }
             }
-            GetNewAddressID();
+            //GetNewAddressID();
             return false;
         }
 
@@ -88,11 +88,36 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
+        public static Address FindByAddressId(int addressId)
+        {
+            foreach (Address address in Addresses)
+            {
+                if (address.AddressId == addressId)
+                {
+                    return address;
+                }
+            }
+            return null;
+        }
+
         public static int GetAddressID(string streetName)
         {
             if (FindByStreetName(streetName) != null)
             {
                 return FindByStreetName(streetName).AddressId;
+            }
+            return GetNewAddressID();
+        }
+
+        public static int GetAddressID(string streetName, int cityId)
+        {
+            var x = FindByStreetName(streetName);
+            if (x != null)
+            {
+                if (x.CityId == cityId)
+                {
+                    return FindByStreetName(streetName).AddressId;
+                }
             }
             return GetNewAddressID();
         }

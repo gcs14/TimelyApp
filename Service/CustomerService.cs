@@ -91,6 +91,18 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
+        public static Customer FindByCustomerId(int customerId)
+        {
+            foreach (Customer customer in Customers)
+            {
+                if (customer.CustomerId == customerId)
+                {
+                    return customer;
+                }
+            }
+            return null;
+        }
+
         public static int GetCustomerID(string customerName)
         {
             if (CustomerExistsByName(customerName))

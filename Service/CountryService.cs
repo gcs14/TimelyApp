@@ -76,6 +76,18 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
+        public static Country FindByCountryId(int countryId)
+        {
+            foreach (Country country in Countries)
+            {
+                if (country.CountryId == countryId)
+                {
+                    return country;
+                }
+            }
+            return null;
+        }
+
         public static int GetCountryID(string countryName)
         {
             if (FindByCountryName(countryName) != null)

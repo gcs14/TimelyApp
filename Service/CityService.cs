@@ -78,16 +78,41 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
+        public static City FindByCityId(int cityId)
+        {
+            foreach (City city in Cities)
+            {
+                if (city.CityId == cityId)
+                {
+                    return city;
+                }
+            }
+            return null;
+        }
+
         public static int GetCityID(string cityName)
         {
             if (CityExistsByName(cityName))
             {
                 return FindByCityName(cityName).CityId;
             }
-            return NewCityID();
+            return GetNewCityID();
         }
 
-        private static int NewCityID()
+        public static int GetCityID(string cityName, int countryId)
+        {
+            var x = FindByCityName(cityName);
+            if (x != null)
+            {
+                if (x.CountryId == countryId)
+                {
+                    return FindByCityName(cityName).CountryId;
+                }
+            }
+            return GetNewCityID();
+        }
+
+        private static int GetNewCityID()
         {
             return highestID += 1;
         }
