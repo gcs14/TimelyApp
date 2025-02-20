@@ -55,11 +55,23 @@ namespace DesktopSchedulingApp.Service
             rdr.Close();
         }
 
-        public static bool CustomerExistsById(int customerId)
+        //public static bool CustomerExistsById(int customerId)
+        //{
+        //    foreach (Customer c in DBCustomers)
+        //    {
+        //        if (c.CustomerId == (customerId))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        public static bool IsDuplicate(Customer customer)
         {
             foreach (Customer c in DBCustomers)
             {
-                if (c.CustomerId == (customerId))
+                if (c.CustomerId == customer.CustomerId)
                 {
                     return true;
                 }
@@ -109,13 +121,13 @@ namespace DesktopSchedulingApp.Service
             {
                 return FindByCustomerName(customerName).CustomerId;
             }
-            return NewCustomerID();
-        }
-
-        public static int NewCustomerID()
-        {
             return highestID += 1;
         }
+
+        //public static int NewCustomerID()
+        //{
+        //    return highestID += 1;
+        //}
 
         public static void AddCustomer(Customer customer)
         {

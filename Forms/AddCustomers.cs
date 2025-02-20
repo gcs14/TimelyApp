@@ -28,6 +28,7 @@ namespace DesktopSchedulingApp.Forms
         private void AddCustomers_Load(object sender, EventArgs e)
         {
             countryComboBox.DataSource = ResourceInfo.Countries;
+            countryComboBox.Text = "";
         }
 
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)

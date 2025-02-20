@@ -40,11 +40,23 @@ namespace DesktopSchedulingApp.Service
             ReadCountryData();
         }
 
-        public static bool CountryExistsByID(int countryId)
+        //public static bool CountryExistsByID(int countryId)
+        //{
+        //    foreach (Country country in DBCountries)
+        //    {
+        //        if (country.CountryId == countryId)
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        public static bool IsDuplicate(Country country)
         {
-            foreach (Country country in DBCountries)
+            foreach (Country c in DBCountries)
             {
-                if (country.CountryId == countryId)
+                if (c.CountryId == country.CountryId)
                 {
                     return true;
                 }
@@ -52,17 +64,17 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
-        private static bool CountryExistsByName(string countryName)
-        {
-            foreach (Country country in Countries) 
-            {
-                if (country.CountryName.Equals(countryName))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //private static bool CountryExistsByName(string countryName)
+        //{
+        //    foreach (Country country in Countries) 
+        //    {
+        //        if (country.CountryName.Equals(countryName))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         public static Country FindByCountryName(string countryName)
         {
@@ -94,17 +106,18 @@ namespace DesktopSchedulingApp.Service
             {
                 return FindByCountryName(countryName).CountryId;
             }
-            return NewCountryID();
-        }
-
-        private static int NewCountryID()
-        {
             return highestID += 1;
         }
 
+        //private static int NewCountryID()
+        //{
+        //    return highestID += 1;
+        //}
+
         public static void AddCountry(Country country)
         {
-            if (!CountryExistsByName(country.CountryName))
+            //if (!CountryExistsByName(country.CountryName))
+            if (!IsDuplicate(country))
             {
                 Countries.Add(country);
             }

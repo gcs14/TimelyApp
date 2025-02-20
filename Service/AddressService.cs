@@ -57,23 +57,38 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
-        private static bool AddressExists(Address address)
+        //private static bool AddressExists(Address address)
+        //{
+        //    Boolean exists = false;
+        //    foreach (Address a in Addresses)
+        //    {
+        //        if (a.AddressId != address.AddressId)
+        //        {
+        //            if (a.StreetAddress == address.StreetAddress
+        //                && a.Phone == address.Phone
+        //                && a.CityId == address.CityId
+        //                && AddressExistsById(address.AddressId))
+        //            {
+        //                exists = true;
+        //            }
+        //        }
+        //    }
+        //    return exists;
+        //}
+
+        public static bool IsDuplicate(Address address)
         {
-            Boolean exists = false;
-            foreach (Address a in Addresses)
+            foreach (Address a in DBAddresses)
             {
-                if (a.AddressId != address.AddressId)
+                if (a.AddressId == address.CityId
+                    || (a.StreetAddress.Equals(address.StreetAddress)
+                        && a.Phone.Equals(address.Phone)
+                        && a.CityId == address.CityId))
                 {
-                    if (a.StreetAddress == address.StreetAddress
-                        && a.Phone == address.Phone
-                        && a.CityId == address.CityId
-                        && AddressExistsById(address.AddressId))
-                    {
-                        exists = true;
-                    }
+                    return true;
                 }
             }
-            return exists;
+            return false;
         }
 
         public static Address FindByStreetName(string streetName)
@@ -106,7 +121,7 @@ namespace DesktopSchedulingApp.Service
             {
                 return FindByStreetName(streetName).AddressId;
             }
-            return GetNewAddressID();
+            return highestID += 1;
         }
 
         public static int GetAddressID(string streetName, int cityId)
@@ -119,17 +134,18 @@ namespace DesktopSchedulingApp.Service
                     return FindByStreetName(streetName).AddressId;
                 }
             }
-            return GetNewAddressID();
-        }
-
-        private static int GetNewAddressID()
-        {
             return highestID += 1;
         }
 
+        //private static int GetNewAddressID()
+        //{
+        //    return highestID += 1;
+        //}
+
         public static void AddAddress(Address address)
         {
-            if (!AddressExists(address))
+            //if (!AddressExists(address))
+            if (!IsDuplicate(address))
             {
                 Addresses.Add(address);
             }

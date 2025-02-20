@@ -85,11 +85,11 @@ namespace DesktopSchedulingApp.Forms
         }
 
         // check if customer name has changed. if so, replace customerName with new name
-        private bool CustomerChanged(Customer newCustomer)
+        private bool CustomerNameChanged(Customer newCustomer)
         {
-            if (newCustomer.CustomerId != currentCustomer.CustomerId
-                || newCustomer.CustomerName.Equals(currentCustomer.CustomerName)
-                || newCustomer.AddressId != currentCustomer.AddressId)
+            if (newCustomer.CustomerId == currentCustomer.CustomerId
+                && newCustomer.AddressId == currentCustomer.AddressId
+                && !newCustomer.CustomerName.Equals(currentCustomer.CustomerName))
             {
                 return true;
             }
@@ -120,13 +120,13 @@ namespace DesktopSchedulingApp.Forms
             AddressService.AddAddress(newAddress);
 
             newCustomer = new(
-                CustomerService.GetCustomerID(customerNameText.Text),
+                currentCustomer.CustomerId,
                 customerNameText.Text,
                 newAddress.AddressId
                 );
             CustomerService.AddCustomer(newCustomer);
 
-            if (CountryChanged(newCountry))
+            if (CountryChanged(newCountry) || CityChanged(newCity) || AddressChanged(newAddress) || CustomerNameChanged(newCustomer))
             {
                 DBCommands.InsertCountryData(newCountry);
                 DBCommands.InsertCityData(newCity);

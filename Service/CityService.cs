@@ -42,11 +42,25 @@ namespace DesktopSchedulingApp.Service
             ReadCityData();
         }
 
-        public static bool CityExistsById(int cityId)
+        //public static bool CityExistsById(int cityId)
+        //{
+        //    foreach (City city in DBCities)
+        //    {
+        //        if (city.CityId == cityId)
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        public static bool IsDuplicate(City city)
         {
-            foreach (City city in DBCities)
+            foreach (City c in DBCities)
             {
-                if (city.CityId == cityId)
+                if (c.CityId == city.CityId
+                    || (c.CityName.Equals(city.CityName)
+                        && c.CountryId == city.CountryId))
                 {
                     return true;
                 }
@@ -96,7 +110,7 @@ namespace DesktopSchedulingApp.Service
             {
                 return FindByCityName(cityName).CityId;
             }
-            return GetNewCityID();
+            return highestID += 1;
         }
 
         public static int GetCityID(string cityName, int countryId)
@@ -106,20 +120,21 @@ namespace DesktopSchedulingApp.Service
             {
                 if (x.CountryId == countryId)
                 {
-                    return FindByCityName(cityName).CountryId;
+                    return FindByCityName(cityName).CityId;
                 }
             }
-            return GetNewCityID();
-        }
-
-        private static int GetNewCityID()
-        {
             return highestID += 1;
         }
 
+        //private static int GetNewCityID()
+        //{
+        //    return highestID += 1;
+        //}
+
         public static void AddCity(City city)
         {
-            if (!CityExistsByName(city.CityName))
+            //if (!CityExistsByName(city.CityName))
+            if (!IsDuplicate(city))
             {
                 Cities.Add(city);
             }
