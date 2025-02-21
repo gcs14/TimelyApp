@@ -3,7 +3,6 @@ using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Web;
 
 namespace DesktopSchedulingApp.Service
 {
@@ -104,7 +103,6 @@ namespace DesktopSchedulingApp.Service
             }
             return highestID += 1;
         }
-
 
         public static int GetAddressID(string streetName, int cityId, string phone)
         {

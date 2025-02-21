@@ -109,5 +109,14 @@ namespace DesktopSchedulingApp.Repository
             cmd.Parameters.AddWithValue("@countryId", country.CountryId);
             cmd.ExecuteNonQuery();
         }
+
+        public static void DeleteCustomerData(Customer customer)
+        {
+            string deleteQuery = "DELETE FROM customer WHERE customerId = @id;";
+
+            MySqlCommand cmd = new MySqlCommand(deleteQuery, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@id", customer.CustomerId);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using DesktopSchedulingApp.Models;
-using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
-using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
 
@@ -19,10 +17,6 @@ namespace DesktopSchedulingApp.Forms
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-
-            AddressService.ViewAddresses();
-            CityService.ViewCities();
-            CountryService.ViewCountries();
             PopulateCustomerTable();
             username = currentUserName;
         }
@@ -30,6 +24,9 @@ namespace DesktopSchedulingApp.Forms
         private void PopulateCustomerTable()
         {
             CustomerService.LoadCustomerData(this);
+            AddressService.ViewAddresses();
+            CityService.ViewCities();
+            CountryService.ViewCountries();
             dataGridView1.CurrentCell = null;
         }
 
@@ -47,14 +44,8 @@ namespace DesktopSchedulingApp.Forms
 
         private void DeleteCustomerBtn_Click(object sender, EventArgs e)
         {
-            //CustomerService.DeleteCustomer(selectedCustomer);
-
-            string deleteQuery = "DELETE FROM your_table WHERE id = @id";
-
-            MySqlConnection conn = new MySqlConnection(deleteQuery);
-            MySqlCommand cmd = new MySqlCommand(deleteQuery, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@id", 1);
-            cmd.ExecuteNonQuery();
+            CustomerService.DeleteCustomer(selectedCustomer);
+            PopulateCustomerTable();
         }
 
         private void CustomerSelection(object sender, EventArgs e)

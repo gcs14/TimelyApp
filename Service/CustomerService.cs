@@ -120,14 +120,6 @@ namespace DesktopSchedulingApp.Service
             }
         }
 
-        //public static void ModifyCustomer(Customer current, Customer modified)
-        //{
-        //    if (current.CustomerId == modified.CustomerId)
-        //    {
-        //        Customers[Customers.IndexOf(current)] = modified;
-        //    }
-        //}
-
         public static void DeleteCustomer(Customer c)
         {
             DialogResult confirm = MessageBox.Show("Are you sure want to delete this customer?", "WARNING", MessageBoxButtons.YesNo);
@@ -137,8 +129,12 @@ namespace DesktopSchedulingApp.Service
                 {
                     MessageBox.Show("This customer does not exisit.");
                 }
-                Customers.Remove(c);
-                MessageBox.Show($"Customer \"{c.CustomerName}\" has successfully been deleted.");
+                else
+                {
+                    Customers.Remove(c);
+                    DBCommands.DeleteCustomerData(c);
+                    MessageBox.Show($"Customer \"{c.CustomerName}\" has successfully been deleted.");
+                }
             }
         }
     }

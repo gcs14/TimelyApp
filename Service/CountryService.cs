@@ -7,12 +7,14 @@ namespace DesktopSchedulingApp.Service
 {
     internal static class CountryService
     {
-        public static List<Country> Countries = [];
-        private static List<Country> DBCountries = [];
+        public static List<Country> Countries;
+        private static List<Country> DBCountries;
         private static int highestID = 0;
 
         private static void ReadCountryData()
         {
+            Countries = [];
+            DBCountries = [];
             string sql = "SELECT * FROM country";
             MySqlCommand cmd = new(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
