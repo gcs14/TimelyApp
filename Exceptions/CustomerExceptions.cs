@@ -1,4 +1,5 @@
 ﻿using DesktopSchedulingApp.Forms;
+using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Service;
 using System;
 using System.Collections.Generic;
@@ -11,106 +12,208 @@ namespace DesktopSchedulingApp.Exceptions
 {
     internal class CustomerExceptions
     {
-        AddCustomers addCustomers;
-        public bool AddCustomerExceptions(AddCustomers addCustomers)
+        AddCustomer addCustomer;
+        ModifyCustomer modifyCustomer;
+        Country country;
+        City city;
+        Address address;
+        Customer customer;
+
+        public bool AddCustomerExceptions(AddCustomer addCustomer)
         {
-            this.addCustomers = addCustomers;
+            this.addCustomer = addCustomer;
             // No blank customer name
-            if (string.IsNullOrWhiteSpace(addCustomers.customerNameText.Text))
+            if (string.IsNullOrWhiteSpace(addCustomer.customerNameText.Text))
             {
-                MessageBox.Show("ERROR: Enter a valid customer name.");
+                MessageBox.Show("ERROR: Entry can not be blank. Enter a valid customer name.");
                 return EraseAndFocus(0);
             }
             // Customer name can not be a number
             //if (int.TryParse(addCustomers.customerNameText.Text, out _))
-            if (addCustomers.customerNameText.Text.All(char.IsDigit))
+            if (addCustomer.customerNameText.Text.All(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Customer name cannot be a number.");
                 return EraseAndFocus(0);
             }
             //Customer name can not contain a number
-            if (addCustomers.customerNameText.Text.Any(char.IsDigit))
+            if (addCustomer.customerNameText.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Enter letters only for customer name.");
                 return EraseAndFocus(0);
             }
             // customer phone number can not be empty
-            if (addCustomers.phoneText.Text == "")
+            if (string.IsNullOrWhiteSpace(addCustomer.phoneText.Text))
             {
                 MessageBox.Show("ERROR: Phone number cannot be empty.");
                 return EraseAndFocus(1);
             }
             //customer phone number must be a number
-            if (!addCustomers.phoneText.Text.All(char.IsDigit))
+            if (addCustomer.phoneText.Text.Any(char.IsLetter))
             {
-                MessageBox.Show("ERROR: Enter numbers only for phone number.");
+                MessageBox.Show("ERROR: Phone number must be numbers only");
                 return EraseAndFocus(1);
             }
             // customer phone number must be 7 digits long
-            if (addCustomers.phoneText.Text.Length != 7)
+            if (addCustomer.phoneText.Text.Trim().Length < 7 || addCustomer.phoneText.Text.Trim().Length > 8)
             {
                 MessageBox.Show("ERROR: Phone number must be 7 digits long.");
                 return EraseAndFocus(1);
             }
             // customer address can not be empty
-            if (addCustomers.addressText.Text == "")
+            if (string.IsNullOrWhiteSpace(addCustomer.addressText.Text))
             {
                 MessageBox.Show("ERROR: Address cannot be empty.");
                 return EraseAndFocus(2);
             }
             //customer address can not be a number
-            if (addCustomers.addressText.Text.All(char.IsDigit))
+            if (addCustomer.addressText.Text.All(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Address cannot be a number.");
                 return EraseAndFocus(2);
             }
             // customer city can not be empty
-            if (addCustomers.cityText.Text == "")
+            if (string.IsNullOrWhiteSpace(addCustomer.cityText.Text))
             {
                 MessageBox.Show("ERROR: City cannot be empty.");
                 return EraseAndFocus(3);
             }
             //customer city can not be a number
-            if (addCustomers.cityText.Text.All(char.IsDigit))
+            if (addCustomer.cityText.Text.All(char.IsDigit))
             {
                 MessageBox.Show("ERROR: City cannot be a number.");
                 return EraseAndFocus(3);
             }
             //customer city can not have a number
-            if (addCustomers.cityText.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("ERROR: City cannot have a number in it.");
-                return EraseAndFocus(3);
-            }
-            //customer city can not have a number in it
-            if (addCustomers.cityText.Text.All(char.IsDigit))
+            if (addCustomer.cityText.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("ERROR: City cannot have a number in it.");
                 return EraseAndFocus(3);
             }
             // customer country can not be empty
-            if (addCustomers.countryComboBox.Text == "")
+            if (string.IsNullOrWhiteSpace(addCustomer.countryComboBox.Text))
             {
                 MessageBox.Show("ERROR: Country cannot be empty.");
                 return EraseAndFocus(4);
             }
             //customer country can not be a number
-            if (addCustomers.countryComboBox.Text.All(char.IsDigit))
+            if (addCustomer.countryComboBox.Text.All(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Country cannot be a number.");
                 return EraseAndFocus(4);
             }
             //customer country can not have a number in it
-            if (addCustomers.countryComboBox.Text.Any(char.IsDigit))
+            if (addCustomer.countryComboBox.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Country cannot have a number in it.");
                 return EraseAndFocus(4);
             }
             //customer country must be present in country list
-            if (!ResourceInfo.Countries.Contains(addCustomers.countryComboBox.Text.Trim()))
+            if (!ResourceInfo.Countries.Contains(addCustomer.countryComboBox.Text.Trim()))
             {
                 MessageBox.Show("ERROR: The value entered is not a real country.");
                 return EraseAndFocus(4);
+            }
+            return true;
+        }
+
+        public bool ModifyCustomerExceptions(ModifyCustomer modifyCustomer, Country country,
+            City city, Address address, Customer customer)
+        {
+            this.modifyCustomer = modifyCustomer;
+            this.country = country;
+            this.city = city;
+            this.address = address;
+            this.customer = customer;
+
+            // No blank customer name
+            if (string.IsNullOrWhiteSpace(modifyCustomer.customerNameText.Text))
+            {
+                MessageBox.Show("ERROR: Entry can not be blank. Enter a valid customer name.");
+                return EraseAndFocus(5);
+            }
+            // Customer name can not be a number
+            if (modifyCustomer.customerNameText.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: Customer name cannot be a number.");
+                return EraseAndFocus(5);
+            }
+            //Customer name can not contain a number
+            if (modifyCustomer.customerNameText.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: Customer name cannot have a number in it.");
+                return EraseAndFocus(5);
+            }
+            // customer phone number can not be empty
+            if (string.IsNullOrWhiteSpace(modifyCustomer.phoneText.Text))
+            {
+                MessageBox.Show("ERROR: Phone number cannot be empty.");
+                return EraseAndFocus(6);
+            }
+            //customer phone number must be a number
+            if (!modifyCustomer.phoneText.Text.Any(char.IsLetter))
+            {
+                MessageBox.Show("ERROR: Phone number must be numbers only");
+                return EraseAndFocus(6);
+            }
+            // customer phone number must be 7 digits long
+            if (modifyCustomer.phoneText.Text.Length != 7)
+            {
+                MessageBox.Show("ERROR: Phone number must be 7 digits long.");
+                return EraseAndFocus(6);
+            }
+            // customer address can not be empty
+            if (string.IsNullOrWhiteSpace(modifyCustomer.addressText.Text))
+            {
+                MessageBox.Show("ERROR: Address cannot be empty.");
+                return EraseAndFocus(7);
+            }
+            //customer address can not be a number
+            if (modifyCustomer.addressText.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: Address cannot be a number.");
+                return EraseAndFocus(7);
+            }
+            // customer city can not be empty
+            if (string.IsNullOrWhiteSpace(modifyCustomer.cityText.Text))
+            {
+                MessageBox.Show("ERROR: City cannot be empty.");
+                return EraseAndFocus(8);
+            }
+            //customer city can not be a number
+            if (modifyCustomer.cityText.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: City cannot be a number.");
+                return EraseAndFocus(8);
+            }
+            //customer city can not have a number
+            if (modifyCustomer.cityText.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: City cannot have a number in it.");
+                return EraseAndFocus(8);
+            }
+            // customer country can not be empty
+            if (string.IsNullOrWhiteSpace(modifyCustomer.countryComboBox.Text))
+            {
+                MessageBox.Show("ERROR: Country cannot be empty.");
+                return EraseAndFocus(9);
+            }
+            //customer country can not be a number
+            if (modifyCustomer.countryComboBox.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: Country cannot be a number.");
+                return EraseAndFocus(9);
+            }
+            //customer country can not have a number in it
+            if (modifyCustomer.countryComboBox.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("ERROR: Country cannot have a number in it.");
+                return EraseAndFocus(9);
+            }
+            //customer country must be present in country list
+            if (!ResourceInfo.Countries.Contains(modifyCustomer.countryComboBox.Text.Trim()))
+            {
+                MessageBox.Show("ERROR: The value entered is not a real country.");
+                return EraseAndFocus(9);
             }
             return true;
         }
@@ -121,28 +224,53 @@ namespace DesktopSchedulingApp.Exceptions
             {
                 // customer name
                 case 0:
-                    addCustomers.customerNameText.Text = "";
-                    addCustomers.customerNameText.Focus();
+                    addCustomer.customerNameText.Text = "";
+                    addCustomer.customerNameText.Focus();
                     break;
                 // customer phone number
                 case 1:
-                    addCustomers.phoneText.Text = "";
-                    addCustomers.phoneText.Focus();
+                    addCustomer.phoneText.Text = "";
+                    addCustomer.phoneText.Focus();
                     break;
                 // customer address
                 case 2:
-                    addCustomers.addressText.Text = "";
-                    addCustomers.addressText.Focus();
+                    addCustomer.addressText.Text = "";
+                    addCustomer.addressText.Focus();
                     break;
                 // customer city
                 case 3:
-                    addCustomers.cityText.Text = "";
-                    addCustomers.cityText.Focus();
+                    addCustomer.cityText.Text = "";
+                    addCustomer.cityText.Focus();
                     break;
                 // customer country
                 case 4:
-                    addCustomers.countryComboBox.Text = "";
-                    addCustomers.countryComboBox.Focus();
+                    addCustomer.countryComboBox.Text = "";
+                    addCustomer.countryComboBox.Focus();
+                    break;
+                // customer name
+                case 5:
+                    modifyCustomer.customerNameText.Text = customer.CustomerName;
+                    modifyCustomer.customerNameText.Focus();
+                    break;
+                // customer phone number
+                case 6:
+                    modifyCustomer.phoneText.Text = address.Phone;
+                    modifyCustomer.phoneText.Focus();
+                    break;
+                // customer address
+                case 7:
+                    modifyCustomer.addressText.Text = address.StreetAddress;
+                    modifyCustomer.addressText.Focus();
+                    break;
+                // customer city
+                case 8:
+                    modifyCustomer.cityText.Text = city.CityName;
+                    modifyCustomer.cityText.Focus();
+                    break;
+                // customer country
+                case 9:
+                    modifyCustomer.countryComboBox.Text = country.CountryName;
+                    modifyCustomer.countryComboBox.Focus();
                     break;
             }
             return false;
