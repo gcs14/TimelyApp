@@ -29,7 +29,7 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(0);
             }
             //Customer name can not contain a number
-            if (!addCustomers.customerNameText.Text.All(char.IsLetter))
+            if (addCustomers.customerNameText.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Enter letters only for customer name.");
                 return EraseAndFocus(0);

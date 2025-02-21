@@ -80,7 +80,7 @@ namespace DesktopSchedulingApp.Service
         {
             foreach (Address a in DBAddresses)
             {
-                if (a.AddressId == address.CityId
+                if (a.AddressId == address.AddressId
                     || (a.StreetAddress.Equals(address.StreetAddress)
                         && a.Phone.Equals(address.Phone)
                         && a.CityId == address.CityId))
@@ -124,12 +124,13 @@ namespace DesktopSchedulingApp.Service
             return highestID += 1;
         }
 
-        public static int GetAddressID(string streetName, int cityId)
+
+        public static int GetAddressID(string streetName, int cityId, string phone)
         {
             var x = FindByStreetName(streetName);
             if (x != null)
             {
-                if (x.CityId == cityId)
+                if (x.CityId == cityId && x.Phone == phone)
                 {
                     return FindByStreetName(streetName).AddressId;
                 }

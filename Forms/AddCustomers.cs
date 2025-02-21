@@ -53,7 +53,7 @@ namespace DesktopSchedulingApp.Forms
                 Address address = new(
                     AddressService.GetAddressID(addressText.Text.Trim()),
                     addressText.Text.Trim(),
-                    phoneText.Text,
+                    String.Format("{0:###-####}", phoneText.Text.Trim()),
                     city.CityId
                     );
                 AddressService.AddAddress(address);

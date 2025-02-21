@@ -30,28 +30,10 @@ namespace DesktopSchedulingApp.Forms
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            //MessageBox.Show(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
             if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
             {
                 isSpanish = true;
                 TranslateToSpanish_Login();
-            }
-        }
-
-        private void EnterBtn_Click(object sender, EventArgs e)
-        {
-            if (loginCount <= 1)
-            {
-                LoginValidation();
-
-            }
-            else
-            {
-                if (isSpanish)
-                {
-                    MessageBox.Show("Un usuario ya ha iniciado sesión.");
-                }
-                MessageBox.Show("A user is already logged in.");
             }
         }
 
@@ -142,6 +124,23 @@ namespace DesktopSchedulingApp.Forms
                 this.Hide();
                 new Home(username).ShowDialog();
                 this.Close();
+            }
+        }
+
+        private void EnterBtn_Click(object sender, EventArgs e)
+        {
+            if (loginCount <= 1)
+            {
+                LoginValidation();
+
+            }
+            else
+            {
+                if (isSpanish)
+                {
+                    MessageBox.Show("Un usuario ya ha iniciado sesión.");
+                }
+                MessageBox.Show("A user is already logged in.");
             }
         }
 

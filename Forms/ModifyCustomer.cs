@@ -1,6 +1,7 @@
 ﻿using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -100,28 +101,29 @@ namespace DesktopSchedulingApp.Forms
         {
             newCountry = new(
                 CountryService.GetCountryID(countryComboBox.Text),
-                countryComboBox.Text
+                countryComboBox.Text.Trim()
                 );
             CountryService.AddCountry(newCountry);
 
             newCity = new(
                 CityService.GetCityID(cityText.Text, newCountry.CountryId),
-                cityText.Text,
+                cityText.Text.Trim(),
                 newCountry.CountryId
                 );
             CityService.AddCity(newCity);
 
+            string newPhoneNumber = Convert.ToInt64(phoneText.Text.Trim()).ToString("###-####");
             newAddress = new(
-                AddressService.GetAddressID(addressText.Text, newCity.CityId),
-                addressText.Text,
-                phoneText.Text,
+                AddressService.GetAddressID(addressText.Text, newCity.CityId, newPhoneNumber),
+                addressText.Text.Trim(),
+                newPhoneNumber,
                 newCity.CityId
                 );
             AddressService.AddAddress(newAddress);
 
             newCustomer = new(
                 currentCustomer.CustomerId,
-                customerNameText.Text,
+                customerNameText.Text.Trim(),
                 newAddress.AddressId
                 );
             CustomerService.AddCustomer(newCustomer);
