@@ -45,15 +45,6 @@ namespace DesktopSchedulingApp.Service
             ReadAddressData();
         }
 
-        public static string FormatPhone(string phone)
-        {
-            if (!phone.Contains('-'))
-            {
-                phone = Convert.ToInt64(phone.Trim()).ToString("###-####");
-            }
-            return phone;
-        }
-
         public static bool AddressExistsById(int id)
         {
             foreach (Address address in DBAddresses)
@@ -126,6 +117,15 @@ namespace DesktopSchedulingApp.Service
                 }
             }
             return highestID += 1;
+        }
+
+        public static string FormatPhone(string phone)
+        {
+            if (!phone.Contains('-'))
+            {
+                phone = Convert.ToInt64(phone.Trim()).ToString("###-####");
+            }
+            return phone;
         }
 
         public static void AddAddress(Address address)
