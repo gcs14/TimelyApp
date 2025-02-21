@@ -1,6 +1,6 @@
 ﻿namespace DesktopSchedulingApp.Forms
 {
-    partial class AddCustomers
+    partial class AddCustomer
     {
         /// <summary>
         /// Required designer variable.

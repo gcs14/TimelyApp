@@ -1,26 +1,19 @@
-﻿using DesktopSchedulingApp.Models;
+﻿using DesktopSchedulingApp.Exceptions;
+using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
-using Google.Protobuf.WellKnownTypes;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
 {
     public partial class ModifyCustomer : Form
     {
+        CustomerExceptions customerExceptions = new();
         private Customer currentCustomer;
         private Address currentAddress;
         private City currentCity;
         private Country currentCountry;
-
         private Customer newCustomer;
         private Address newAddress;
         private City newCity;
@@ -49,7 +42,6 @@ namespace DesktopSchedulingApp.Forms
             countryComboBox.Text = currentCountry.CountryName;
         }
 
-        // check if county has changed. if so, create new country object and replace current
         private bool CountryChanged(Country newCountry)
         {
             if (newCountry.CountryId != currentCountry.CountryId
@@ -60,7 +52,6 @@ namespace DesktopSchedulingApp.Forms
             return false;
         }
 
-        // check if city has changed. if so, create new city object and replace current
         private bool CityChanged(City newCity)
         {
             if (newCity.CityId != currentCity.CityId
@@ -72,7 +63,6 @@ namespace DesktopSchedulingApp.Forms
             return false;
         }
 
-        // check if address has changed. if so, create new address object and replace current
         private bool AddressChanged(Address newAddress)
         {
             if (newAddress.AddressId != currentAddress.AddressId
@@ -85,7 +75,6 @@ namespace DesktopSchedulingApp.Forms
             return false;
         }
 
-        // check if customer name has changed. if so, replace customerName with new name
         private bool CustomerNameChanged(Customer newCustomer)
         {
             if (newCustomer.CustomerId == currentCustomer.CustomerId
@@ -99,43 +88,48 @@ namespace DesktopSchedulingApp.Forms
 
         private void ModifyCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
-            newCountry = new(
+            if (customerExceptions.ModifyCustomerExceptions(this, currentCountry, currentCity, currentAddress, currentCustomer))
+            {
+                //if ()
+                newCountry = new(
                 CountryService.GetCountryID(countryComboBox.Text),
                 countryComboBox.Text.Trim()
                 );
-            CountryService.AddCountry(newCountry);
+                CountryService.AddCountry(newCountry);
 
-            newCity = new(
-                CityService.GetCityID(cityText.Text, newCountry.CountryId),
-                cityText.Text.Trim(),
-                newCountry.CountryId
-                );
-            CityService.AddCity(newCity);
+                newCity = new(
+                    CityService.GetCityID(cityText.Text, newCountry.CountryId),
+                    cityText.Text.Trim(),
+                    newCountry.CountryId
+                    );
+                CityService.AddCity(newCity);
 
-            string newPhoneNumber = Convert.ToInt64(phoneText.Text.Trim()).ToString("###-####");
-            newAddress = new(
-                AddressService.GetAddressID(addressText.Text, newCity.CityId, newPhoneNumber),
-                addressText.Text.Trim(),
-                newPhoneNumber,
-                newCity.CityId
-                );
-            AddressService.AddAddress(newAddress);
+                string newPhone = AddressService.FormatPhone(phoneText.Text);
+                newAddress = new(
+                    AddressService.GetAddressID(addressText.Text, newCity.CityId, newPhone),
+                    addressText.Text.Trim(),
+                    newPhone,
+                    newCity.CityId
+                    );
+                AddressService.AddAddress(newAddress);
 
-            newCustomer = new(
-                currentCustomer.CustomerId,
-                customerNameText.Text.Trim(),
-                newAddress.AddressId
-                );
-            CustomerService.AddCustomer(newCustomer);
+                newCustomer = new(
+                    currentCustomer.CustomerId,
+                    customerNameText.Text.Trim(),
+                    newAddress.AddressId
+                    );
+                CustomerService.AddCustomer(newCustomer);
 
-            if (CountryChanged(newCountry) || CityChanged(newCity) || AddressChanged(newAddress) || CustomerNameChanged(newCustomer))
-            {
-                DBCommands.InsertCountryData(newCountry);
-                DBCommands.InsertCityData(newCity);
-                DBCommands.InsertAddressData(newAddress);
-                DBCommands.UpdateCustomerData(newCustomer, newAddress, newCity, newCountry);
+                if (CountryChanged(newCountry) || CityChanged(newCity) || AddressChanged(newAddress) || CustomerNameChanged(newCustomer))
+                {
+                    DBCommands.InsertCountryData(newCountry);
+                    DBCommands.InsertCityData(newCity);
+                    DBCommands.InsertAddressData(newAddress);
+                    DBCommands.UpdateCustomerData(newCustomer, newAddress, newCity, newCountry);
+                }
+                this.Close();
             }
-            this.Close();
+            
         }
     }
 }

@@ -42,18 +42,6 @@ namespace DesktopSchedulingApp.Service
             ReadCityData();
         }
 
-        //public static bool CityExistsById(int cityId)
-        //{
-        //    foreach (City city in DBCities)
-        //    {
-        //        if (city.CityId == cityId)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
         public static bool IsDuplicate(City city)
         {
             foreach (City c in DBCities)
@@ -126,14 +114,8 @@ namespace DesktopSchedulingApp.Service
             return highestID += 1;
         }
 
-        //private static int GetNewCityID()
-        //{
-        //    return highestID += 1;
-        //}
-
         public static void AddCity(City city)
         {
-            //if (!CityExistsByName(city.CityName))
             if (!IsDuplicate(city))
             {
                 Cities.Add(city);

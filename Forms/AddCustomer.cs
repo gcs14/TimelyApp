@@ -14,15 +14,14 @@ using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
 {
-    public partial class AddCustomers : Form
+    public partial class AddCustomer : Form
     {
         CustomerExceptions customerExceptions = new();
         //string currentUserName;
-        public AddCustomers(string n)
+        public AddCustomer(string n)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            //currentUserName = n;
         }
 
         private void AddCustomers_Load(object sender, EventArgs e)
@@ -33,7 +32,6 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
-            // Validate input through exceptions handling
             if (customerExceptions.AddCustomerExceptions(this))
             {
                 #region -- creating new objects for Country, City, Address, and Customer tables --
@@ -50,10 +48,11 @@ namespace DesktopSchedulingApp.Forms
                     );
                 CityService.AddCity(city);
 
+                string phone = AddressService.FormatPhone(phoneText.Text);
                 Address address = new(
-                    AddressService.GetAddressID(addressText.Text.Trim()),
+                    AddressService.GetAddressID(addressText.Text.Trim(), city.CityId, phone),
                     addressText.Text.Trim(),
-                    String.Format("{0:###-####}", phoneText.Text.Trim()),
+                    phone,
                     city.CityId
                     );
                 AddressService.AddAddress(address);

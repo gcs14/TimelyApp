@@ -9,7 +9,6 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class ViewCustomers : Form
     {
-        int selectedCustomerID;
         Customer selectedCustomer;
         Address selectedAddress;
         City selectedCity;
@@ -36,7 +35,7 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerBtn_Click(object sender, EventArgs e)
         {
-            new AddCustomers(username).ShowDialog();
+            new AddCustomer(username).ShowDialog();
             PopulateCustomerTable();
         }
 

@@ -1,10 +1,6 @@
 ﻿using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Service;
 using MySql.Data.MySqlClient;
-using Mysqlx.Crud;
-using Org.BouncyCastle.Asn1.Tsp;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 
 namespace DesktopSchedulingApp.Repository
 {
@@ -71,7 +67,6 @@ namespace DesktopSchedulingApp.Repository
 
         public static void InsertCustomerData(Customer customer)
         {
-            //if (CustomerService.CustomerExistsById(customer.CustomerId) == false)
             if (customer != null && !CustomerService.IsDuplicate(customer))
             {
                 string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
@@ -114,6 +109,5 @@ namespace DesktopSchedulingApp.Repository
             cmd.Parameters.AddWithValue("@countryId", country.CountryId);
             cmd.ExecuteNonQuery();
         }
-
     }
 }

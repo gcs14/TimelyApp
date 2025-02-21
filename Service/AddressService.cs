@@ -3,6 +3,7 @@ using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Web;
 
 namespace DesktopSchedulingApp.Service
 {
@@ -44,6 +45,15 @@ namespace DesktopSchedulingApp.Service
             ReadAddressData();
         }
 
+        public static string FormatPhone(string phone)
+        {
+            if (!phone.Contains('-'))
+            {
+                phone = Convert.ToInt64(phone.Trim()).ToString("###-####");
+            }
+            return phone;
+        }
+
         public static bool AddressExistsById(int id)
         {
             foreach (Address address in DBAddresses)
@@ -53,28 +63,8 @@ namespace DesktopSchedulingApp.Service
                     return true;
                 }
             }
-            //GetNewAddressID();
             return false;
         }
-
-        //private static bool AddressExists(Address address)
-        //{
-        //    Boolean exists = false;
-        //    foreach (Address a in Addresses)
-        //    {
-        //        if (a.AddressId != address.AddressId)
-        //        {
-        //            if (a.StreetAddress == address.StreetAddress
-        //                && a.Phone == address.Phone
-        //                && a.CityId == address.CityId
-        //                && AddressExistsById(address.AddressId))
-        //            {
-        //                exists = true;
-        //            }
-        //        }
-        //    }
-        //    return exists;
-        //}
 
         public static bool IsDuplicate(Address address)
         {
@@ -138,14 +128,8 @@ namespace DesktopSchedulingApp.Service
             return highestID += 1;
         }
 
-        //private static int GetNewAddressID()
-        //{
-        //    return highestID += 1;
-        //}
-
         public static void AddAddress(Address address)
         {
-            //if (!AddressExists(address))
             if (!IsDuplicate(address))
             {
                 Addresses.Add(address);

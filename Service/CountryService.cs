@@ -40,18 +40,6 @@ namespace DesktopSchedulingApp.Service
             ReadCountryData();
         }
 
-        //public static bool CountryExistsByID(int countryId)
-        //{
-        //    foreach (Country country in DBCountries)
-        //    {
-        //        if (country.CountryId == countryId)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
         public static bool IsDuplicate(Country country)
         {
             foreach (Country c in DBCountries)
@@ -63,18 +51,6 @@ namespace DesktopSchedulingApp.Service
             }
             return false;
         }
-
-        //private static bool CountryExistsByName(string countryName)
-        //{
-        //    foreach (Country country in Countries) 
-        //    {
-        //        if (country.CountryName.Equals(countryName))
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
 
         public static Country FindByCountryName(string countryName)
         {
@@ -109,14 +85,8 @@ namespace DesktopSchedulingApp.Service
             return highestID += 1;
         }
 
-        //private static int NewCountryID()
-        //{
-        //    return highestID += 1;
-        //}
-
         public static void AddCountry(Country country)
         {
-            //if (!CountryExistsByName(country.CountryName))
             if (!IsDuplicate(country))
             {
                 Countries.Add(country);

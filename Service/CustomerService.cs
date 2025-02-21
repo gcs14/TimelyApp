@@ -55,18 +55,6 @@ namespace DesktopSchedulingApp.Service
             rdr.Close();
         }
 
-        //public static bool CustomerExistsById(int customerId)
-        //{
-        //    foreach (Customer c in DBCustomers)
-        //    {
-        //        if (c.CustomerId == (customerId))
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
         public static bool IsDuplicate(Customer customer)
         {
             foreach (Customer c in DBCustomers)
@@ -124,11 +112,6 @@ namespace DesktopSchedulingApp.Service
             return highestID += 1;
         }
 
-        //public static int NewCustomerID()
-        //{
-        //    return highestID += 1;
-        //}
-
         public static void AddCustomer(Customer customer)
         {
             if (!CustomerExistsByName(customer.CustomerName))
@@ -137,13 +120,13 @@ namespace DesktopSchedulingApp.Service
             }
         }
 
-        public static void ModifyCustomer(Customer current, Customer modified)
-        {
-            if (current.CustomerId == modified.CustomerId)
-            {
-                Customers[Customers.IndexOf(current)] = modified;
-            }
-        }
+        //public static void ModifyCustomer(Customer current, Customer modified)
+        //{
+        //    if (current.CustomerId == modified.CustomerId)
+        //    {
+        //        Customers[Customers.IndexOf(current)] = modified;
+        //    }
+        //}
 
         public static void DeleteCustomer(Customer c)
         {

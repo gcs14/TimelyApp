@@ -187,15 +187,15 @@
 
         private System.Windows.Forms.Label addCustomerLabel;
         private System.Windows.Forms.Label customerNameLabel;
-        private System.Windows.Forms.TextBox customerNameText;
         private System.Windows.Forms.Label phoneLabel;
-        private System.Windows.Forms.TextBox phoneText;
         private System.Windows.Forms.Label cityLabel;
-        private System.Windows.Forms.TextBox cityText;
         private System.Windows.Forms.Label countryLabel;
-        private System.Windows.Forms.ComboBox countryComboBox;
         private System.Windows.Forms.Button modifyCustomerSubmitBtn;
         internal System.Windows.Forms.TextBox addressText;
         private System.Windows.Forms.Label addressLabel;
+        internal System.Windows.Forms.TextBox customerNameText;
+        internal System.Windows.Forms.TextBox phoneText;
+        internal System.Windows.Forms.TextBox cityText;
+        internal System.Windows.Forms.ComboBox countryComboBox;
     }
 }
