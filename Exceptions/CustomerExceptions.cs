@@ -24,7 +24,6 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(0);
             }
             // Customer name can not be a number
-            //if (int.TryParse(addCustomers.customerNameText.Text, out _))
             if (addCustomer.customerNameText.Text.All(char.IsDigit))
             {
                 MessageBox.Show("ERROR: Customer name cannot be a number.");
@@ -145,13 +144,13 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(6);
             }
             //customer phone number must be a number
-            if (!modifyCustomer.phoneText.Text.Any(char.IsLetter))
+            if (modifyCustomer.phoneText.Text.Any(char.IsLetter))
             {
                 MessageBox.Show("ERROR: Phone number must be numbers only");
                 return EraseAndFocus(6);
             }
             // customer phone number must be 7 digits long
-            if (modifyCustomer.phoneText.Text.Length != 7)
+            if (modifyCustomer.phoneText.Text.Trim().Length < 7 || modifyCustomer.phoneText.Text.Trim().Length > 8)
             {
                 MessageBox.Show("ERROR: Phone number must be 7 digits long.");
                 return EraseAndFocus(6);

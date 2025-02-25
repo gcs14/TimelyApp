@@ -18,9 +18,8 @@ namespace DesktopSchedulingApp.Forms
         private Address newAddress;
         private City newCity;
         private Country newCountry;
-        string currentUserName;
         
-        public ModifyCustomer(string username, Customer currentCustomer, Address currentAddress, City currentCity, Country currentCountry)
+        public ModifyCustomer(Customer currentCustomer, Address currentAddress, City currentCity, Country currentCountry)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -28,8 +27,6 @@ namespace DesktopSchedulingApp.Forms
             this.currentAddress = currentAddress;
             this.currentCity = currentCity;
             this.currentCountry = currentCountry;
-
-            currentUserName = username;
         }
 
         private void ModifyCustomer_Load(object sender, EventArgs e)
@@ -90,19 +87,16 @@ namespace DesktopSchedulingApp.Forms
         {
             if (customerExceptions.ModifyCustomerExceptions(this, currentCountry, currentCity, currentAddress, currentCustomer))
             {
-                //if ()
                 newCountry = new(
                 CountryService.GetCountryID(countryComboBox.Text),
                 countryComboBox.Text.Trim()
                 );
-                CountryService.AddCountry(newCountry);
 
                 newCity = new(
                     CityService.GetCityID(cityText.Text, newCountry.CountryId),
                     cityText.Text.Trim(),
                     newCountry.CountryId
                     );
-                CityService.AddCity(newCity);
 
                 string newPhone = AddressService.FormatPhone(phoneText.Text);
                 newAddress = new(
@@ -111,14 +105,12 @@ namespace DesktopSchedulingApp.Forms
                     newPhone,
                     newCity.CityId
                     );
-                AddressService.AddAddress(newAddress);
 
                 newCustomer = new(
                     currentCustomer.CustomerId,
                     customerNameText.Text.Trim(),
                     newAddress.AddressId
                     );
-                CustomerService.AddCustomer(newCustomer);
 
                 if (CountryChanged(newCountry) || CityChanged(newCity) || AddressChanged(newAddress) || CustomerNameChanged(newCustomer))
                 {

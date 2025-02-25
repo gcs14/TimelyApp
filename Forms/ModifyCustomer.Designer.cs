@@ -177,7 +177,7 @@
             Controls.Add(customerNameLabel);
             Controls.Add(addCustomerLabel);
             Name = "ModifyCustomer";
-            Text = "ModifyCustomer";
+            Text = "Modify Customer";
             Load += ModifyCustomer_Load;
             ResumeLayout(false);
             PerformLayout();
