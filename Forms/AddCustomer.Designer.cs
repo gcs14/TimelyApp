@@ -159,7 +159,7 @@
             addressLabel.TabIndex = 2;
             addressLabel.Text = "Address";
             // 
-            // AddCustomers
+            // AddCustomer
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -178,7 +178,8 @@
             Controls.Add(phoneText);
             Controls.Add(customerNameText);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            Name = "AddCustomers";
+            Name = "AddCustomer";
+            Text = "Add Customer";
             Load += AddCustomers_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -8,13 +8,11 @@ namespace DesktopSchedulingApp.Service
     internal static class CityService
     {
         public static List<City> Cities;
-        private static List<City> DBCities;
         private static int highestID = 0;
 
         private static void ReadCityData()
         {
             Cities = [];
-            DBCities = [];
             string sql = "SELECT * FROM city";
             MySqlCommand cmd = new(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -27,7 +25,6 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetString("city"),
                         rdr.GetInt32("countryId")
                     );
-                DBCities.Add(city);
                 Cities.Add(city);
                 if (city.CityId > highestID)
                 {
@@ -44,7 +41,7 @@ namespace DesktopSchedulingApp.Service
 
         public static bool IsDuplicate(City city)
         {
-            foreach (City c in DBCities)
+            foreach (City c in Cities)
             {
                 if (c.CityId == city.CityId
                     || (c.CityName.Equals(city.CityName)
@@ -56,23 +53,12 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
-        private static bool CityExistsByName(string cityName)
-        {
-            for (int i = 0; i < Cities.Count; i++)
-            {
-                if (Cities[i].CityName.Equals(cityName))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static City FindByCityName(string cityName)
+        public static City FindByCityName(string cityName, int countryId)
         {
             foreach (City city in Cities)
             {
-                if (city.CityName.Equals(cityName))
+                if (city.CityName.Equals(cityName)
+                    && city.CountryId == countryId)
                 {
                     return city;
                 }
@@ -92,34 +78,14 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
-        public static int GetCityID(string cityName)
-        {
-            if (CityExistsByName(cityName))
-            {
-                return FindByCityName(cityName).CityId;
-            }
-            return highestID += 1;
-        }
-
         public static int GetCityID(string cityName, int countryId)
         {
-            var x = FindByCityName(cityName);
+            var x = FindByCityName(cityName, countryId);
             if (x != null)
             {
-                if (x.CountryId == countryId)
-                {
-                    return FindByCityName(cityName).CityId;
-                }
+                return FindByCityName(cityName, countryId).CityId;
             }
             return highestID += 1;
-        }
-
-        public static void AddCity(City city)
-        {
-            if (!IsDuplicate(city))
-            {
-                Cities.Add(city);
-            }
         }
     }
 }

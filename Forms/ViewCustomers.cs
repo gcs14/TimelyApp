@@ -1,4 +1,5 @@
 ﻿using DesktopSchedulingApp.Models;
+using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
 using System;
 using System.Windows.Forms;
@@ -11,19 +12,17 @@ namespace DesktopSchedulingApp.Forms
         Address selectedAddress;
         City selectedCity;
         Country selectedCountry;
-        string username;
 
-        public ViewCustomers(string currentUserName)
+        public ViewCustomers()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             PopulateCustomerTable();
-            username = currentUserName;
         }
 
         private void PopulateCustomerTable()
         {
-            CustomerService.LoadCustomerData(this);
+            DBCommands.LoadCustomerData(this);
             AddressService.ViewAddresses();
             CityService.ViewCities();
             CountryService.ViewCountries();
@@ -32,13 +31,13 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerBtn_Click(object sender, EventArgs e)
         {
-            new AddCustomer(username).ShowDialog();
+            new AddCustomer().ShowDialog();
             PopulateCustomerTable();
         }
 
         private void ModifyCustomerBtn_Click(object sender, EventArgs e)
         {
-            new ModifyCustomer(username, selectedCustomer, selectedAddress, selectedCity, selectedCountry).ShowDialog();
+            new ModifyCustomer(selectedCustomer, selectedAddress, selectedCity, selectedCountry).ShowDialog();
             PopulateCustomerTable();
         }
 

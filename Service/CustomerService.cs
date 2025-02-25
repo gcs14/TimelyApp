@@ -1,9 +1,7 @@
-﻿using DesktopSchedulingApp.Forms;
-using DesktopSchedulingApp.Models;
+﻿using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Data;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
@@ -11,30 +9,11 @@ namespace DesktopSchedulingApp.Service
     internal static class CustomerService
     {
         public static List<Customer> Customers;
-        public static List<Customer> DBCustomers;
         private static int highestID = 0;
 
-        public static void LoadCustomerData(ViewCustomers view)
-        {
-            string sql = "SELECT customer.customerId, customer.customerName, address.addressId, address.address, " +
-                "address.phone, city.cityId, city.city, country.countryId, country.country " +
-                "FROM customer " +
-                "JOIN address ON address.addressId = customer.addressId " +
-                "JOIN city ON city.cityId = address.cityId " +
-                "JOIN country ON country.countryId = city.countryId " +
-                "ORDER BY customer.customerId";
-
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            view.dataGridView1.DataSource = dt;
-            ReadCustomerData(sql);
-        }
-
-        private static void ReadCustomerData(string sql)
+        internal static void ReadCustomerData(string sql)
         {
             Customers = [];
-            DBCustomers = [];
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
 
@@ -45,7 +24,6 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetString("customerName"),
                         rdr.GetInt32("addressId")
                     );
-                DBCustomers.Add(c);
                 Customers.Add(c);
                 if (c.CustomerId > highestID)
                 {
@@ -57,7 +35,7 @@ namespace DesktopSchedulingApp.Service
 
         public static bool IsDuplicate(Customer customer)
         {
-            foreach (Customer c in DBCustomers)
+            foreach (Customer c in Customers)
             {
                 if (c.CustomerId == customer.CustomerId)
                 {
@@ -79,11 +57,12 @@ namespace DesktopSchedulingApp.Service
             return false; 
         }
 
-        public static Customer FindByCustomerName(string customerName)
+        public static Customer FindByCustomerName(string customerName, int addressId)
         {
             foreach (Customer customer in Customers)
             {
-                if (customer.CustomerName.Equals(customerName))
+                if (customer.CustomerName.Equals(customerName)
+                    && customer.AddressId == addressId)
                 {
                     return customer;
                 }
@@ -103,21 +82,19 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
-        public static int GetCustomerID(string customerName)
+        public static int GetCustomerID(string customerName, int addressId)
         {
-            if (CustomerExistsByName(customerName))
+            var x = FindByCustomerName(customerName, addressId);
+            if (x != null)
             {
-                return FindByCustomerName(customerName).CustomerId;
+                return FindByCustomerName(customerName, addressId).CustomerId;
             }
             return highestID += 1;
         }
 
-        public static void AddCustomer(Customer customer)
+        public static void DecrementHighestId()
         {
-            if (!CustomerExistsByName(customer.CustomerName))
-            {
-                Customers.Add(customer);
-            }
+            highestID--;
         }
 
         public static void DeleteCustomer(Customer c)

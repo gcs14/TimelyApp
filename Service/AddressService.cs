@@ -9,13 +9,11 @@ namespace DesktopSchedulingApp.Service
     internal static class AddressService
     {
         public static List<Address> Addresses;
-        private static List<Address> DBAddresses;
         private static int highestID = 0;
 
         private static void ReadAddressData()
         {
             Addresses = [];
-            DBAddresses = [];
             string sql = "SELECT * FROM Address";
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -29,7 +27,6 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetString("phone"),
                         rdr.GetInt32("cityId")
                     );
-                DBAddresses.Add(address);
                 Addresses.Add(address);
                 if (address.AddressId > highestID)
                 {
@@ -46,7 +43,7 @@ namespace DesktopSchedulingApp.Service
 
         public static bool AddressExistsById(int id)
         {
-            foreach (Address address in DBAddresses)
+            foreach (Address address in Addresses)
             {
                 if (address.AddressId == id)
                 {
@@ -58,7 +55,7 @@ namespace DesktopSchedulingApp.Service
 
         public static bool IsDuplicate(Address address)
         {
-            foreach (Address a in DBAddresses)
+            foreach (Address a in Addresses)
             {
                 if (a.AddressId == address.AddressId
                     || (a.StreetAddress.Equals(address.StreetAddress)
@@ -71,11 +68,13 @@ namespace DesktopSchedulingApp.Service
             return false;
         }
 
-        public static Address FindByStreetName(string streetName)
+        public static Address FindByStreetName(string streetName, int cityId, string phone)
         {
             foreach (Address address in Addresses)
             {
-                if (address.StreetAddress.Equals(streetName))
+                if (address.StreetAddress.Equals(streetName)
+                    && address.CityId == cityId
+                    && address.Phone.Equals(phone))
                 {
                     return address;
                 }
@@ -95,26 +94,19 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
-        public static int GetAddressID(string streetName)
+        public static int GetAddressID(string streetName, int cityId, string phone)
         {
-            if (FindByStreetName(streetName) != null)
+            var x = FindByStreetName(streetName, cityId, phone);
+            if (x != null)
             {
-                return FindByStreetName(streetName).AddressId;
+                return FindByStreetName(streetName, cityId, phone).AddressId;
             }
             return highestID += 1;
         }
 
-        public static int GetAddressID(string streetName, int cityId, string phone)
+        public static void DecrementHighestId()
         {
-            var x = FindByStreetName(streetName);
-            if (x != null)
-            {
-                if (x.CityId == cityId && x.Phone == phone)
-                {
-                    return FindByStreetName(streetName).AddressId;
-                }
-            }
-            return highestID += 1;
+            highestID--;
         }
 
         public static string FormatPhone(string phone)
@@ -124,14 +116,6 @@ namespace DesktopSchedulingApp.Service
                 phone = Convert.ToInt64(phone.Trim()).ToString("###-####");
             }
             return phone;
-        }
-
-        public static void AddAddress(Address address)
-        {
-            if (!IsDuplicate(address))
-            {
-                Addresses.Add(address);
-            }
         }
     }
 }

@@ -8,13 +8,11 @@ namespace DesktopSchedulingApp.Service
     internal static class CountryService
     {
         public static List<Country> Countries;
-        private static List<Country> DBCountries;
         private static int highestID = 0;
 
         private static void ReadCountryData()
         {
             Countries = [];
-            DBCountries = [];
             string sql = "SELECT * FROM country";
             MySqlCommand cmd = new(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
@@ -26,8 +24,6 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetInt32("countryId"),
                         rdr.GetString("country")
                     );
-
-                DBCountries.Add(country);
                 Countries.Add(country);
                 if (country.CountryId > highestID)
                 {
@@ -44,7 +40,7 @@ namespace DesktopSchedulingApp.Service
 
         public static bool IsDuplicate(Country country)
         {
-            foreach (Country c in DBCountries)
+            foreach (Country c in Countries)
             {
                 if (c.CountryId == country.CountryId)
                 {
@@ -85,14 +81,6 @@ namespace DesktopSchedulingApp.Service
                 return FindByCountryName(countryName).CountryId;
             }
             return highestID += 1;
-        }
-
-        public static void AddCountry(Country country)
-        {
-            if (!IsDuplicate(country))
-            {
-                Countries.Add(country);
-            }
         }
     }
 }

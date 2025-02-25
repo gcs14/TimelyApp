@@ -10,8 +10,7 @@ namespace DesktopSchedulingApp.Forms
     public partial class AddCustomer : Form
     {
         CustomerExceptions customerExceptions = new();
-        //string currentUserName;
-        public AddCustomer(string n)
+        public AddCustomer()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -32,14 +31,12 @@ namespace DesktopSchedulingApp.Forms
                     CountryService.GetCountryID(countryComboBox.Text.Trim()),
                     countryComboBox.Text.Trim()
                     );
-                CountryService.AddCountry(country);
 
                 City city = new(
-                    CityService.GetCityID(cityText.Text.Trim()),
+                    CityService.GetCityID(cityText.Text.Trim(), country.CountryId),
                     cityText.Text.Trim(),
                     country.CountryId
                     );
-                CityService.AddCity(city);
 
                 string phone = AddressService.FormatPhone(phoneText.Text);
                 Address address = new(
@@ -48,22 +45,29 @@ namespace DesktopSchedulingApp.Forms
                     phone,
                     city.CityId
                     );
-                AddressService.AddAddress(address);
 
                 Customer customer = new(
-                    CustomerService.GetCustomerID(customerNameText.Text.Trim()),
+                    CustomerService.GetCustomerID(customerNameText.Text.Trim(), address.AddressId),
                     customerNameText.Text.Trim(),
                     address.AddressId
                     );
-                CustomerService.AddCustomer(customer);
                 #endregion
 
                 #region -- calling database commands to insert data in specified tables --
                 DBCommands.InsertCountryData(country);
                 DBCommands.InsertCityData(city);
                 DBCommands.InsertAddressData(address);
-                DBCommands.InsertCustomerData(customer);
-                this.Close();
+                try
+                {
+                    DBCommands.InsertCustomerData(customer);
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    //CustomerService.DecrementHighestId();
+                    //AddressService.DecrementHighestId();
+                    MessageBox.Show("ERROR: This customer already exists.");
+                }
                 #endregion
             }
         }

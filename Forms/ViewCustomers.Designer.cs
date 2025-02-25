@@ -141,7 +141,7 @@
             Controls.Add(dataGridView1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             Name = "ViewCustomers";
-            Text = "ViewCustomers";
+            Text = "Customers";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
