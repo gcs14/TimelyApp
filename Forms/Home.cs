@@ -15,9 +15,16 @@ namespace DesktopSchedulingApp.Forms
 
         private void CustomerBtn_Click(object sender, EventArgs e)
         {
-            var viewCustomers = new ViewCustomers(username);
+            var viewCustomers = new ViewCustomers();
             viewCustomers.MdiParent = this;
             viewCustomers.Show();
+        }
+
+        private void AppointmentBtn_Click(object sender, EventArgs e)
+        {
+            var viewAppointments = new ViewAppointments(username);
+            viewAppointments.MdiParent = this;
+            viewAppointments.Show();
         }
     }
 }

@@ -57,6 +57,7 @@
             appointmentsToolStripMenuItem.Name = "appointmentsToolStripMenuItem";
             appointmentsToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             appointmentsToolStripMenuItem.Text = "Appointments";
+            appointmentsToolStripMenuItem.Click += AppointmentBtn_Click;
             // 
             // calendarToolStripMenuItem
             // 
