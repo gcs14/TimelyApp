@@ -84,6 +84,11 @@ namespace DesktopSchedulingApp.Service
             BusinessHours.Add(new TimeOnly(16, 00, 00), "4:00 PM");
             BusinessHours.Add(new TimeOnly(16, 30, 00), "4:30 PM");
             BusinessHours.Add(new TimeOnly(17, 00, 00), "5:00 PM");
+            
+            if (selectedDate.DayOfWeek == DayOfWeek.Saturday || selectedDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                BusinessHours.Clear();
+            }
 
             if (AppointmentDates.ContainsKey(selectedDate))
             {
