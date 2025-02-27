@@ -27,12 +27,26 @@ namespace DesktopSchedulingApp.Repository
             CustomerService.ReadCustomerData(sql);
         }
 
+        public static void LoadCustomerData(AddAppointment view)
+        {
+            string sql = "SELECT customer.customerId, customer.customerName FROM customer ";
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            view.custNamesDGV.DataSource = dt;
+            view.custNamesDGV.Columns["customerId"].Visible = false;
+            view.custNamesDGV.Columns["customerName"].HeaderText = "Customer";
+
+            //CustomerService.ReadCustomerData(sql);
+        }
+
         // appointment Id, customer name, user name, appointment type, appointment date, start time, end time
         public static void LoadAppointmentData(ViewAppointments view)
         {
             string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
                 "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
-                "DATE(appointment.start) AS 'Start Date', DATE(appointment.end) AS 'End Date', " +
+                "appointment.start AS 'Start Date', appointment.end AS 'End Date', " +
                 "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
                 "FROM appointment " +
                 "JOIN user ON user.userId = appointment.userId " +
