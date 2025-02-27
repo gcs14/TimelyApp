@@ -32,7 +32,8 @@ namespace DesktopSchedulingApp.Repository
         {
             string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
                 "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
-                "appointment.start, appointment.end, TIME(appointment.start) AS 'start time', TIME(appointment.end) AS 'end time' " +
+                "DATE(appointment.start) AS 'Start Date', DATE(appointment.end) AS 'End Date', " +
+                "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
                 "FROM appointment " +
                 "JOIN user ON user.userId = appointment.userId " +
                 "JOIN customer ON customer.customerId = appointment.customerId " +

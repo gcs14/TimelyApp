@@ -76,6 +76,7 @@
             addCustomerBtn.TabIndex = 5;
             addCustomerBtn.Text = "Add";
             addCustomerBtn.UseVisualStyleBackColor = false;
+            addCustomerBtn.Click += addCustomerBtn_Click;
             // 
             // dataGridView1
             // 

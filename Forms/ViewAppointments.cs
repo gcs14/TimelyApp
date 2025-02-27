@@ -30,5 +30,10 @@ namespace DesktopSchedulingApp.Forms
             dataGridView1.Columns["userId"].Visible = false;
             dataGridView1.Columns["customerId"].Visible = false;
         }
+
+        private void addCustomerBtn_Click(object sender, EventArgs e)
+        {
+            new AddAppointment().ShowDialog();
+        }
     }
 }
