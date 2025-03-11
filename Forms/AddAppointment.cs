@@ -1,4 +1,5 @@
-﻿using DesktopSchedulingApp.Repository;
+﻿using DesktopSchedulingApp.Models;
+using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
 using MySql.Data.MySqlClient;
 using System;
@@ -15,8 +16,10 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class AddAppointment : Form
     {
-        public AddAppointment()
+        string currentUser;
+        public AddAppointment(string username)
         {
+            currentUser = username;
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             //AppointmentService.SetAvailableHours();
@@ -44,8 +47,27 @@ namespace DesktopSchedulingApp.Forms
             {
                 hoursDGV.Columns.Remove("Time");
             }
-            AppointmentService.GetSelectedDate(monthCalendar1.SelectionRange.Start.ToShortDateString());
+            AppointmentService.GetSelectedDate(monthCalendar.SelectionRange.Start.ToShortDateString());
             AppointmentService.SetAvailableHours(this);
+        }
+
+        private void addAppointmentBtn_Click(object sender, EventArgs e)
+        {
+            Customer selectedCustomer = CustomerService.FindByCustomerName(Convert.ToString(custNamesDGV.CurrentRow.Cells[1].Value.ToString()));
+            
+            string date = monthCalendar.SelectionStart.ToShortDateString();
+            string time = AppointmentService.GetSelectedTime(hoursDGV.CurrentRow.Cells[0].Value.ToString());
+            DateTime appointmentStart = Convert.ToDateTime(date + " " + time);
+            DateTime appointmentEnd = appointmentStart.AddMinutes(Convert.ToDouble(durationComboBox.Text));
+
+            Appointment appointment = new(
+                AppointmentService.GetAppointmentID(selectedCustomer.CustomerId, 1, appointmentStart, appointmentEnd),
+                selectedCustomer.CustomerId,
+                1,
+                typeComboBox.Text,
+                appointmentStart,
+                appointmentEnd
+                );
         }
     }
 }

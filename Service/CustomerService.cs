@@ -57,6 +57,18 @@ namespace DesktopSchedulingApp.Service
             return false; 
         }
 
+        public static Customer FindByCustomerName(string customerName)
+        {
+            foreach (Customer customer in Customers)
+            {
+                if (customer.CustomerName.Equals(customerName))
+                {
+                    return customer;
+                }
+            }
+            return null;
+        }
+
         public static Customer FindByCustomerName(string customerName, int addressId)
         {
             foreach (Customer customer in Customers)

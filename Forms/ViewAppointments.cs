@@ -14,13 +14,13 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class ViewAppointments : Form
     {
-        string currentUserName;
+        string currentUser;
         public ViewAppointments(string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             PopulateAppointmentTable();
-            username = currentUserName;
+            currentUser = username;
         }
 
         private void PopulateAppointmentTable()
@@ -33,7 +33,7 @@ namespace DesktopSchedulingApp.Forms
 
         private void addCustomerBtn_Click(object sender, EventArgs e)
         {
-            new AddAppointment().ShowDialog();
+            new AddAppointment(currentUser).ShowDialog();
         }
     }
 }

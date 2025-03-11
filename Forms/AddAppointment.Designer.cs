@@ -33,12 +33,12 @@
             hoursDGV = new System.Windows.Forms.DataGridView();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
-            monthCalendar1 = new System.Windows.Forms.MonthCalendar();
+            monthCalendar = new System.Windows.Forms.MonthCalendar();
             button1 = new System.Windows.Forms.Button();
             durationComboBox = new System.Windows.Forms.ComboBox();
             typeComboBox = new System.Windows.Forms.ComboBox();
             label4 = new System.Windows.Forms.Label();
-            button2 = new System.Windows.Forms.Button();
+            addAppointment_Btn = new System.Windows.Forms.Button();
             label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hoursDGV).BeginInit();
@@ -108,14 +108,14 @@
             label2.TabIndex = 3;
             label2.Text = "Select Time Slot:";
             // 
-            // monthCalendar1
+            // monthCalendar
             // 
-            monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            monthCalendar1.Location = new System.Drawing.Point(18, 145);
-            monthCalendar1.MaxSelectionCount = 1;
-            monthCalendar1.Name = "monthCalendar1";
-            monthCalendar1.TabIndex = 4;
-            monthCalendar1.DateSelected += MonthCalendar1_DateSelected;
+            monthCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
+            monthCalendar.Location = new System.Drawing.Point(18, 145);
+            monthCalendar.MaxSelectionCount = 1;
+            monthCalendar.Name = "monthCalendar";
+            monthCalendar.TabIndex = 4;
+            monthCalendar.DateSelected += MonthCalendar1_DateSelected;
             // 
             // button1
             // 
@@ -154,14 +154,15 @@
             label4.TabIndex = 3;
             label4.Text = "Type:";
             // 
-            // button2
+            // addAppointment_Btn
             // 
-            button2.Location = new System.Drawing.Point(483, 388);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(75, 23);
-            button2.TabIndex = 7;
-            button2.Text = "Submit";
-            button2.UseVisualStyleBackColor = true;
+            addAppointment_Btn.Location = new System.Drawing.Point(483, 388);
+            addAppointment_Btn.Name = "addAppointment_Btn";
+            addAppointment_Btn.Size = new System.Drawing.Size(75, 23);
+            addAppointment_Btn.TabIndex = 7;
+            addAppointment_Btn.Text = "Submit";
+            addAppointment_Btn.UseVisualStyleBackColor = true;
+            addAppointment_Btn.Click += addAppointmentBtn_Click;
             // 
             // label5
             // 
@@ -179,11 +180,11 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
             ClientSize = new System.Drawing.Size(578, 438);
-            Controls.Add(button2);
+            Controls.Add(addAppointment_Btn);
             Controls.Add(typeComboBox);
             Controls.Add(durationComboBox);
             Controls.Add(button1);
-            Controls.Add(monthCalendar1);
+            Controls.Add(monthCalendar);
             Controls.Add(label4);
             Controls.Add(label5);
             Controls.Add(label2);
@@ -206,12 +207,12 @@
         internal System.Windows.Forms.DataGridView hoursDGV;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.MonthCalendar monthCalendar1;
+        private System.Windows.Forms.MonthCalendar monthCalendar;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox durationComboBox;
         private System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button addAppointment_Btn;
         private System.Windows.Forms.Label label5;
     }
 }

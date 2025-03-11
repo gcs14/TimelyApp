@@ -29,36 +29,20 @@ namespace DesktopSchedulingApp.Repository
 
         public static void LoadCustomerData(AddAppointment view)
         {
-            string sql = "SELECT customer.customerId, customer.customerName FROM customer ";
+            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer ";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
             view.custNamesDGV.DataSource = dt;
             view.custNamesDGV.Columns["customerId"].Visible = false;
+            view.custNamesDGV.Columns["addressId"].Visible = false;
             view.custNamesDGV.Columns["customerName"].HeaderText = "Customer";
 
-            //CustomerService.ReadCustomerData(sql);
+            CustomerService.ReadCustomerData(sql);
         }
 
-        // appointment Id, customer name, user name, appointment type, appointment date, start time, end time
-        public static void LoadAppointmentData(ViewAppointments view)
-        {
-            string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
-                "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
-                "appointment.start AS 'Start Date', appointment.end AS 'End Date', " +
-                "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
-                "FROM appointment " +
-                "JOIN user ON user.userId = appointment.userId " +
-                "JOIN customer ON customer.customerId = appointment.customerId " +
-                "ORDER BY appointment.appointmentId;";
-
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            view.dataGridView1.DataSource = dt;
-            AppointmentService.ReadAppointmentData(sql);
-        }
+        
 
         public static void InsertCountryData(Country country)
         {
@@ -121,8 +105,6 @@ namespace DesktopSchedulingApp.Repository
 
         public static void InsertCustomerData(Customer customer)
         {
-            //if (customer != null && !CustomerService.IsDuplicate(customer))
-            
             string insertCustomerQuery = "INSERT INTO Customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
             "VALUES (@custId, @custName, @addressId, @active, @created, @createdBy, @update, @updateBy)";
 
@@ -169,6 +151,50 @@ namespace DesktopSchedulingApp.Repository
 
             MySqlCommand cmd = new MySqlCommand(deleteQuery, DBConnection.conn);
             cmd.Parameters.AddWithValue("@id", customer.CustomerId);
+            cmd.ExecuteNonQuery();
+        }
+
+        public static void LoadAppointmentData(ViewAppointments view)
+        {
+            string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
+                "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
+                "appointment.start AS 'Start Date', appointment.end AS 'End Date', " +
+                "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
+                "FROM appointment " +
+                "JOIN user ON user.userId = appointment.userId " +
+                "JOIN customer ON customer.customerId = appointment.customerId " +
+                "ORDER BY appointment.appointmentId;";
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            view.dataGridView1.DataSource = dt;
+            AppointmentService.ReadAppointmentData(sql);
+        }
+
+        public static void InsertAppointmentData(Appointment appointment)
+        {
+            string insertAppointmentQuery = "INSERT INTO Appointment (appointmentId, customerId, userId, title, " +
+                "description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES (@appointmentId, @customerId, @userId, @title, @description, @location, @contact, @type, " +
+                "@url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)";
+
+            MySqlCommand cmd = new MySqlCommand(insertAppointmentQuery, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@appointmentId", appointment.AppointmentId);
+            cmd.Parameters.AddWithValue("@customerId", appointment.CustomerId);
+            cmd.Parameters.AddWithValue("@userId", appointment.UserId);
+            cmd.Parameters.AddWithValue("@title", "");
+            cmd.Parameters.AddWithValue("@description", "");
+            cmd.Parameters.AddWithValue("@location", "");
+            cmd.Parameters.AddWithValue("@contact", "");
+            cmd.Parameters.AddWithValue("@type", appointment.Type);
+            cmd.Parameters.AddWithValue("@url", "");
+            cmd.Parameters.AddWithValue("@start", appointment.StartTime);
+            cmd.Parameters.AddWithValue("@end", appointment.EndTime);
+            cmd.Parameters.AddWithValue("@createDate", "2000-01-01");
+            cmd.Parameters.AddWithValue("@createdBy", "");
+            cmd.Parameters.AddWithValue("@lastUpdate", "2000-01-01");
+            cmd.Parameters.AddWithValue("@lastUpdateBy", "");
             cmd.ExecuteNonQuery();
         }
     }

@@ -123,7 +123,40 @@ namespace DesktopSchedulingApp.Service
 
         public static void GetSelectedDate(string date)
         {
-            selectedDate =  DateOnly.FromDateTime(DateTime.Parse(date));
+            selectedDate = DateOnly.FromDateTime(DateTime.Parse(date));
+        }
+
+        public static string GetSelectedTime(string selectedTime)
+        {
+            foreach (KeyValuePair<TimeOnly, string> time in BusinessHours)
+            {
+                if (time.Value == selectedTime)
+                {
+                    return time.Key.ToString();
+                }
+            }
+            return null;
+        }
+
+        public static int GetAppointmentID(int customerId, int userId, DateTime start, DateTime end)
+        {
+            foreach (Appointment appointment in Appointments)
+            {
+                if (appointment.CustomerId == customerId
+                    && appointment.UserId == userId
+                    && appointment.StartTime == start
+                    && appointment.EndTime == end)
+                {
+                    return appointment.AppointmentId;
+                }
+            }
+            return highestID++;
+            //var x = FindByCustomerName(customerName, addressId);
+            //if (x != null)
+            //{
+            //    return FindByCustomerName(customerName, addressId).CustomerId;
+            //}
+            //return highestID += 1;
         }
     }
 }
