@@ -20,7 +20,7 @@ namespace DesktopSchedulingApp.Repository
                 string constr = ConfigurationManager.ConnectionStrings["localdb"].ConnectionString;
                 conn = new MySqlConnection(constr);
                 conn.Open();
-                //MessageBox.Show("Connection is open");
+                //MessageBox.Show("Connection is open"
             }
             catch(MySqlException ex)
             {
