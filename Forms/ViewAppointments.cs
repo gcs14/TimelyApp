@@ -1,13 +1,5 @@
 ﻿using DesktopSchedulingApp.Repository;
-using DesktopSchedulingApp.Service;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
@@ -26,14 +18,21 @@ namespace DesktopSchedulingApp.Forms
         private void PopulateAppointmentTable()
         {
             DBCommands.LoadAppointmentData(this);
+            DBCommands.LoadUserData();
             dataGridView1.CurrentCell = null;
             dataGridView1.Columns["userId"].Visible = false;
             dataGridView1.Columns["customerId"].Visible = false;
+            dataGridView1.Columns["End Date"].Visible = false;
+            dataGridView1.Columns[6].DefaultCellStyle.Format = @"MM\/dd\/yyyy";
+            dataGridView1.Columns[7].DefaultCellStyle.Format = @"MM\/dd\/yyyy";
+            dataGridView1.Columns[8].DefaultCellStyle.Format = @"hh\:mm";
+            dataGridView1.Columns[9].DefaultCellStyle.Format = @"hh\:mm";
         }
 
         private void addCustomerBtn_Click(object sender, EventArgs e)
         {
             new AddAppointment(currentUser).ShowDialog();
+            PopulateAppointmentTable();
         }
     }
 }

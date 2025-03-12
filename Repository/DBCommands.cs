@@ -2,14 +2,18 @@
 using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Service;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
-using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Repository
 {
     internal class DBCommands
     {
+        public static void LoadUserData()
+        {
+            string sql = "SELECT user.userId, user.userName, user.password FROM user";
+            UserService.ReadUserData(sql);
+        }
+
         public static void LoadCustomerData(ViewCustomers view)
         {
             string sql = "SELECT customer.customerId, customer.customerName, address.addressId, address.address, " +
@@ -29,7 +33,7 @@ namespace DesktopSchedulingApp.Repository
 
         public static void LoadCustomerData(AddAppointment view)
         {
-            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer ";
+            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
@@ -41,8 +45,6 @@ namespace DesktopSchedulingApp.Repository
 
             CustomerService.ReadCustomerData(sql);
         }
-
-        
 
         public static void InsertCountryData(Country country)
         {
@@ -158,7 +160,7 @@ namespace DesktopSchedulingApp.Repository
         {
             string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
                 "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
-                "appointment.start AS 'Start Date', appointment.end AS 'End Date', " +
+                "appointment.start AS 'Date', appointment.end AS 'End Date', " +
                 "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
                 "FROM appointment " +
                 "JOIN user ON user.userId = appointment.userId " +

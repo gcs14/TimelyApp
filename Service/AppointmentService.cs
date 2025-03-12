@@ -4,8 +4,6 @@ using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Globalization;
 using System.Linq;
 
 namespace DesktopSchedulingApp.Service
@@ -22,6 +20,7 @@ namespace DesktopSchedulingApp.Service
         internal static void ReadAppointmentData(string sql)
         {
             Appointments = [];
+            AppointmentDates = [];
             MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
             MySqlDataReader rdr = cmd.ExecuteReader();
 
@@ -33,7 +32,7 @@ namespace DesktopSchedulingApp.Service
                         rdr.GetInt32("userId"),
                         rdr.GetInt32("customerId"),
                         rdr.GetString("Type"),
-                        rdr.GetDateTime("Start Date"),
+                        rdr.GetDateTime("Date"),
                         rdr.GetDateTime("End Date")
                     );
                 Appointments.Add(appointment);
@@ -54,7 +53,6 @@ namespace DesktopSchedulingApp.Service
                 {
                     AppointmentDates[DateOnly.FromDateTime(appointment.StartTime)].Add(TimeOnly.FromDateTime(appointment.StartTime), duration);
                 }
-                
 
                 if (appointment.AppointmentId > highestID)
                 {
@@ -83,11 +81,21 @@ namespace DesktopSchedulingApp.Service
             BusinessHours.Add(new TimeOnly(15, 30, 00), "3:30 PM");
             BusinessHours.Add(new TimeOnly(16, 00, 00), "4:00 PM");
             BusinessHours.Add(new TimeOnly(16, 30, 00), "4:30 PM");
-            BusinessHours.Add(new TimeOnly(17, 00, 00), "5:00 PM");
-            
-            if (selectedDate.DayOfWeek == DayOfWeek.Saturday || selectedDate.DayOfWeek == DayOfWeek.Sunday)
+
+            if (selectedDate < DateOnly.FromDateTime(DateTime.Now)
+                || selectedDate.DayOfWeek == DayOfWeek.Saturday 
+                || selectedDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 BusinessHours.Clear();
+            }
+
+            foreach (KeyValuePair<TimeOnly, string> hour in BusinessHours)
+            {
+                if (selectedDate == DateOnly.FromDateTime(DateTime.Today)
+                    && hour.Key < TimeOnly.FromDateTime(DateTime.Now))
+                {
+                    BusinessHours.Remove(hour.Key);
+                }
             }
 
             if (AppointmentDates.ContainsKey(selectedDate))
@@ -100,12 +108,12 @@ namespace DesktopSchedulingApp.Service
                         {
                             if (time.Value.TotalMinutes == 30.00)
                             {
-                                BusinessHours.Remove(BusinessHours.Keys.ToList()[BusinessHours.Keys.ToList().IndexOf(t) + 1]);
+                                BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 1]);
                             }
                             if (time.Value.TotalMinutes == 60.00)
                             {
-                                BusinessHours.Remove(BusinessHours.Keys.ToList()[BusinessHours.Keys.ToList().IndexOf(t) + 1]);
-                                BusinessHours.Remove(BusinessHours.Keys.ToList()[BusinessHours.Keys.ToList().IndexOf(t) + 2]);
+                                BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 1]);
+                                BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 2]);
                             }
                             BusinessHours.Remove(t);
                         }
@@ -119,6 +127,11 @@ namespace DesktopSchedulingApp.Service
             {
                 view.hoursDGV.Rows.Add(entry.Value);
             }
+        }
+
+        public static int GetBusinessHoursKeyIndex(TimeOnly key)
+        {
+            return BusinessHours.Keys.ToList().IndexOf(key);
         }
 
         public static void GetSelectedDate(string date)
@@ -138,6 +151,11 @@ namespace DesktopSchedulingApp.Service
             return null;
         }
 
+        public static DateTime MergeDateTime(string date, string time)
+        {
+            return Convert.ToDateTime(date + " " + time);
+        }
+
         public static int GetAppointmentID(int customerId, int userId, DateTime start, DateTime end)
         {
             foreach (Appointment appointment in Appointments)
@@ -150,13 +168,7 @@ namespace DesktopSchedulingApp.Service
                     return appointment.AppointmentId;
                 }
             }
-            return highestID++;
-            //var x = FindByCustomerName(customerName, addressId);
-            //if (x != null)
-            //{
-            //    return FindByCustomerName(customerName, addressId).CustomerId;
-            //}
-            //return highestID += 1;
+            return highestID += 1;
         }
     }
 }

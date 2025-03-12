@@ -1,39 +1,24 @@
-﻿using DesktopSchedulingApp.Models;
+﻿using DesktopSchedulingApp.Exceptions;
+using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
-using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
 {
     public partial class AddAppointment : Form
     {
+        AppointmentExceptions appointmentExceptions = new();
         string currentUser;
         public AddAppointment(string username)
         {
             currentUser = username;
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            //AppointmentService.SetAvailableHours();
 
             DBCommands.LoadCustomerData(this);
             durationComboBox.SelectedIndex = 0;
-
-            //hoursDGV.Columns.Add("Time", "Time");
-            //hoursDGV.CurrentCell = null;
-            //foreach (KeyValuePair<TimeOnly, string> entry in AppointmentService.BusinessHours)
-            //{
-            //    hoursDGV.Rows.Add(entry.Value);
-            //}
-
         }
 
         private void NewCustomer_Click(object sender, EventArgs e)
@@ -55,19 +40,27 @@ namespace DesktopSchedulingApp.Forms
         {
             Customer selectedCustomer = CustomerService.FindByCustomerName(Convert.ToString(custNamesDGV.CurrentRow.Cells[1].Value.ToString()));
             
-            string date = monthCalendar.SelectionStart.ToShortDateString();
-            string time = AppointmentService.GetSelectedTime(hoursDGV.CurrentRow.Cells[0].Value.ToString());
-            DateTime appointmentStart = Convert.ToDateTime(date + " " + time);
-            DateTime appointmentEnd = appointmentStart.AddMinutes(Convert.ToDouble(durationComboBox.Text));
+            DateTime appointmentStart = AppointmentService.MergeDateTime(
+                monthCalendar.SelectionStart.ToShortDateString(),
+                AppointmentService.GetSelectedTime(hoursDGV.CurrentRow.Cells[0].Value.ToString())
+                );
+            DateTime appointmentEnd = appointmentStart.AddMinutes(Convert.ToDouble(durationComboBox.Text.Substring(0,2)));
 
-            Appointment appointment = new(
+            Appointment appointment = new (
                 AppointmentService.GetAppointmentID(selectedCustomer.CustomerId, 1, appointmentStart, appointmentEnd),
                 selectedCustomer.CustomerId,
-                1,
+                UserService.GetUserId(currentUser),
                 typeComboBox.Text,
                 appointmentStart,
                 appointmentEnd
                 );
+
+            if (appointmentExceptions.AddAppointmentExceptions(this))
+            {
+                AppointmentService.Appointments.Add(appointment);
+                DBCommands.InsertAppointmentData(appointment);
+                this.Close();
+            }
         }
     }
 }
