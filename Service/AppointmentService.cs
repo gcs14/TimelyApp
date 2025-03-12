@@ -113,7 +113,10 @@ namespace DesktopSchedulingApp.Service
                             if (time.Value.TotalMinutes == 60.00)
                             {
                                 BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 1]);
-                                BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 2]);
+                                if (time.Key != TimeOnly.Parse("16:00:00"))
+                                {
+                                    BusinessHours.Remove(BusinessHours.Keys.ToList()[GetBusinessHoursKeyIndex(t) + 2]);
+                                }
                             }
                             BusinessHours.Remove(t);
                         }
