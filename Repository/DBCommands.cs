@@ -165,7 +165,7 @@ namespace DesktopSchedulingApp.Repository
                 "FROM appointment " +
                 "JOIN user ON user.userId = appointment.userId " +
                 "JOIN customer ON customer.customerId = appointment.customerId " +
-                "ORDER BY appointment.appointmentId;";
+                "ORDER BY appointment.start;";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
