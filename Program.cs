@@ -24,8 +24,8 @@ namespace DesktopSchedulingApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConnection.StartConnection();
-            //Application.Run(new Login());
-            Application.Run(new Home("test"));
+            Application.Run(new Login());
+            //Application.Run(new Home("test"));
             DBConnection.CloseConnection();
         }
     }
