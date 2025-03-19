@@ -1,5 +1,4 @@
 ﻿using DesktopSchedulingApp.Forms;
-using DesktopSchedulingApp.Models;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -9,10 +8,6 @@ namespace DesktopSchedulingApp.Exceptions
     {
         AddCustomer addCustomer;
         ModifyCustomer modifyCustomer;
-        Country country;
-        City city;
-        Address address;
-        Customer customer;
 
         public bool AddCustomerExceptions(AddCustomer addCustomer)
         {
@@ -110,14 +105,9 @@ namespace DesktopSchedulingApp.Exceptions
             return true;
         }
 
-        public bool ModifyCustomerExceptions(ModifyCustomer modifyCustomer, Country country,
-            City city, Address address, Customer customer)
+        public bool ModifyCustomerExceptions(ModifyCustomer modifyCustomer)
         {
             this.modifyCustomer = modifyCustomer;
-            this.country = country;
-            this.city = city;
-            this.address = address;
-            this.customer = customer;
 
             // No blank customer name
             if (string.IsNullOrWhiteSpace(modifyCustomer.customerNameText.Text))
@@ -243,27 +233,27 @@ namespace DesktopSchedulingApp.Exceptions
                     break;
                 // customer name
                 case 5:
-                    modifyCustomer.customerNameText.Text = customer.CustomerName;
+                    modifyCustomer.customerNameText.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "customerName").Select(kv => kv.Value).ToString();
                     modifyCustomer.customerNameText.Focus();
                     break;
                 // customer phone number
                 case 6:
-                    modifyCustomer.phoneText.Text = address.Phone;
+                    modifyCustomer.phoneText.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "phone").Select(kv => kv.Value).ToString();
                     modifyCustomer.phoneText.Focus();
                     break;
                 // customer address
                 case 7:
-                    modifyCustomer.addressText.Text = address.StreetAddress;
+                    modifyCustomer.addressText.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "address").Select(kv => kv.Value).ToString();
                     modifyCustomer.addressText.Focus();
                     break;
                 // customer city
                 case 8:
-                    modifyCustomer.cityText.Text = city.CityName;
+                    modifyCustomer.cityText.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "city").Select(kv => kv.Value).ToString();
                     modifyCustomer.cityText.Focus();
                     break;
                 // customer country
                 case 9:
-                    modifyCustomer.countryComboBox.Text = country.CountryName;
+                    modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "country").Select(kv => kv.Value).ToString();
                     modifyCustomer.countryComboBox.Focus();
                     break;
             }

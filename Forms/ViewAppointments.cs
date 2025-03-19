@@ -1,4 +1,4 @@
-﻿using DesktopSchedulingApp.Repository;
+﻿using DesktopSchedulingApp.Service;
 using System;
 using System.Windows.Forms;
 
@@ -6,19 +6,21 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class ViewAppointments : Form
     {
-        string currentUser;
+        int selectedAppointmentId;
+        string username;
+
         public ViewAppointments(string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             PopulateAppointmentTable();
-            currentUser = username;
+            this.username = username;
         }
 
         private void PopulateAppointmentTable()
         {
-            DBCommands.LoadAppointmentData(this);
-            DBCommands.LoadUserData();
+            AppointmentService.LoadAppointmentData(this);
+            UserService.LoadUserData();
             dataGridView1.CurrentCell = null;
             dataGridView1.Columns["userId"].Visible = false;
             dataGridView1.Columns["customerId"].Visible = false;
@@ -29,10 +31,27 @@ namespace DesktopSchedulingApp.Forms
             dataGridView1.Columns[9].DefaultCellStyle.Format = @"hh\:mm";
         }
 
-        private void addCustomerBtn_Click(object sender, EventArgs e)
+        private void AddAppointmentBtn_Click(object sender, EventArgs e)
         {
-            new AddAppointment(currentUser).ShowDialog();
+            new AddAppointment(username).ShowDialog();
             PopulateAppointmentTable();
+        }
+
+        private void ModifyAppointmentBtn_Click(object sender, EventArgs e)
+        {
+            new ModifyAppointment(selectedAppointmentId).ShowDialog();
+            PopulateAppointmentTable();
+        }
+
+        private void DeleteAppointmentBtn_Click(object sender, EventArgs e)
+        {
+            AppointmentService.DeleteAppointment(selectedAppointmentId);
+            PopulateAppointmentTable();
+        }
+
+        private void AppointmentSelection(object sender, EventArgs e)
+        {
+            selectedAppointmentId = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value);
         }
     }
 }

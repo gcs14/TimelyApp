@@ -40,6 +40,7 @@
             addCustomerLabel = new System.Windows.Forms.Label();
             addressText = new System.Windows.Forms.TextBox();
             addressLabel = new System.Windows.Forms.Label();
+            AddCancelBtn = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // customerNameText
@@ -52,13 +53,13 @@
             // addCustomerSubmitBtn
             // 
             addCustomerSubmitBtn.AutoSize = true;
-            addCustomerSubmitBtn.BackColor = System.Drawing.Color.Silver;
+            addCustomerSubmitBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             addCustomerSubmitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            addCustomerSubmitBtn.Font = new System.Drawing.Font("Arial", 11F);
-            addCustomerSubmitBtn.Location = new System.Drawing.Point(179, 295);
+            addCustomerSubmitBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
+            addCustomerSubmitBtn.Location = new System.Drawing.Point(227, 287);
             addCustomerSubmitBtn.Name = "addCustomerSubmitBtn";
             addCustomerSubmitBtn.Size = new System.Drawing.Size(75, 32);
-            addCustomerSubmitBtn.TabIndex = 9;
+            addCustomerSubmitBtn.TabIndex = 6;
             addCustomerSubmitBtn.Text = "Submit";
             addCustomerSubmitBtn.UseVisualStyleBackColor = false;
             addCustomerSubmitBtn.Click += AddCustomerSubmitBtn_Click;
@@ -108,7 +109,7 @@
             cityText.Location = new System.Drawing.Point(227, 177);
             cityText.Name = "cityText";
             cityText.Size = new System.Drawing.Size(170, 23);
-            cityText.TabIndex = 5;
+            cityText.TabIndex = 4;
             // 
             // cityLabel
             // 
@@ -128,18 +129,19 @@
             countryComboBox.Location = new System.Drawing.Point(27, 239);
             countryComboBox.Name = "countryComboBox";
             countryComboBox.Size = new System.Drawing.Size(121, 23);
-            countryComboBox.TabIndex = 7;
+            countryComboBox.TabIndex = 5;
             // 
             // addCustomerLabel
             // 
-            addCustomerLabel.AutoSize = true;
+            addCustomerLabel.Dock = System.Windows.Forms.DockStyle.Top;
             addCustomerLabel.Font = new System.Drawing.Font("Arial Black", 30F);
             addCustomerLabel.ForeColor = System.Drawing.Color.MediumPurple;
-            addCustomerLabel.Location = new System.Drawing.Point(15, 9);
+            addCustomerLabel.Location = new System.Drawing.Point(0, 0);
             addCustomerLabel.Name = "addCustomerLabel";
-            addCustomerLabel.Size = new System.Drawing.Size(391, 56);
+            addCustomerLabel.Size = new System.Drawing.Size(422, 76);
             addCustomerLabel.TabIndex = 0;
             addCustomerLabel.Text = "NEW CUSTOMER";
+            addCustomerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // addressText
             // 
@@ -159,6 +161,20 @@
             addressLabel.TabIndex = 2;
             addressLabel.Text = "Address";
             // 
+            // AddCancelBtn
+            // 
+            AddCancelBtn.AutoSize = true;
+            AddCancelBtn.BackColor = System.Drawing.Color.MediumPurple;
+            AddCancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            AddCancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
+            AddCancelBtn.Location = new System.Drawing.Point(322, 287);
+            AddCancelBtn.Name = "AddCancelBtn";
+            AddCancelBtn.Size = new System.Drawing.Size(75, 32);
+            AddCancelBtn.TabIndex = 7;
+            AddCancelBtn.Text = "Cancel";
+            AddCancelBtn.UseVisualStyleBackColor = false;
+            AddCancelBtn.Click += AddCancelBtn_Click;
+            // 
             // AddCustomer
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -172,6 +188,7 @@
             Controls.Add(countryLabel);
             Controls.Add(phoneLabel);
             Controls.Add(customerNameLabel);
+            Controls.Add(AddCancelBtn);
             Controls.Add(addCustomerSubmitBtn);
             Controls.Add(addressText);
             Controls.Add(cityText);
@@ -198,5 +215,6 @@
         internal System.Windows.Forms.ComboBox countryComboBox;
         internal System.Windows.Forms.TextBox addressText;
         private System.Windows.Forms.Label addressLabel;
+        private System.Windows.Forms.Button AddCancelBtn;
     }
 }

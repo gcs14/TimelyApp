@@ -37,6 +37,7 @@
             passwordText = new System.Windows.Forms.TextBox();
             usernameText = new System.Windows.Forms.TextBox();
             loginLabel = new System.Windows.Forms.Label();
+            CreateAccount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -46,9 +47,9 @@
             usernameLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             usernameLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             usernameLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            usernameLabel.Location = new System.Drawing.Point(162, 229);
+            usernameLabel.Location = new System.Drawing.Point(142, 172);
             usernameLabel.Name = "usernameLabel";
-            usernameLabel.Size = new System.Drawing.Size(98, 23);
+            usernameLabel.Size = new System.Drawing.Size(80, 19);
             usernameLabel.TabIndex = 0;
             usernameLabel.Text = "USERNAME";
             // 
@@ -58,9 +59,9 @@
             passwordLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             passwordLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             passwordLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            passwordLabel.Location = new System.Drawing.Point(162, 341);
+            passwordLabel.Location = new System.Drawing.Point(142, 256);
             passwordLabel.Name = "passwordLabel";
-            passwordLabel.Size = new System.Drawing.Size(99, 23);
+            passwordLabel.Size = new System.Drawing.Size(81, 19);
             passwordLabel.TabIndex = 0;
             passwordLabel.Text = "PASSWORD";
             // 
@@ -68,14 +69,13 @@
             // 
             enterBtn.AutoSize = true;
             enterBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            enterBtn.BackColor = System.Drawing.Color.Silver;
+            enterBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             enterBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             enterBtn.Font = new System.Drawing.Font("Arial", 11F);
-            enterBtn.Location = new System.Drawing.Point(231, 460);
-            enterBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            enterBtn.Location = new System.Drawing.Point(204, 385);
             enterBtn.Name = "enterBtn";
-            enterBtn.Size = new System.Drawing.Size(87, 34);
-            enterBtn.TabIndex = 2;
+            enterBtn.Size = new System.Drawing.Size(70, 29);
+            enterBtn.TabIndex = 3;
             enterBtn.Text = "ENTER";
             enterBtn.UseVisualStyleBackColor = false;
             enterBtn.Click += EnterBtn_Click;
@@ -85,10 +85,9 @@
             pictureBox1.BackColor = System.Drawing.Color.White;
             pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             pictureBox1.Image = Properties.Resources.hidden;
-            pictureBox1.Location = new System.Drawing.Point(389, 371);
-            pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            pictureBox1.Location = new System.Drawing.Point(340, 278);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new System.Drawing.Size(35, 39);
+            pictureBox1.Size = new System.Drawing.Size(31, 29);
             pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
@@ -99,9 +98,9 @@
             passwordError.AutoSize = true;
             passwordError.Font = new System.Drawing.Font("Arial Black", 12F);
             passwordError.ForeColor = System.Drawing.Color.Red;
-            passwordError.Location = new System.Drawing.Point(358, 336);
+            passwordError.Location = new System.Drawing.Point(313, 252);
             passwordError.Name = "passwordError";
-            passwordError.Size = new System.Drawing.Size(23, 28);
+            passwordError.Size = new System.Drawing.Size(19, 23);
             passwordError.TabIndex = 4;
             passwordError.Text = "*";
             passwordError.Visible = false;
@@ -111,9 +110,9 @@
             usernameError.AutoSize = true;
             usernameError.Font = new System.Drawing.Font("Arial Black", 12F);
             usernameError.ForeColor = System.Drawing.Color.Red;
-            usernameError.Location = new System.Drawing.Point(358, 227);
+            usernameError.Location = new System.Drawing.Point(313, 170);
             usernameError.Name = "usernameError";
-            usernameError.Size = new System.Drawing.Size(23, 28);
+            usernameError.Size = new System.Drawing.Size(19, 23);
             usernameError.TabIndex = 4;
             usernameError.Text = "*";
             usernameError.Visible = false;
@@ -121,21 +120,19 @@
             // passwordText
             // 
             passwordText.Font = new System.Drawing.Font("Segoe UI", 12F);
-            passwordText.Location = new System.Drawing.Point(166, 371);
-            passwordText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            passwordText.Location = new System.Drawing.Point(145, 278);
             passwordText.Name = "passwordText";
             passwordText.PasswordChar = '*';
-            passwordText.Size = new System.Drawing.Size(215, 34);
-            passwordText.TabIndex = 5;
+            passwordText.Size = new System.Drawing.Size(189, 29);
+            passwordText.TabIndex = 2;
             // 
             // usernameText
             // 
             usernameText.Font = new System.Drawing.Font("Segoe UI", 12F);
-            usernameText.Location = new System.Drawing.Point(166, 259);
-            usernameText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            usernameText.Location = new System.Drawing.Point(145, 194);
             usernameText.Name = "usernameText";
-            usernameText.Size = new System.Drawing.Size(215, 34);
-            usernameText.TabIndex = 5;
+            usernameText.Size = new System.Drawing.Size(189, 29);
+            usernameText.TabIndex = 1;
             // 
             // loginLabel
             // 
@@ -144,17 +141,31 @@
             loginLabel.ForeColor = System.Drawing.Color.MediumPurple;
             loginLabel.Location = new System.Drawing.Point(0, 0);
             loginLabel.Name = "loginLabel";
-            loginLabel.Size = new System.Drawing.Size(553, 199);
-            loginLabel.TabIndex = 6;
+            loginLabel.Size = new System.Drawing.Size(484, 149);
+            loginLabel.TabIndex = 0;
             loginLabel.Text = "LOGIN";
             loginLabel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
+            // CreateAccount
+            // 
+            CreateAccount.AutoSize = true;
+            CreateAccount.Cursor = System.Windows.Forms.Cursors.Hand;
+            CreateAccount.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            CreateAccount.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic);
+            CreateAccount.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            CreateAccount.Location = new System.Drawing.Point(176, 340);
+            CreateAccount.Name = "CreateAccount";
+            CreateAccount.Size = new System.Drawing.Size(123, 21);
+            CreateAccount.TabIndex = 4;
+            CreateAccount.Text = "Create Account?";
+            CreateAccount.Click += CreateAccount_Click;
+            // 
             // Login
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(553, 615);
+            ClientSize = new System.Drawing.Size(484, 461);
             Controls.Add(loginLabel);
             Controls.Add(usernameText);
             Controls.Add(passwordText);
@@ -163,9 +174,9 @@
             Controls.Add(pictureBox1);
             Controls.Add(enterBtn);
             Controls.Add(passwordLabel);
+            Controls.Add(CreateAccount);
             Controls.Add(usernameLabel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "Login";
             Text = "Login";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -185,5 +196,6 @@
         private System.Windows.Forms.TextBox passwordText;
         private System.Windows.Forms.TextBox usernameText;
         private System.Windows.Forms.Label loginLabel;
+        private System.Windows.Forms.Label CreateAccount;
     }
 }

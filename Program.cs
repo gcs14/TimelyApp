@@ -21,6 +21,7 @@ namespace DesktopSchedulingApp
         [STAThread]
         static void Main()
         {
+            DBConnection.CloseConnection();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConnection.StartConnection();

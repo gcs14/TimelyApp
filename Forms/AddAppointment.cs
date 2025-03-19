@@ -1,6 +1,4 @@
 ﻿using DesktopSchedulingApp.Exceptions;
-using DesktopSchedulingApp.Models;
-using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
 using System;
 using System.Windows.Forms;
@@ -9,21 +7,22 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class AddAppointment : Form
     {
-        AppointmentExceptions appointmentExceptions = new();
-        string currentUser;
+        string username;
+
         public AddAppointment(string username)
         {
-            currentUser = username;
+            this.username = username;
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            DBCommands.LoadCustomerData(this);
+            CustomerService.LoadCustomerData(this);
             durationComboBox.SelectedIndex = 0;
         }
 
         private void NewCustomer_Click(object sender, EventArgs e)
         {
             new AddCustomer().ShowDialog();
+            CustomerService.LoadCustomerData(this);
         }
 
         private void MonthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
@@ -36,31 +35,18 @@ namespace DesktopSchedulingApp.Forms
             AppointmentService.SetAvailableHours(this);
         }
 
-        private void addAppointmentBtn_Click(object sender, EventArgs e)
+        private void AddAppointmentBtn_Click(object sender, EventArgs e)
         {
-            Customer selectedCustomer = CustomerService.FindByCustomerName(Convert.ToString(custNamesDGV.CurrentRow.Cells[1].Value.ToString()));
-            
-            DateTime appointmentStart = AppointmentService.MergeDateTime(
-                monthCalendar.SelectionStart.ToShortDateString(),
-                AppointmentService.GetSelectedTime(hoursDGV.CurrentRow.Cells[0].Value.ToString())
-                );
-            DateTime appointmentEnd = appointmentStart.AddMinutes(Convert.ToDouble(durationComboBox.Text.Substring(0,2)));
-
-            Appointment appointment = new (
-                AppointmentService.GetAppointmentID(selectedCustomer.CustomerId, 1, appointmentStart, appointmentEnd),
-                selectedCustomer.CustomerId,
-                UserService.GetUserId(currentUser),
-                typeComboBox.Text,
-                appointmentStart,
-                appointmentEnd
-                );
-
+            AppointmentExceptions appointmentExceptions = new();
             if (appointmentExceptions.AddAppointmentExceptions(this))
             {
-                AppointmentService.Appointments.Add(appointment);
-                DBCommands.InsertAppointmentData(appointment);
-                this.Close();
+                AppointmentService.AddAppointment(this, username);
             }
+        }
+
+        private void AddCancelBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

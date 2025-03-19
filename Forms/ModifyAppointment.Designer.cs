@@ -39,21 +39,23 @@
             custNamesDGV = new System.Windows.Forms.DataGridView();
             typeComboBox = new System.Windows.Forms.ComboBox();
             label4 = new System.Windows.Forms.Label();
-            addAppointment_Btn = new System.Windows.Forms.Button();
+            ModifyAppointment_Btn = new System.Windows.Forms.Button();
+            CancelBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)hoursDGV).BeginInit();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).BeginInit();
             SuspendLayout();
             // 
             // addAppoinmentLabel
             // 
-            addAppoinmentLabel.AutoSize = true;
-            addAppoinmentLabel.Font = new System.Drawing.Font("Arial Black", 30F);
+            addAppoinmentLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            addAppoinmentLabel.Font = new System.Drawing.Font("Arial Black", 31F);
             addAppoinmentLabel.ForeColor = System.Drawing.Color.MediumPurple;
-            addAppoinmentLabel.Location = new System.Drawing.Point(54, 9);
+            addAppoinmentLabel.Location = new System.Drawing.Point(0, 0);
             addAppoinmentLabel.Name = "addAppoinmentLabel";
-            addAppoinmentLabel.Size = new System.Drawing.Size(471, 56);
+            addAppoinmentLabel.Size = new System.Drawing.Size(578, 86);
             addAppoinmentLabel.TabIndex = 2;
             addAppoinmentLabel.Text = "EDIT APPOINTMENT";
+            addAppoinmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // monthCalendar
             // 
@@ -61,7 +63,7 @@
             monthCalendar.Location = new System.Drawing.Point(18, 145);
             monthCalendar.MaxSelectionCount = 1;
             monthCalendar.Name = "monthCalendar";
-            monthCalendar.TabIndex = 5;
+            monthCalendar.TabIndex = 1;
             // 
             // label5
             // 
@@ -77,10 +79,10 @@
             // 
             durationComboBox.FormattingEnabled = true;
             durationComboBox.Items.AddRange(new object[] { "30 Mins", "60 Mins" });
-            durationComboBox.Location = new System.Drawing.Point(295, 314);
+            durationComboBox.Location = new System.Drawing.Point(295, 311);
             durationComboBox.Name = "durationComboBox";
             durationComboBox.Size = new System.Drawing.Size(121, 23);
-            durationComboBox.TabIndex = 9;
+            durationComboBox.TabIndex = 3;
             // 
             // label2
             // 
@@ -88,7 +90,7 @@
             label2.ForeColor = System.Drawing.SystemColors.Window;
             label2.Location = new System.Drawing.Point(296, 121);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(94, 15);
+            label2.Size = new System.Drawing.Size(93, 15);
             label2.TabIndex = 8;
             label2.Text = "Select Time Slot:";
             // 
@@ -108,16 +110,17 @@
             hoursDGV.RowHeadersWidth = 51;
             hoursDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             hoursDGV.Size = new System.Drawing.Size(120, 162);
-            hoursDGV.TabIndex = 7;
+            hoursDGV.TabIndex = 2;
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(438, 313);
+            button1.Location = new System.Drawing.Point(438, 311);
             button1.Name = "button1";
             button1.Size = new System.Drawing.Size(120, 23);
             button1.TabIndex = 12;
             button1.Text = "New Customer";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += NewCustomer_Click;
             // 
             // label1
             // 
@@ -143,8 +146,9 @@
             custNamesDGV.ReadOnly = true;
             custNamesDGV.RowHeadersVisible = false;
             custNamesDGV.RowHeadersWidth = 51;
+            custNamesDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             custNamesDGV.Size = new System.Drawing.Size(120, 162);
-            custNamesDGV.TabIndex = 10;
+            custNamesDGV.TabIndex = 4;
             // 
             // typeComboBox
             // 
@@ -152,7 +156,7 @@
             typeComboBox.Location = new System.Drawing.Point(18, 337);
             typeComboBox.Name = "typeComboBox";
             typeComboBox.Size = new System.Drawing.Size(121, 23);
-            typeComboBox.TabIndex = 14;
+            typeComboBox.TabIndex = 5;
             // 
             // label4
             // 
@@ -160,18 +164,37 @@
             label4.ForeColor = System.Drawing.SystemColors.Window;
             label4.Location = new System.Drawing.Point(18, 319);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(35, 15);
+            label4.Size = new System.Drawing.Size(34, 15);
             label4.TabIndex = 13;
             label4.Text = "Type:";
             // 
-            // addAppointment_Btn
+            // ModifyAppointment_Btn
             // 
-            addAppointment_Btn.Location = new System.Drawing.Point(483, 388);
-            addAppointment_Btn.Name = "addAppointment_Btn";
-            addAppointment_Btn.Size = new System.Drawing.Size(75, 23);
-            addAppointment_Btn.TabIndex = 15;
-            addAppointment_Btn.Text = "Submit";
-            addAppointment_Btn.UseVisualStyleBackColor = true;
+            ModifyAppointment_Btn.AutoSize = true;
+            ModifyAppointment_Btn.BackColor = System.Drawing.Color.DarkSeaGreen;
+            ModifyAppointment_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            ModifyAppointment_Btn.Font = new System.Drawing.Font("Segoe UI", 11F);
+            ModifyAppointment_Btn.Location = new System.Drawing.Point(341, 388);
+            ModifyAppointment_Btn.Name = "ModifyAppointment_Btn";
+            ModifyAppointment_Btn.Size = new System.Drawing.Size(75, 32);
+            ModifyAppointment_Btn.TabIndex = 6;
+            ModifyAppointment_Btn.Text = "Submit";
+            ModifyAppointment_Btn.UseVisualStyleBackColor = false;
+            ModifyAppointment_Btn.Click += ModifyAppointmentBtn_Click;
+            // 
+            // CancelBtn
+            // 
+            CancelBtn.AutoSize = true;
+            CancelBtn.BackColor = System.Drawing.Color.MediumPurple;
+            CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            CancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
+            CancelBtn.Location = new System.Drawing.Point(447, 388);
+            CancelBtn.Name = "CancelBtn";
+            CancelBtn.Size = new System.Drawing.Size(75, 32);
+            CancelBtn.TabIndex = 7;
+            CancelBtn.Text = "Cancel";
+            CancelBtn.UseVisualStyleBackColor = false;
+            CancelBtn.Click += ModifyCancelBtn_Click;
             // 
             // ModifyAppointment
             // 
@@ -179,7 +202,8 @@
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
             ClientSize = new System.Drawing.Size(578, 438);
-            Controls.Add(addAppointment_Btn);
+            Controls.Add(CancelBtn);
+            Controls.Add(ModifyAppointment_Btn);
             Controls.Add(typeComboBox);
             Controls.Add(label4);
             Controls.Add(button1);
@@ -193,6 +217,7 @@
             Controls.Add(addAppoinmentLabel);
             Name = "ModifyAppointment";
             Text = "ModifyAppointment";
+            Load += ModifyAppointment_Load;
             ((System.ComponentModel.ISupportInitialize)hoursDGV).EndInit();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).EndInit();
             ResumeLayout(false);
@@ -212,6 +237,7 @@
         internal System.Windows.Forms.DataGridView custNamesDGV;
         internal System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button addAppointment_Btn;
+        private System.Windows.Forms.Button ModifyAppointment_Btn;
+        private System.Windows.Forms.Button CancelBtn;
     }
 }

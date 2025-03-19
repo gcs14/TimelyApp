@@ -5,12 +5,12 @@ namespace DesktopSchedulingApp.Forms
 {
     public partial class Home : Form
     {
-        string username;
-        public Home(string currentUserName)
+        readonly string username;
+        public Home(string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            username = currentUserName;
+            this.username = username;
         }
 
         private void CustomerBtn_Click(object sender, EventArgs e)
