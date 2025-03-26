@@ -41,6 +41,7 @@
             label4 = new System.Windows.Forms.Label();
             ModifyAppointment_Btn = new System.Windows.Forms.Button();
             CancelBtn = new System.Windows.Forms.Button();
+            TimeZoneLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)hoursDGV).BeginInit();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).BeginInit();
             SuspendLayout();
@@ -64,6 +65,7 @@
             monthCalendar.MaxSelectionCount = 1;
             monthCalendar.Name = "monthCalendar";
             monthCalendar.TabIndex = 1;
+            monthCalendar.DateChanged += MonthCalendar1_DateSelected;
             // 
             // label5
             // 
@@ -153,6 +155,7 @@
             // typeComboBox
             // 
             typeComboBox.FormattingEnabled = true;
+            typeComboBox.Items.AddRange(new object[] { "Presentation", "Scrum", "Consulation", "Other" });
             typeComboBox.Location = new System.Drawing.Point(18, 337);
             typeComboBox.Name = "typeComboBox";
             typeComboBox.Size = new System.Drawing.Size(121, 23);
@@ -174,7 +177,7 @@
             ModifyAppointment_Btn.BackColor = System.Drawing.Color.DarkSeaGreen;
             ModifyAppointment_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             ModifyAppointment_Btn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            ModifyAppointment_Btn.Location = new System.Drawing.Point(341, 388);
+            ModifyAppointment_Btn.Location = new System.Drawing.Point(459, 388);
             ModifyAppointment_Btn.Name = "ModifyAppointment_Btn";
             ModifyAppointment_Btn.Size = new System.Drawing.Size(75, 32);
             ModifyAppointment_Btn.TabIndex = 6;
@@ -188,7 +191,7 @@
             CancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             CancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            CancelBtn.Location = new System.Drawing.Point(447, 388);
+            CancelBtn.Location = new System.Drawing.Point(341, 388);
             CancelBtn.Name = "CancelBtn";
             CancelBtn.Size = new System.Drawing.Size(75, 32);
             CancelBtn.TabIndex = 7;
@@ -196,12 +199,22 @@
             CancelBtn.UseVisualStyleBackColor = false;
             CancelBtn.Click += ModifyCancelBtn_Click;
             // 
+            // TimeZoneLabel
+            // 
+            TimeZoneLabel.AutoSize = true;
+            TimeZoneLabel.ForeColor = System.Drawing.SystemColors.Window;
+            TimeZoneLabel.Location = new System.Drawing.Point(295, 106);
+            TimeZoneLabel.Name = "TimeZoneLabel";
+            TimeZoneLabel.Size = new System.Drawing.Size(0, 15);
+            TimeZoneLabel.TabIndex = 14;
+            // 
             // ModifyAppointment
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
             ClientSize = new System.Drawing.Size(578, 438);
+            Controls.Add(TimeZoneLabel);
             Controls.Add(CancelBtn);
             Controls.Add(ModifyAppointment_Btn);
             Controls.Add(typeComboBox);
@@ -239,5 +252,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button ModifyAppointment_Btn;
         private System.Windows.Forms.Button CancelBtn;
+        private System.Windows.Forms.Label TimeZoneLabel;
     }
 }

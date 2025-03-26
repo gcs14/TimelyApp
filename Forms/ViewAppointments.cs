@@ -53,5 +53,10 @@ namespace DesktopSchedulingApp.Forms
         {
             selectedAppointmentId = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value);
         }
+
+        private void CloseBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -56,7 +56,7 @@
             addCustomerSubmitBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             addCustomerSubmitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             addCustomerSubmitBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            addCustomerSubmitBtn.Location = new System.Drawing.Point(227, 287);
+            addCustomerSubmitBtn.Location = new System.Drawing.Point(322, 287);
             addCustomerSubmitBtn.Name = "addCustomerSubmitBtn";
             addCustomerSubmitBtn.Size = new System.Drawing.Size(75, 32);
             addCustomerSubmitBtn.TabIndex = 6;
@@ -167,7 +167,7 @@
             AddCancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             AddCancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             AddCancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            AddCancelBtn.Location = new System.Drawing.Point(322, 287);
+            AddCancelBtn.Location = new System.Drawing.Point(227, 287);
             AddCancelBtn.Name = "AddCancelBtn";
             AddCancelBtn.Size = new System.Drawing.Size(75, 32);
             AddCancelBtn.TabIndex = 7;

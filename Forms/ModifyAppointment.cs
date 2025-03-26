@@ -1,6 +1,7 @@
 ﻿using DesktopSchedulingApp.Exceptions;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ namespace DesktopSchedulingApp.Forms
         string type;
         DateTime start;
         DateTime end;
+        TimeSpan duration;
 
         public ModifyAppointment(int id)
         {
@@ -28,10 +30,11 @@ namespace DesktopSchedulingApp.Forms
         {
             monthCalendar.SelectionStart = start;
             AppointmentService.GetSelectedDate(monthCalendar.SelectionRange.Start.ToShortDateString());
-            TimeSpan duration = end - start;
+            duration = end - start;
             durationComboBox.Text = duration.TotalMinutes.ToString() + " Mins";
             AppointmentService.SetAvailableHours(this, TimeOnly.FromDateTime(start), Convert.ToInt32(duration.TotalMinutes));
             typeComboBox.Text = type;
+            TimeZoneLabel.Text = TimeZoneInfo.Local.StandardName;
             CustomerService.LoadCustomerData(this);
             foreach (DataGridViewRow row in custNamesDGV.Rows)
             {
@@ -71,6 +74,16 @@ namespace DesktopSchedulingApp.Forms
                     MessageBox.Show("Customer not found.");
                 }
             }
+        }
+
+        private void MonthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            if (hoursDGV.Columns.Contains("Time"))
+            {
+                hoursDGV.Columns.Remove("Time");
+            }
+            AppointmentService.GetSelectedDate(monthCalendar.SelectionRange.Start.ToShortDateString());
+            AppointmentService.SetAvailableHours(this, TimeOnly.FromDateTime(start), Convert.ToInt32(duration.TotalMinutes)); ;
         }
 
         private void NewCustomer_Click(object sender, EventArgs e)

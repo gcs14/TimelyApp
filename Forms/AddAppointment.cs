@@ -2,6 +2,7 @@
 using DesktopSchedulingApp.Service;
 using System;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DesktopSchedulingApp.Forms
 {
@@ -14,9 +15,10 @@ namespace DesktopSchedulingApp.Forms
             this.username = username;
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            typeComboBox.SelectedIndex = 0;
             CustomerService.LoadCustomerData(this);
             durationComboBox.SelectedIndex = 0;
+            TimeZoneLabel.Text = TimeZoneInfo.Local.StandardName;
         }
 
         private void NewCustomer_Click(object sender, EventArgs e)

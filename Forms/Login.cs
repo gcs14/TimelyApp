@@ -158,66 +158,66 @@ namespace DesktopSchedulingApp.Forms
         //    }
         //}
 
-        private void CheckUpcomingAppointments(string username)
-        {
-            try
-            {
-                int userId = GetUserId(username);
+        //private void CheckUpcomingAppointments(string username)
+        //{
+        //    try
+        //    {
+        //        int userId = GetUserId(username);
 
-                if (userId == -1)
-                {
-                    return; // User not found or error occurred
-                }
+        //        if (userId == -1)
+        //        {
+        //            return; // User not found or error occurred
+        //        }
 
-                // Get current time
-                DateTime now = DateTime.Now;
+        //        // Get current time
+        //        DateTime now = DateTime.Now;
 
-                // Define the 15-minute window
-                DateTime fifteenMinutesFromNow = now.AddMinutes(15);
+        //        // Define the 15-minute window
+        //        DateTime fifteenMinutesFromNow = now.AddMinutes(15);
 
-                // Check for appointments within the next 15 minutes
+        //        // Check for appointments within the next 15 minutes
 
-                string query = @"
-                SELECT appointmentId, start, end, type, customer.customerName
-                FROM appointment
-                JOIN customer ON appointment.customerId = customer.customerId
-                WHERE appointment.userId = @userId
-                AND appointment.start BETWEEN @now AND @fifteenMin
-                ORDER BY start";
+        //        string query = @"
+        //        SELECT appointmentId, start, end, type, customer.customerName
+        //        FROM appointment
+        //        JOIN customer ON appointment.customerId = customer.customerId
+        //        WHERE appointment.userId = @userId
+        //        AND appointment.start BETWEEN @now AND @fifteenMin
+        //        ORDER BY start";
 
-                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@userId", userId);
-                cmd.Parameters.AddWithValue("@now", now);
-                cmd.Parameters.AddWithValue("@fifteenMin", fifteenMinutesFromNow);
+        //        MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+        //        cmd.Parameters.AddWithValue("@userId", userId);
+        //        cmd.Parameters.AddWithValue("@now", now);
+        //        cmd.Parameters.AddWithValue("@fifteenMin", fifteenMinutesFromNow);
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        // Build alert message for upcoming appointments
-                        string alertMessage = translations[currentLanguage]["appointmentAlert"] + "\n\n";
+        //        using (MySqlDataReader reader = cmd.ExecuteReader())
+        //        {
+        //            if (reader.HasRows)
+        //            {
+        //                // Build alert message for upcoming appointments
+        //                string alertMessage = translations[currentLanguage]["appointmentAlert"] + "\n\n";
 
-                        while (reader.Read())
-                        {
-                            int appointmentId = Convert.ToInt32(reader["appointmentId"]);
-                            DateTime start = Convert.ToDateTime(reader["start"]);
-                            string type = reader["type"].ToString();
-                            string customerName = reader["customerName"].ToString();
+        //                while (reader.Read())
+        //                {
+        //                    int appointmentId = Convert.ToInt32(reader["appointmentId"]);
+        //                    DateTime start = Convert.ToDateTime(reader["start"]);
+        //                    string type = reader["type"].ToString();
+        //                    string customerName = reader["customerName"].ToString();
 
-                            alertMessage += $"- {start.ToLocalTime():g}: {type} with {customerName}\n";
-                        }
+        //                    alertMessage += $"- {start.ToLocalTime():g}: {type} with {customerName}\n";
+        //                }
 
-                        // Show alert for upcoming appointments
-                        MessageBox.Show(alertMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the error but don't disrupt the login process
-                Console.WriteLine($"Error checking appointments: {ex.Message}");
-            }
-        }
+        //                // Show alert for upcoming appointments
+        //                MessageBox.Show(alertMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the error but don't disrupt the login process
+        //        Console.WriteLine($"Error checking appointments: {ex.Message}");
+        //    }
+        //}
 
         private int GetUserId(string username)
         {
@@ -274,7 +274,7 @@ namespace DesktopSchedulingApp.Forms
 
                     // Open main form
                     this.Hide();
-                    new Home(username).ShowDialog();
+                    new Home(username, GetUserId(username)).ShowDialog();
                     this.Close();
                 }
                 else

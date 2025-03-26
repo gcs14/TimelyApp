@@ -72,7 +72,12 @@ namespace DesktopSchedulingApp.Service
                 }
                 else
                 {
-                    AppointmentDates[DateOnly.FromDateTime(appointment.StartTime)].Add(TimeOnly.FromDateTime(appointment.StartTime), duration);
+                    DateOnly key1 = DateOnly.FromDateTime(appointment.StartTime);
+                    TimeOnly key2 = TimeOnly.FromDateTime(appointment.StartTime);
+                    if (!AppointmentDates[key1].ContainsKey(key2))
+                    {
+                        AppointmentDates[key1].Add(TimeOnly.FromDateTime(appointment.StartTime), duration);
+                    }
                 }
 
                 if (appointment.AppointmentId > highestID)
@@ -97,23 +102,47 @@ namespace DesktopSchedulingApp.Service
         }
 
         // Helper method to initialize business hours
+        //private static void InitializeBusinessHours()
+        //{
+        //    BusinessHours.Clear();
+
+        //    // Add all possible business hours in 30-minute increments
+        //    for (int hour = 9; hour <= 16; hour++)
+        //    {
+        //        // Add the hour (e.g., 9:00 AM)
+        //        BusinessHours.Add(
+        //            new TimeOnly(hour, 0, 0),
+        //            $"{(hour > 12 ? hour - 12 : hour)}:00 {(hour >= 12 ? "PM" : "AM")}"
+        //        );
+
+        //        // Add the half-hour (e.g., 9:30 AM)
+        //        BusinessHours.Add(
+        //            new TimeOnly(hour, 30, 0),
+        //            $"{(hour > 12 ? hour - 12 : hour)}:30 {(hour >= 12 ? "PM" : "AM")}"
+        //        );
+        //    }
+        //}
+
         private static void InitializeBusinessHours()
         {
             BusinessHours.Clear();
+            TimeZoneInfo localZone = TimeZoneInfo.Local;
+            TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
-            // Add all possible business hours in 30-minute increments
             for (int hour = 9; hour <= 16; hour++)
             {
-                // Add the hour (e.g., 9:00 AM)
+                DateTime estHour = new DateTime(1, 1, 1, hour, 0, 0);
+                DateTime localHour = TimeZoneInfo.ConvertTime(estHour, estZone, localZone);
                 BusinessHours.Add(
-                    new TimeOnly(hour, 0, 0),
-                    $"{(hour > 12 ? hour - 12 : hour)}:00 {(hour >= 12 ? "PM" : "AM")}"
+                    new TimeOnly(localHour.Hour, localHour.Minute, 0),
+                    $"{localHour:hh:mm tt}"
                 );
 
-                // Add the half-hour (e.g., 9:30 AM)
+                DateTime estHalfHour = new DateTime(1, 1, 1, hour, 30, 0);
+                DateTime localHalfHour = TimeZoneInfo.ConvertTime(estHalfHour, estZone, localZone);
                 BusinessHours.Add(
-                    new TimeOnly(hour, 30, 0),
-                    $"{(hour > 12 ? hour - 12 : hour)}:30 {(hour >= 12 ? "PM" : "AM")}"
+                    new TimeOnly(localHalfHour.Hour, localHalfHour.Minute, 0),
+                    $"{localHalfHour:hh:mm tt}"
                 );
             }
         }
@@ -147,7 +176,16 @@ namespace DesktopSchedulingApp.Service
             {
                 foreach (var appointment in AppointmentDates[selectedDate])
                 {
-                    TimeOnly appointmentTime = appointment.Key;
+
+                    // Construct a full DateTime using the selected date and appointment.Key (TimeOnly)
+                    DateTime estTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day,
+                                                    appointment.Key.Hour, appointment.Key.Minute, 0);
+
+                    // Convert to local time
+                    DateTime localTime = ConvertFromEastern(estTime);
+
+                    // Extract the local TimeOnly
+                    TimeOnly appointmentTime = TimeOnly.FromDateTime(localTime);
                     TimeSpan duration = appointment.Value;
 
                     // Remove the appointment time slot
@@ -345,9 +383,10 @@ namespace DesktopSchedulingApp.Service
 
 
             int customerId = GetCustomerId(DBConnection.conn, addAppointment.custNamesDGV.CurrentRow.Cells[1].Value.ToString());
+            int userId = GetUserId(DBConnection.conn, username);
             DateTime selectedDate = addAppointment.monthCalendar.SelectionStart;
             DateTime startTime = DateTime.Parse(addAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
-            DateTime start = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0);
+            DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
             int duration = int.Parse(addAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
             DateTime end = start.AddMinutes(duration);
 
@@ -357,9 +396,15 @@ namespace DesktopSchedulingApp.Service
                 return;
             }
 
-            if (IsOverlappingAppointment(DBConnection.conn, customerId, start, end))
+            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end))
             {
-                MessageBox.Show("Appointment conflicts with an existing appointment.");
+                MessageBox.Show("You already have an appointment scheduled at this time.");
+                return;
+            }
+
+            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end))
+            {
+                MessageBox.Show("This customer already has an appointment at this time.");
                 return;
             }
 
@@ -370,7 +415,7 @@ namespace DesktopSchedulingApp.Service
             MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
             cmd.Parameters.AddWithValue("@appointmentId", GetNextAppointmentId(DBConnection.conn));
             cmd.Parameters.AddWithValue("@customerId", customerId);
-            cmd.Parameters.AddWithValue("@userId", GetUserId(DBConnection.conn, username));
+            cmd.Parameters.AddWithValue("@userId", userId);
             cmd.Parameters.AddWithValue("@title", "");
             cmd.Parameters.AddWithValue("@description", "");
             cmd.Parameters.AddWithValue("@location", "");
@@ -398,10 +443,28 @@ namespace DesktopSchedulingApp.Service
 
             DateTime selectedDate = modifyAppointment.monthCalendar.SelectionStart;
             DateTime startTime = DateTime.Parse(modifyAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
-            DateTime start = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0);
+            DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
             int duration = int.Parse(modifyAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
             DateTime end = start.AddMinutes(duration);
             int customerId = Convert.ToInt32(modifyAppointment.custNamesDGV.SelectedRows[0].Cells[0].Value);
+
+            if (!IsValidAppointmentTime(start, end))
+            {
+                MessageBox.Show("Appointment must be within business hours (9 AM - 5 PM EST, Mon-Fri).");
+                return;
+            }
+
+            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end))
+            {
+                MessageBox.Show("You already have an appointment scheduled at this time.");
+                return;
+            }
+
+            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end))
+            {
+                MessageBox.Show("This customer already has an appointment at this time.");
+                return;
+            }
 
             string query = "UPDATE appointment SET appointmentId = @appointmentId, customerId = @customerId, userId = @userId, " +
                 "title = @title, description = @description, location = @location, contact = @contact, type = @type, url = @url, " +
@@ -455,15 +518,30 @@ namespace DesktopSchedulingApp.Service
             //DateTime startEST = TimeZoneInfo.ConvertTime(start, est);
             //DateTime endEST = TimeZoneInfo.ConvertTime(end, est);
 
+            //TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            //DateTime startEST = ConvertToEastern(start);
+            //DateTime endEST = ConvertToEastern(end);
+
             //return startEST.TimeOfDay >= TimeSpan.FromHours(9) && endEST.TimeOfDay <= TimeSpan.FromHours(17) &&
             //       startEST.DayOfWeek != DayOfWeek.Saturday && startEST.DayOfWeek != DayOfWeek.Sunday;
             return start.TimeOfDay >= TimeSpan.FromHours(9) && end.TimeOfDay <= TimeSpan.FromHours(17) &&
                    start.DayOfWeek != DayOfWeek.Saturday && start.DayOfWeek != DayOfWeek.Sunday;
         }
 
-        private static bool IsOverlappingAppointment(MySqlConnection connection, int customerId, DateTime start, DateTime end)
+        private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end)
         {
-            string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId AND ((start <= @end AND end >= @start))";
+            string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId AND ((start < @end AND end > @start))";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@start", start);
+            cmd.Parameters.AddWithValue("@end", end);
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
+
+        private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end)
+        {
+            string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId AND ((start < @end AND end > @start))";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@customerId", customerId);
             cmd.Parameters.AddWithValue("@start", start);
@@ -496,6 +574,42 @@ namespace DesktopSchedulingApp.Service
             MySqlCommand cmd = new MySqlCommand(query, connection);
             object result = cmd.ExecuteScalar();
             return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
+
+        public static DateTime ConvertToEastern(DateTime localTime)
+        {
+            if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
+            {
+                TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                return TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, estZone);
+            }
+            return localTime;
+        }
+
+        public static DateTime ConvertFromEastern(DateTime estTime)
+        {
+            if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
+            {
+                TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                return TimeZoneInfo.ConvertTime(estTime, estZone, TimeZoneInfo.Local);
+            }
+            return estTime;
+        }
+
+        public static void CheckUpcomingAppointments(int userId)
+        {
+            string query = "SELECT start FROM appointment WHERE userId = @userId AND start BETWEEN @now AND @futureLimit ORDER BY start LIMIT 1";
+            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@now", ConvertToEastern(DateTime.Now));
+            cmd.Parameters.AddWithValue("@futureLimit", ConvertToEastern(DateTime.Now.AddMinutes(15)));
+            object result = cmd.ExecuteScalar();
+
+            if (result != null)
+            {
+                DateTime nextAppointmentTime = Convert.ToDateTime(result);
+                MessageBox.Show($"Reminder: You have an appointment at {ConvertFromEastern(nextAppointmentTime).ToShortTimeString()}.", "Upcoming Appointment", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

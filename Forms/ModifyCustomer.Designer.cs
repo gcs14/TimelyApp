@@ -134,7 +134,7 @@
             ModifyCustomerSubmitBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             ModifyCustomerSubmitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             ModifyCustomerSubmitBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            ModifyCustomerSubmitBtn.Location = new System.Drawing.Point(227, 287);
+            ModifyCustomerSubmitBtn.Location = new System.Drawing.Point(322, 287);
             ModifyCustomerSubmitBtn.Name = "ModifyCustomerSubmitBtn";
             ModifyCustomerSubmitBtn.Size = new System.Drawing.Size(75, 32);
             ModifyCustomerSubmitBtn.TabIndex = 6;
@@ -166,7 +166,7 @@
             ModifyCancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             ModifyCancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             ModifyCancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            ModifyCancelBtn.Location = new System.Drawing.Point(322, 287);
+            ModifyCancelBtn.Location = new System.Drawing.Point(227, 287);
             ModifyCancelBtn.Name = "ModifyCancelBtn";
             ModifyCancelBtn.Size = new System.Drawing.Size(75, 32);
             ModifyCancelBtn.TabIndex = 7;
