@@ -1,4 +1,5 @@
-﻿using DesktopSchedulingApp.Repository;
+﻿using DesktopSchedulingApp.Forms.ReportForms;
+using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
 using MySql.Data.MySqlClient;
 using System;
@@ -62,6 +63,11 @@ namespace DesktopSchedulingApp.Forms
             {
                 Application.Exit();
             }
+        }
+
+        private void monthlyAppointmentsBtn_Click(object sender, EventArgs e)
+        {
+            new MonthlyAppointments(userId).ShowDialog();
         }
     }
 }

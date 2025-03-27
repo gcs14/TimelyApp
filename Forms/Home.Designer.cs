@@ -38,6 +38,8 @@
             logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             welcomeLabel = new System.Windows.Forms.Label();
+            monthlyAppointmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            userScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -73,6 +75,7 @@
             // 
             // reportsToolStripMenuItem
             // 
+            reportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { monthlyAppointmentsToolStripMenuItem, userScheduleToolStripMenuItem });
             reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
             reportsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             reportsToolStripMenuItem.Text = "Reports";
@@ -116,6 +119,19 @@
             welcomeLabel.Text = "Welcome Back";
             welcomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // monthlyAppointmentsToolStripMenuItem
+            // 
+            monthlyAppointmentsToolStripMenuItem.Name = "monthlyAppointmentsToolStripMenuItem";
+            monthlyAppointmentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            monthlyAppointmentsToolStripMenuItem.Text = "Monthly Appointments";
+            monthlyAppointmentsToolStripMenuItem.Click += monthlyAppointmentsBtn_Click;
+            // 
+            // userScheduleToolStripMenuItem
+            // 
+            userScheduleToolStripMenuItem.Name = "userScheduleToolStripMenuItem";
+            userScheduleToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            userScheduleToolStripMenuItem.Text = "User Schedule";
+            // 
             // Home
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -145,5 +161,7 @@
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem monthlyAppointmentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem userScheduleToolStripMenuItem;
     }
 }
