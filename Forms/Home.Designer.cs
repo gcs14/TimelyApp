@@ -33,13 +33,13 @@
             appointmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             reportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            monthlyAppointmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            userScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             welcomeLabel = new System.Windows.Forms.Label();
-            monthlyAppointmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            userScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -80,6 +80,20 @@
             reportsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             reportsToolStripMenuItem.Text = "Reports";
             // 
+            // monthlyAppointmentsToolStripMenuItem
+            // 
+            monthlyAppointmentsToolStripMenuItem.Name = "monthlyAppointmentsToolStripMenuItem";
+            monthlyAppointmentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            monthlyAppointmentsToolStripMenuItem.Text = "Monthly Appointments";
+            monthlyAppointmentsToolStripMenuItem.Click += monthlyAppointmentsBtn_Click;
+            // 
+            // userScheduleToolStripMenuItem
+            // 
+            userScheduleToolStripMenuItem.Name = "userScheduleToolStripMenuItem";
+            userScheduleToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            userScheduleToolStripMenuItem.Text = "User Schedule";
+            userScheduleToolStripMenuItem.Click += userScheduleBtn_Click;
+            // 
             // toolStripMenuItem2
             // 
             toolStripMenuItem2.Name = "toolStripMenuItem2";
@@ -118,19 +132,6 @@
             welcomeLabel.TabIndex = 10;
             welcomeLabel.Text = "Welcome Back";
             welcomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // monthlyAppointmentsToolStripMenuItem
-            // 
-            monthlyAppointmentsToolStripMenuItem.Name = "monthlyAppointmentsToolStripMenuItem";
-            monthlyAppointmentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            monthlyAppointmentsToolStripMenuItem.Text = "Monthly Appointments";
-            monthlyAppointmentsToolStripMenuItem.Click += monthlyAppointmentsBtn_Click;
-            // 
-            // userScheduleToolStripMenuItem
-            // 
-            userScheduleToolStripMenuItem.Name = "userScheduleToolStripMenuItem";
-            userScheduleToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            userScheduleToolStripMenuItem.Text = "User Schedule";
             // 
             // Home
             // 

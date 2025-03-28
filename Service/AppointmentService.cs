@@ -18,10 +18,6 @@ namespace DesktopSchedulingApp.Service
         private static int highestID = 0;
         public static DateOnly selectedDate;
 
-        //private static TimeZoneInfo est;
-        //private static DateTime startEST;
-        //private static DateTime endEST;
-
         public static void LoadAppointmentData(ViewAppointments view)
         {
             string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
@@ -91,37 +87,10 @@ namespace DesktopSchedulingApp.Service
         #region -- Methods to set available hours on AddAppointment form --
         public static void SetAvailableHours(AddAppointment view)
         {
-            // Initialize the business hours dictionary
             InitializeBusinessHours();
-
-            // Remove unavailable hours
             RemoveUnavailableHours(selectedDate);
-
-            // Display available hours in the DataGridView
             DisplayHoursInDataGrid(view);
         }
-
-        // Helper method to initialize business hours
-        //private static void InitializeBusinessHours()
-        //{
-        //    BusinessHours.Clear();
-
-        //    // Add all possible business hours in 30-minute increments
-        //    for (int hour = 9; hour <= 16; hour++)
-        //    {
-        //        // Add the hour (e.g., 9:00 AM)
-        //        BusinessHours.Add(
-        //            new TimeOnly(hour, 0, 0),
-        //            $"{(hour > 12 ? hour - 12 : hour)}:00 {(hour >= 12 ? "PM" : "AM")}"
-        //        );
-
-        //        // Add the half-hour (e.g., 9:30 AM)
-        //        BusinessHours.Add(
-        //            new TimeOnly(hour, 30, 0),
-        //            $"{(hour > 12 ? hour - 12 : hour)}:30 {(hour >= 12 ? "PM" : "AM")}"
-        //        );
-        //    }
-        //}
 
         private static void InitializeBusinessHours()
         {
@@ -147,10 +116,8 @@ namespace DesktopSchedulingApp.Service
             }
         }
 
-        // Helper method to remove unavailable hours
         private static void RemoveUnavailableHours(DateOnly selectedDate)
         {
-            // Clear hours if the selected date is in the past or a weekend
             if (selectedDate < DateOnly.FromDateTime(DateTime.Now) ||
                 selectedDate.DayOfWeek == DayOfWeek.Saturday ||
                 selectedDate.DayOfWeek == DayOfWeek.Sunday)
@@ -158,7 +125,6 @@ namespace DesktopSchedulingApp.Service
                 BusinessHours.Clear();
                 return;
             }
-
             // Remove hours that are in the past if the selected date is today
             if (selectedDate == DateOnly.FromDateTime(DateTime.Today))
             {
@@ -170,25 +136,17 @@ namespace DesktopSchedulingApp.Service
                     BusinessHours.Remove(hour);
                 }
             }
-
             // Remove hours that are already booked
             if (AppointmentDates.ContainsKey(selectedDate))
             {
                 foreach (var appointment in AppointmentDates[selectedDate])
                 {
-
-                    // Construct a full DateTime using the selected date and appointment.Key (TimeOnly)
                     DateTime estTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day,
                                                     appointment.Key.Hour, appointment.Key.Minute, 0);
-
-                    // Convert to local time
                     DateTime localTime = ConvertFromEastern(estTime);
-
-                    // Extract the local TimeOnly
                     TimeOnly appointmentTime = TimeOnly.FromDateTime(localTime);
                     TimeSpan duration = appointment.Value;
 
-                    // Remove the appointment time slot
                     BusinessHours.Remove(appointmentTime);
 
                     // If the appointment is 60 minutes, also remove the next time slot
@@ -218,21 +176,23 @@ namespace DesktopSchedulingApp.Service
         #endregion
 
         #region -- Methods to set available hours for ModifyAppointment form --
-        // Overloaded method for modifying appointments
-        public static void SetAvailableHours(ModifyAppointment modifyAppointment, TimeOnly start, int duration)
+        public static void SetAvailableHours(ModifyAppointment view, TimeOnly startTime, int duration)
         {
-            // Initialize the business hours dictionary
             InitializeBusinessHours();
-
-            // Remove unavailable hours, but preserve the appointment being modified
-            RemoveUnavailableHoursExceptCurrent(selectedDate, start, duration);
-
-            // Display available hours in the DataGridView and select the start time
-            DisplayHoursInDataGridWithSelection(modifyAppointment, start);
+            RemoveUnavailableHoursExceptCurrent(selectedDate, ConvertTime(startTime), duration);
+            DisplayHoursInDataGridWithSelection(ConvertTime(startTime), view);
         }
 
-        // Helper method to remove unavailable hours except for the current appointment being modified
-        private static void RemoveUnavailableHoursExceptCurrent(DateOnly selectedDate, TimeOnly appointmentStartTime, int duration)
+        private static TimeOnly ConvertTime(TimeOnly startTime)
+        {
+            DateTime estTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day,
+                                            startTime.Hour, startTime.Minute, 0);
+            DateTime localTime = ConvertFromEastern(estTime);
+            TimeOnly appointmentStartTime = TimeOnly.FromDateTime(localTime);
+            return appointmentStartTime;
+        }
+
+        private static void RemoveUnavailableHoursExceptCurrent(DateOnly selectedDate, TimeOnly startTime, int duration)
         {
             // Clear hours if the selected date is in the past or a weekend
             if (selectedDate < DateOnly.FromDateTime(DateTime.Now) ||
@@ -247,49 +207,48 @@ namespace DesktopSchedulingApp.Service
             if (selectedDate == DateOnly.FromDateTime(DateTime.Today))
             {
                 var currentTime = TimeOnly.FromDateTime(DateTime.Now);
-                var pastHours = BusinessHours.Keys.Where(time => time < currentTime && time != appointmentStartTime).ToList();
+                var pastHours = BusinessHours.Keys.Where(time => time < currentTime && time != startTime).ToList();
 
                 foreach (var hour in pastHours)
                 {
                     BusinessHours.Remove(hour);
                 }
             }
-
             // Remove hours that are already booked, except for the appointment being modified
             if (AppointmentDates.ContainsKey(selectedDate))
             {
                 foreach (var appointment in AppointmentDates[selectedDate])
                 {
-                    TimeOnly existingAppointmentTime = appointment.Key;
+                    TimeOnly bookedTimeLocal = ConvertTime(appointment.Key);
                     TimeSpan existingDuration = appointment.Value;
 
                     // Skip the current appointment being modified
-                    if (existingAppointmentTime == appointmentStartTime)
+                    if (bookedTimeLocal == startTime)
                         continue;
 
                     // Remove the appointment time slot
-                    BusinessHours.Remove(existingAppointmentTime);
+                    BusinessHours.Remove(bookedTimeLocal);
 
                     // If the appointment is 60 minutes, also remove the next time slot
-                    if (existingDuration.TotalMinutes == 60.0 && BusinessHours.ContainsKey(existingAppointmentTime.AddMinutes(30)))
+                    if (existingDuration.TotalMinutes == 60.0 && BusinessHours.ContainsKey(bookedTimeLocal.AddMinutes(30)))
                     {
-                        BusinessHours.Remove(existingAppointmentTime.AddMinutes(30));
+                        BusinessHours.Remove(bookedTimeLocal.AddMinutes(30));
                     }
                 }
             }
 
             // Ensure the appointment start time is available in the dictionary
             // This handles the case where it might have been removed due to being in the past
-            if (!BusinessHours.ContainsKey(appointmentStartTime))
+            if (!BusinessHours.ContainsKey(startTime))
             {
-                string timeString = GetFormattedTimeString(appointmentStartTime);
-                BusinessHours.Add(appointmentStartTime, timeString);
+                string timeString = GetFormattedTimeString(startTime);
+                BusinessHours.Add(startTime, timeString);
             }
 
             // If duration is 60 minutes, ensure the next slot is also available
             if (duration == 60)
             {
-                TimeOnly nextSlot = appointmentStartTime.AddMinutes(30);
+                TimeOnly nextSlot = startTime.AddMinutes(30);
                 if (!BusinessHours.ContainsKey(nextSlot))
                 {
                     string timeString = GetFormattedTimeString(nextSlot);
@@ -298,8 +257,15 @@ namespace DesktopSchedulingApp.Service
             }
         }
 
-        // Helper method to display hours in the DataGridView with a specific time selected
-        private static void DisplayHoursInDataGridWithSelection(ModifyAppointment modifyAppointment, TimeOnly selectedTime)
+        private static string GetFormattedTimeString(TimeOnly time)
+        {
+            int hour = time.Hour;
+            string amPm = hour >= 12 ? "PM" : "AM";
+            int displayHour = hour > 12 ? hour - 12 : hour;
+            return $"{displayHour}:{time.Minute:D2} {amPm}";
+        }
+
+        private static void DisplayHoursInDataGridWithSelection(TimeOnly selectedTime, ModifyAppointment modifyAppointment)
         {
             // Clear and set up the DataGridView
             modifyAppointment.hoursDGV.Columns.Clear();
@@ -334,22 +300,8 @@ namespace DesktopSchedulingApp.Service
                 modifyAppointment.hoursDGV.CurrentCell = modifyAppointment.hoursDGV.Rows[selectedIndex].Cells[0];
             }
         }
-
-        // Helper method to format a TimeOnly value into a display string
-        private static string GetFormattedTimeString(TimeOnly time)
-        {
-            int hour = time.Hour;
-            string amPm = hour >= 12 ? "PM" : "AM";
-            int displayHour = hour > 12 ? hour - 12 : hour;
-            return $"{displayHour}:{time.Minute:D2} {amPm}";
-        }
         #endregion
 
-
-        public static int GetBusinessHoursKeyIndex(TimeOnly key)
-        {
-            return BusinessHours.Keys.ToList().IndexOf(key);
-        }
 
         public static void GetSelectedDate(string date)
         {
@@ -514,16 +466,6 @@ namespace DesktopSchedulingApp.Service
 
         private static bool IsValidAppointmentTime(DateTime start, DateTime end)
         {
-            //TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            //DateTime startEST = TimeZoneInfo.ConvertTime(start, est);
-            //DateTime endEST = TimeZoneInfo.ConvertTime(end, est);
-
-            //TimeZoneInfo est = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            //DateTime startEST = ConvertToEastern(start);
-            //DateTime endEST = ConvertToEastern(end);
-
-            //return startEST.TimeOfDay >= TimeSpan.FromHours(9) && endEST.TimeOfDay <= TimeSpan.FromHours(17) &&
-            //       startEST.DayOfWeek != DayOfWeek.Saturday && startEST.DayOfWeek != DayOfWeek.Sunday;
             return start.TimeOfDay >= TimeSpan.FromHours(9) && end.TimeOfDay <= TimeSpan.FromHours(17) &&
                    start.DayOfWeek != DayOfWeek.Saturday && start.DayOfWeek != DayOfWeek.Sunday;
         }

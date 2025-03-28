@@ -23,7 +23,7 @@ namespace DesktopSchedulingApp.Forms.ReportForms
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Appointments by Month";
-            this.userId = id;
+            userId = id;
 
             LoadYearsFromDatabase();
             LoadReportData();
@@ -56,14 +56,14 @@ namespace DesktopSchedulingApp.Forms.ReportForms
             monthReportDGV.DataSource = reportData.Select(kvp => new { Month = kvp.Key, Appointments = kvp.Value }).ToList();
         }
 
-        private void CancelBtn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void yearComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadReportData();
+        }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

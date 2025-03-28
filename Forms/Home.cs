@@ -69,5 +69,10 @@ namespace DesktopSchedulingApp.Forms
         {
             new MonthlyAppointments(userId).ShowDialog();
         }
+
+        private void userScheduleBtn_Click(object sender, EventArgs e)
+        {
+            new UserSchedule(userId).ShowDialog();
+        }
     }
 }

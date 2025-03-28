@@ -31,5 +31,36 @@ namespace DesktopSchedulingApp.Service
             }
             return report;
         }
+
+        public static Dictionary<string, List<(DateTime Date, TimeSpan Time, string Customer)>> GetScheduleByUser(int userId)
+        {
+            var report = new Dictionary<string, List<(DateTime, TimeSpan, string)>>();
+
+            string query = "SELECT u.userName, a.start, c.customerName FROM appointment a " +
+                       "JOIN user u ON a.userId = u.userId " +
+                       "JOIN customer c ON a.customerId = c.customerId " +
+                       "WHERE a.start >= NOW() AND a.userId = @userId " +
+                       "ORDER BY a.start";
+            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string user = reader.GetString("userName");
+                    DateTime easternStart = reader.GetDateTime("start");
+                    DateTime localStart = AppointmentService.ConvertFromEastern(easternStart);
+                    TimeSpan time = localStart.TimeOfDay;
+                    string customer = reader.GetString("customerName");
+
+                    if (!report.ContainsKey(user))
+                    {
+                        report[user] = new List<(DateTime, TimeSpan, string)>();
+                    }
+                    report[user].Add((localStart.Date, time, customer));
+                }
+            }
+            return report;
+        }
     }
 }
