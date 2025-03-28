@@ -45,31 +45,33 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { customerToolStripMenuItem, appointmentsToolStripMenuItem, calendarToolStripMenuItem, reportsToolStripMenuItem, toolStripMenuItem2, toolStripMenuItem4, logoutToolStripMenuItem, quitToolStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new System.Drawing.Size(793, 24);
+            menuStrip1.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
+            menuStrip1.Size = new System.Drawing.Size(906, 30);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
             // customerToolStripMenuItem
             // 
             customerToolStripMenuItem.Name = "customerToolStripMenuItem";
-            customerToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            customerToolStripMenuItem.Size = new System.Drawing.Size(92, 24);
             customerToolStripMenuItem.Text = "Customers";
             customerToolStripMenuItem.Click += CustomerBtn_Click;
             // 
             // appointmentsToolStripMenuItem
             // 
             appointmentsToolStripMenuItem.Name = "appointmentsToolStripMenuItem";
-            appointmentsToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
+            appointmentsToolStripMenuItem.Size = new System.Drawing.Size(117, 24);
             appointmentsToolStripMenuItem.Text = "Appointments";
             appointmentsToolStripMenuItem.Click += AppointmentBtn_Click;
             // 
             // calendarToolStripMenuItem
             // 
             calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            calendarToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            calendarToolStripMenuItem.Size = new System.Drawing.Size(82, 24);
             calendarToolStripMenuItem.Text = "Calendar";
             calendarToolStripMenuItem.Click += calendarBtn_Click;
             // 
@@ -77,46 +79,48 @@
             // 
             reportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { monthlyAppointmentsToolStripMenuItem, userScheduleToolStripMenuItem });
             reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
-            reportsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            reportsToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
             reportsToolStripMenuItem.Text = "Reports";
             // 
             // monthlyAppointmentsToolStripMenuItem
             // 
             monthlyAppointmentsToolStripMenuItem.Name = "monthlyAppointmentsToolStripMenuItem";
-            monthlyAppointmentsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            monthlyAppointmentsToolStripMenuItem.Size = new System.Drawing.Size(244, 26);
             monthlyAppointmentsToolStripMenuItem.Text = "Monthly Appointments";
             monthlyAppointmentsToolStripMenuItem.Click += monthlyAppointmentsBtn_Click;
             // 
             // userScheduleToolStripMenuItem
             // 
             userScheduleToolStripMenuItem.Name = "userScheduleToolStripMenuItem";
-            userScheduleToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            userScheduleToolStripMenuItem.Size = new System.Drawing.Size(244, 26);
             userScheduleToolStripMenuItem.Text = "User Schedule";
             userScheduleToolStripMenuItem.Click += userScheduleBtn_Click;
             // 
             // toolStripMenuItem2
             // 
+            toolStripMenuItem2.Enabled = false;
             toolStripMenuItem2.Name = "toolStripMenuItem2";
-            toolStripMenuItem2.Size = new System.Drawing.Size(196, 20);
+            toolStripMenuItem2.Size = new System.Drawing.Size(259, 24);
             toolStripMenuItem2.Text = "                                                           ";
             // 
             // toolStripMenuItem4
             // 
+            toolStripMenuItem4.Enabled = false;
             toolStripMenuItem4.Name = "toolStripMenuItem4";
-            toolStripMenuItem4.Size = new System.Drawing.Size(157, 20);
+            toolStripMenuItem4.Size = new System.Drawing.Size(207, 24);
             toolStripMenuItem4.Text = "                                              ";
             // 
             // logoutToolStripMenuItem
             // 
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            logoutToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutBtn_Click;
             // 
             // quitToolStripMenuItem
             // 
             quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            quitToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            quitToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             quitToolStripMenuItem.Text = "Quit";
             quitToolStripMenuItem.Click += quitBtn_Click;
             // 
@@ -126,22 +130,23 @@
             welcomeLabel.AutoSize = true;
             welcomeLabel.Font = new System.Drawing.Font("Arial Black", 50F);
             welcomeLabel.ForeColor = System.Drawing.SystemColors.Window;
-            welcomeLabel.Location = new System.Drawing.Point(97, 175);
+            welcomeLabel.Location = new System.Drawing.Point(111, 233);
             welcomeLabel.Name = "welcomeLabel";
-            welcomeLabel.Size = new System.Drawing.Size(582, 95);
+            welcomeLabel.Size = new System.Drawing.Size(728, 118);
             welcomeLabel.TabIndex = 10;
             welcomeLabel.Text = "Welcome Back";
             welcomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Home
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(793, 510);
+            ClientSize = new System.Drawing.Size(906, 680);
             Controls.Add(welcomeLabel);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "Home";
             Text = "Dashboard";
             Load += Home_Load;

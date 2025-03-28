@@ -129,12 +129,7 @@ namespace DesktopSchedulingApp.Service
             if (selectedDate == DateOnly.FromDateTime(DateTime.Today))
             {
                 var currentTime = TimeOnly.FromDateTime(DateTime.Now);
-                var pastHours = BusinessHours.Keys.Where(time => time < currentTime).ToList();
-
-                foreach (var hour in pastHours)
-                {
-                    BusinessHours.Remove(hour);
-                }
+                BusinessHours = BusinessHours.Where(kvp => kvp.Key >= currentTime).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
             // Remove hours that are already booked
             if (AppointmentDates.ContainsKey(selectedDate))
