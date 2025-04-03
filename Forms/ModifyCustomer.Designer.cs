@@ -50,7 +50,7 @@
             addCustomerLabel.ForeColor = System.Drawing.Color.MediumPurple;
             addCustomerLabel.Location = new System.Drawing.Point(0, 0);
             addCustomerLabel.Name = "addCustomerLabel";
-            addCustomerLabel.Size = new System.Drawing.Size(422, 76);
+            addCustomerLabel.Size = new System.Drawing.Size(482, 101);
             addCustomerLabel.TabIndex = 1;
             addCustomerLabel.Text = "EDIT CUSTOMER";
             addCustomerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -60,17 +60,18 @@
             customerNameLabel.AutoSize = true;
             customerNameLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             customerNameLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            customerNameLabel.Location = new System.Drawing.Point(27, 85);
+            customerNameLabel.Location = new System.Drawing.Point(31, 113);
             customerNameLabel.Name = "customerNameLabel";
-            customerNameLabel.Size = new System.Drawing.Size(49, 20);
+            customerNameLabel.Size = new System.Drawing.Size(62, 25);
             customerNameLabel.TabIndex = 3;
             customerNameLabel.Text = "Name";
             // 
             // customerNameText
             // 
-            customerNameText.Location = new System.Drawing.Point(27, 108);
+            customerNameText.Location = new System.Drawing.Point(31, 144);
+            customerNameText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             customerNameText.Name = "customerNameText";
-            customerNameText.Size = new System.Drawing.Size(170, 23);
+            customerNameText.Size = new System.Drawing.Size(194, 27);
             customerNameText.TabIndex = 1;
             // 
             // phoneLabel
@@ -78,17 +79,18 @@
             phoneLabel.AutoSize = true;
             phoneLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             phoneLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            phoneLabel.Location = new System.Drawing.Point(227, 85);
+            phoneLabel.Location = new System.Drawing.Point(259, 113);
             phoneLabel.Name = "phoneLabel";
-            phoneLabel.Size = new System.Drawing.Size(108, 20);
+            phoneLabel.Size = new System.Drawing.Size(140, 25);
             phoneLabel.TabIndex = 5;
             phoneLabel.Text = "Phone Number";
             // 
             // phoneText
             // 
-            phoneText.Location = new System.Drawing.Point(227, 108);
+            phoneText.Location = new System.Drawing.Point(259, 144);
+            phoneText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             phoneText.Name = "phoneText";
-            phoneText.Size = new System.Drawing.Size(170, 23);
+            phoneText.Size = new System.Drawing.Size(194, 27);
             phoneText.TabIndex = 2;
             // 
             // cityLabel
@@ -96,17 +98,18 @@
             cityLabel.AutoSize = true;
             cityLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             cityLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            cityLabel.Location = new System.Drawing.Point(227, 154);
+            cityLabel.Location = new System.Drawing.Point(259, 205);
             cityLabel.Name = "cityLabel";
-            cityLabel.Size = new System.Drawing.Size(34, 20);
+            cityLabel.Size = new System.Drawing.Size(44, 25);
             cityLabel.TabIndex = 7;
             cityLabel.Text = "City";
             // 
             // cityText
             // 
-            cityText.Location = new System.Drawing.Point(227, 177);
+            cityText.Location = new System.Drawing.Point(259, 236);
+            cityText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             cityText.Name = "cityText";
-            cityText.Size = new System.Drawing.Size(170, 23);
+            cityText.Size = new System.Drawing.Size(194, 27);
             cityText.TabIndex = 4;
             // 
             // countryLabel
@@ -114,18 +117,19 @@
             countryLabel.AutoSize = true;
             countryLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             countryLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            countryLabel.Location = new System.Drawing.Point(27, 216);
+            countryLabel.Location = new System.Drawing.Point(31, 288);
             countryLabel.Name = "countryLabel";
-            countryLabel.Size = new System.Drawing.Size(60, 20);
+            countryLabel.Size = new System.Drawing.Size(79, 25);
             countryLabel.TabIndex = 11;
             countryLabel.Text = "Country";
             // 
             // countryComboBox
             // 
             countryComboBox.FormattingEnabled = true;
-            countryComboBox.Location = new System.Drawing.Point(27, 239);
+            countryComboBox.Location = new System.Drawing.Point(31, 319);
+            countryComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             countryComboBox.Name = "countryComboBox";
-            countryComboBox.Size = new System.Drawing.Size(121, 23);
+            countryComboBox.Size = new System.Drawing.Size(138, 28);
             countryComboBox.TabIndex = 5;
             // 
             // ModifyCustomerSubmitBtn
@@ -133,10 +137,11 @@
             ModifyCustomerSubmitBtn.AutoSize = true;
             ModifyCustomerSubmitBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             ModifyCustomerSubmitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            ModifyCustomerSubmitBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            ModifyCustomerSubmitBtn.Location = new System.Drawing.Point(322, 287);
+            ModifyCustomerSubmitBtn.Font = new System.Drawing.Font("Arial", 11F);
+            ModifyCustomerSubmitBtn.Location = new System.Drawing.Point(368, 383);
+            ModifyCustomerSubmitBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             ModifyCustomerSubmitBtn.Name = "ModifyCustomerSubmitBtn";
-            ModifyCustomerSubmitBtn.Size = new System.Drawing.Size(75, 32);
+            ModifyCustomerSubmitBtn.Size = new System.Drawing.Size(86, 43);
             ModifyCustomerSubmitBtn.TabIndex = 6;
             ModifyCustomerSubmitBtn.Text = "Submit";
             ModifyCustomerSubmitBtn.UseVisualStyleBackColor = false;
@@ -144,9 +149,10 @@
             // 
             // addressText
             // 
-            addressText.Location = new System.Drawing.Point(27, 177);
+            addressText.Location = new System.Drawing.Point(31, 236);
+            addressText.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             addressText.Name = "addressText";
-            addressText.Size = new System.Drawing.Size(170, 23);
+            addressText.Size = new System.Drawing.Size(194, 27);
             addressText.TabIndex = 3;
             // 
             // addressLabel
@@ -154,9 +160,9 @@
             addressLabel.AutoSize = true;
             addressLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             addressLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
-            addressLabel.Location = new System.Drawing.Point(27, 154);
+            addressLabel.Location = new System.Drawing.Point(31, 205);
             addressLabel.Name = "addressLabel";
-            addressLabel.Size = new System.Drawing.Size(62, 20);
+            addressLabel.Size = new System.Drawing.Size(79, 25);
             addressLabel.TabIndex = 16;
             addressLabel.Text = "Address";
             // 
@@ -165,10 +171,11 @@
             ModifyCancelBtn.AutoSize = true;
             ModifyCancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             ModifyCancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            ModifyCancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            ModifyCancelBtn.Location = new System.Drawing.Point(227, 287);
+            ModifyCancelBtn.Font = new System.Drawing.Font("Arial", 11F);
+            ModifyCancelBtn.Location = new System.Drawing.Point(259, 383);
+            ModifyCancelBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             ModifyCancelBtn.Name = "ModifyCancelBtn";
-            ModifyCancelBtn.Size = new System.Drawing.Size(75, 32);
+            ModifyCancelBtn.Size = new System.Drawing.Size(86, 43);
             ModifyCancelBtn.TabIndex = 7;
             ModifyCancelBtn.Text = "Cancel";
             ModifyCancelBtn.UseVisualStyleBackColor = false;
@@ -176,10 +183,10 @@
             // 
             // ModifyCustomer
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(422, 339);
+            ClientSize = new System.Drawing.Size(482, 452);
             Controls.Add(addressLabel);
             Controls.Add(addressText);
             Controls.Add(ModifyCancelBtn);
@@ -193,6 +200,7 @@
             Controls.Add(customerNameText);
             Controls.Add(customerNameLabel);
             Controls.Add(addCustomerLabel);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "ModifyCustomer";
             Text = "Modify Customer";
             Load += ModifyCustomer_Load;

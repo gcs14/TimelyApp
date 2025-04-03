@@ -175,7 +175,7 @@
             // 
             cancelBtn.AutoSize = true;
             cancelBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            cancelBtn.BackColor = System.Drawing.Color.Red;
+            cancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             cancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             cancelBtn.Font = new System.Drawing.Font("Arial", 11F);
             cancelBtn.Location = new System.Drawing.Point(297, 547);

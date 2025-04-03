@@ -57,13 +57,13 @@
             splitContainer1.Panel2.Controls.Add(tableLayoutPanel1);
             splitContainer1.Panel2.Controls.Add(label1);
             splitContainer1.Size = new System.Drawing.Size(457, 485);
-            splitContainer1.SplitterDistance = 311;
+            splitContainer1.SplitterDistance = 310;
             splitContainer1.TabIndex = 7;
             // 
             // monthCalendar1
             // 
             monthCalendar1.CalendarDimensions = new System.Drawing.Size(2, 2);
-            monthCalendar1.Dock = System.Windows.Forms.DockStyle.Top;
+            monthCalendar1.Dock = System.Windows.Forms.DockStyle.Fill;
             monthCalendar1.Location = new System.Drawing.Point(0, 0);
             monthCalendar1.Name = "monthCalendar1";
             monthCalendar1.TabIndex = 0;
@@ -74,11 +74,11 @@
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            tableLayoutPanel1.Location = new System.Drawing.Point(0, 50);
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 51);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             tableLayoutPanel1.Size = new System.Drawing.Size(457, 120);
             tableLayoutPanel1.TabIndex = 2;
             // 

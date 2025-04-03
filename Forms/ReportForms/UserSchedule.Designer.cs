@@ -66,11 +66,11 @@
             CancelBtn.AutoSize = true;
             CancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            CancelBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
+            CancelBtn.Font = new System.Drawing.Font("Arial", 11F);
             CancelBtn.Location = new System.Drawing.Point(334, 423);
             CancelBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             CancelBtn.Name = "CancelBtn";
-            CancelBtn.Size = new System.Drawing.Size(86, 43);
+            CancelBtn.Size = new System.Drawing.Size(88, 43);
             CancelBtn.TabIndex = 11;
             CancelBtn.Text = "Close";
             CancelBtn.UseVisualStyleBackColor = false;
