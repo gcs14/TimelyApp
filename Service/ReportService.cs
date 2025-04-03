@@ -30,6 +30,7 @@ namespace DesktopSchedulingApp.Service
             return report;
         }
 
+        // this method is problematic and does not work well with UTC
         public static Dictionary<string, List<(DateTime Date, TimeSpan Time, string Customer)>> GetScheduleByUser(int userId)
         {
             var report = new Dictionary<string, List<(DateTime, TimeSpan, string)>>();
