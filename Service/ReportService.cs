@@ -38,9 +38,10 @@ namespace DesktopSchedulingApp.Service
             string query = "SELECT u.userName, a.start, c.customerName FROM appointment a " +
                        "JOIN user u ON a.userId = u.userId " +
                        "JOIN customer c ON a.customerId = c.customerId " +
-                       "WHERE a.start >= NOW() AND a.userId = @userId " +
+                       "WHERE a.start >= @nowEST AND a.userId = @userId " +
                        "ORDER BY a.start";
             MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@nowEST", AppointmentService.ConvertToEastern(DateTime.Now));
             cmd.Parameters.AddWithValue("@userId", userId);
             using (var reader = cmd.ExecuteReader())
             {
