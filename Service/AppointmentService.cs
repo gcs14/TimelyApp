@@ -375,13 +375,13 @@ namespace DesktopSchedulingApp.Service
                 return;
             }
 
-            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end))
+            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end, appointmentId))
             {
                 MessageBox.Show("You already have an appointment scheduled at this time.");
                 return;
             }
 
-            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end))
+            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end, appointmentId))
             {
                 MessageBox.Show("This customer already has an appointment at this time.");
                 return;
@@ -439,26 +439,78 @@ namespace DesktopSchedulingApp.Service
                    start.DayOfWeek != DayOfWeek.Saturday && start.DayOfWeek != DayOfWeek.Sunday;
         }
 
-        private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end)
+        //private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end)
+        //{
+        //    string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId AND ((start < @end AND end > @start))";
+        //    MySqlCommand cmd = new MySqlCommand(query, connection);
+        //    cmd.Parameters.AddWithValue("@userId", userId);
+        //    cmd.Parameters.AddWithValue("@start", start);
+        //    cmd.Parameters.AddWithValue("@end", end);
+        //    int count = Convert.ToInt32(cmd.ExecuteScalar());
+        //    return count > 0;
+        //}
+
+        private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end, int? appointmentId = null)
         {
-            string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId AND ((start < @end AND end > @start))";
+            // Query to check for overlapping appointments, but ignore the current one if we're updating
+            string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId " +
+                           "AND ((start < @end AND end > @start)) " +
+                           "AND (@appointmentId IS NULL OR appointmentId != @appointmentId)";
+
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@userId", userId);
             cmd.Parameters.AddWithValue("@start", start);
             cmd.Parameters.AddWithValue("@end", end);
+
+            // If appointmentId is provided, use it; otherwise, ignore it
+            if (appointmentId.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@appointmentId", appointmentId.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue("@appointmentId", DBNull.Value);
+            }
+
             int count = Convert.ToInt32(cmd.ExecuteScalar());
-            return count > 0;
+            return count > 0; // True means there's an overlap
         }
 
-        private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end)
+        //private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end)
+        //{
+        //    string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId AND ((start < @end AND end > @start))";
+        //    MySqlCommand cmd = new MySqlCommand(query, connection);
+        //    cmd.Parameters.AddWithValue("@customerId", customerId);
+        //    cmd.Parameters.AddWithValue("@start", start);
+        //    cmd.Parameters.AddWithValue("@end", end);
+        //    int count = Convert.ToInt32(cmd.ExecuteScalar());
+        //    return count > 0;
+        //}
+
+        private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end, int? appointmentId = null)
         {
-            string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId AND ((start < @end AND end > @start))";
+            // Query to check for overlapping appointments, but ignore the current one if we're updating
+            string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId " +
+                           "AND ((start < @end AND end > @start)) " +
+                           "AND (@appointmentId IS NULL OR appointmentId != @appointmentId)";
+
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@customerId", customerId);
             cmd.Parameters.AddWithValue("@start", start);
             cmd.Parameters.AddWithValue("@end", end);
+
+            // If appointmentId is provided, use it; otherwise, ignore it
+            if (appointmentId.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@appointmentId", appointmentId.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue("@appointmentId", DBNull.Value);
+            }
+
             int count = Convert.ToInt32(cmd.ExecuteScalar());
-            return count > 0;
+            return count > 0; // True means there's an overlap
         }
 
         private static int GetCustomerId(MySqlConnection connection, string customerName)
