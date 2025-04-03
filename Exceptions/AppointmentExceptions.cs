@@ -43,21 +43,19 @@ namespace DesktopSchedulingApp.Exceptions
                 modifyAppointment.monthCalendar.SelectionStart.ToShortDateString(),
                 AppointmentService.GetSelectedTime(modifyAppointment.hoursDGV.CurrentRow.Cells[0].Value.ToString())
                 );
-            DateTime desiredStartLocal = AppointmentService.ConvertFromEastern(desiredStart);
 
             DateTime desiredEnd = desiredStart.AddMinutes(Convert.ToDouble(
                 modifyAppointment.durationComboBox.Text.Substring(0, 2)));
-            DateTime desiredEndLocal = AppointmentService.ConvertFromEastern(desiredEnd);
 
             DateTime closingTimeEST = modifyAppointment.monthCalendar.SelectionStart.AddHours(17);
-            DateTime closingTimeLocal = AppointmentService.ConvertFromEastern(closingTimeEST);
+            DateTime closingTime = AppointmentService.ConvertFromEastern(closingTimeEST);
 
-            if (desiredStartLocal < DateTime.Now)
+            if (desiredStart < DateTime.Now)
             {
                 MessageBox.Show("ERROR: Cannot choose a date that has already passed.");
                 return false;
             }
-            if (desiredEndLocal > closingTimeLocal)
+            if (desiredEnd > closingTime)
             {
                 MessageBox.Show("ERROR: Desired appointment exceeds business hours. Pick a shorter duration or choose another date.");
                 return false;
