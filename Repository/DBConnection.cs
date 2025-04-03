@@ -1,7 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace DesktopSchedulingApp.Repository
 {
@@ -17,7 +16,7 @@ namespace DesktopSchedulingApp.Repository
                 conn = new MySqlConnection(constr);
                 conn.Open();
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 MessageBox.Show(ex.Message);
             }

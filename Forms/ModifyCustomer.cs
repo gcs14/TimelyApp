@@ -40,7 +40,7 @@ namespace DesktopSchedulingApp.Forms
             {
                 if (reader.Read())
                 {
-                    customerInfo.Add("customerName",customerNameText.Text = reader["customerName"].ToString());
+                    customerInfo.Add("customerName", customerNameText.Text = reader["customerName"].ToString());
                     customerInfo.Add("address", addressText.Text = reader["address"].ToString());
                     customerInfo.Add("phone", phoneText.Text = reader["phone"].ToString());
                     customerInfo.Add("city", cityText.Text = reader["city"].ToString());

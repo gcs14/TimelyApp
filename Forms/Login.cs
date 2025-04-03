@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
@@ -14,7 +13,7 @@ namespace DesktopSchedulingApp.Forms
         private Dictionary<string, Dictionary<string, string>> translations = new Dictionary<string, Dictionary<string, string>>();
         private string currentLanguage = "en";
         bool passwordHidden;
-        private string loggedInUser = "";
+        private string loggedInUser;
 
         public Login()
         {

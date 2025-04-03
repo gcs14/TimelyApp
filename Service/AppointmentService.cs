@@ -203,7 +203,7 @@ namespace DesktopSchedulingApp.Service
                     BusinessHours.Remove(hour);
                 }
             }
-            
+
             if (AppointmentDates.ContainsKey(selectedDate))
             {
                 foreach (var appointment in AppointmentDates[selectedDate])

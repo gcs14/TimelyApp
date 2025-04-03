@@ -20,7 +20,6 @@ namespace DesktopSchedulingApp.Forms
         private void PopulateAppointmentTable()
         {
             AppointmentService.LoadAppointmentData(this);
-            UserService.LoadUserData();
             dataGridView1.CurrentCell = null;
             dataGridView1.Columns["userId"].Visible = false;
             dataGridView1.Columns["customerId"].Visible = false;

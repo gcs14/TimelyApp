@@ -1,14 +1,13 @@
 ﻿using DesktopSchedulingApp.Exceptions;
 using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
-using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
 {
-    public partial class ModifyAppointment: Form
+    public partial class ModifyAppointment : Form
     {
         int appointmentId;
         int userId;
