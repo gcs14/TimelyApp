@@ -41,7 +41,10 @@ namespace DesktopSchedulingApp.Forms
 
         private void CustomerSelection(object sender, EventArgs e)
         {
-            selectedCustomerId = Convert.ToInt32(dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[0].Value);
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                selectedCustomerId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+            }
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)

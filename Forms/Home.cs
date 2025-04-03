@@ -1,7 +1,5 @@
 ﻿using DesktopSchedulingApp.Forms.ReportForms;
-using DesktopSchedulingApp.Repository;
 using DesktopSchedulingApp.Service;
-using MySql.Data.MySqlClient;
 using System;
 using System.Windows.Forms;
 
@@ -29,14 +27,12 @@ namespace DesktopSchedulingApp.Forms
         private void CustomerBtn_Click(object sender, EventArgs e)
         {
             var viewCustomers = new ViewCustomers();
-            //viewCustomers.MdiParent = this;
             viewCustomers.Show();
         }
 
         private void AppointmentBtn_Click(object sender, EventArgs e)
         {
             var viewAppointments = new ViewAppointments(username);
-            //viewAppointments.MdiParent = this;
             viewAppointments.Show();
         }
 
@@ -51,6 +47,7 @@ namespace DesktopSchedulingApp.Forms
             if (confirmResult == DialogResult.Yes)
             {
                 this.Hide();
+                Login.LogLogout(username);
                 new Login().ShowDialog();
                 this.Close();
             }
@@ -73,6 +70,11 @@ namespace DesktopSchedulingApp.Forms
         private void userScheduleBtn_Click(object sender, EventArgs e)
         {
             new UserSchedule(userId).ShowDialog();
+        }
+
+        private void peakHoursBtn_Click(object sender, EventArgs e)
+        {
+            new PeakHours().ShowDialog();
         }
     }
 }

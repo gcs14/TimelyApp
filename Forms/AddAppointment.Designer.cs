@@ -146,7 +146,7 @@
             // typeComboBox
             // 
             typeComboBox.FormattingEnabled = true;
-            typeComboBox.Items.AddRange(new object[] { "Presntation", "Scrum", "Consultation", "Other" });
+            typeComboBox.Items.AddRange(new object[] { "Presentation", "Scrum", "Consultation", "Other" });
             typeComboBox.Location = new System.Drawing.Point(18, 337);
             typeComboBox.Name = "typeComboBox";
             typeComboBox.Size = new System.Drawing.Size(121, 23);

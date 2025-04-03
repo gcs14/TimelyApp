@@ -23,7 +23,7 @@ namespace DesktopSchedulingApp.Service
             string sql = "SELECT appointment.appointmentId AS 'Id', appointment.userId, user.userName AS 'User', " +
                 "appointment.customerId, customer.customerName AS 'Customer', appointment.type AS 'Type', " +
                 "appointment.start AS 'Date', appointment.end AS 'End Date', " +
-                "TIME(appointment.start) AS 'Start Time', TIME(appointment.end) AS 'End Time' " +
+                "TIME(appointment.start) AS 'Start Time (EST)', TIME(appointment.end) AS 'End Time (EST)' " +
                 "FROM appointment " +
                 "JOIN user ON user.userId = appointment.userId " +
                 "JOIN customer ON customer.customerId = appointment.customerId " +
@@ -125,13 +125,13 @@ namespace DesktopSchedulingApp.Service
                 BusinessHours.Clear();
                 return;
             }
-            // Remove hours that are in the past if the selected date is today
+
             if (selectedDate == DateOnly.FromDateTime(DateTime.Today))
             {
                 var currentTime = TimeOnly.FromDateTime(DateTime.Now);
                 BusinessHours = BusinessHours.Where(kvp => kvp.Key >= currentTime).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
-            // Remove hours that are already booked
+
             if (AppointmentDates.ContainsKey(selectedDate))
             {
                 foreach (var appointment in AppointmentDates[selectedDate])
@@ -144,7 +144,6 @@ namespace DesktopSchedulingApp.Service
 
                     BusinessHours.Remove(appointmentTime);
 
-                    // If the appointment is 60 minutes, also remove the next time slot
                     if (duration.TotalMinutes == 60.0 && BusinessHours.ContainsKey(appointmentTime.AddMinutes(30)))
                     {
                         BusinessHours.Remove(appointmentTime.AddMinutes(30));
@@ -153,16 +152,13 @@ namespace DesktopSchedulingApp.Service
             }
         }
 
-        // Helper method to display hours in the DataGridView
         private static void DisplayHoursInDataGrid(AddAppointment view)
         {
-            // Clear and set up the DataGridView
             view.hoursDGV.Columns.Clear();
             view.hoursDGV.Rows.Clear();
             view.hoursDGV.Columns.Add("Time", "Time");
             view.hoursDGV.CurrentCell = null;
 
-            // Add available times to the DataGridView
             foreach (var entry in BusinessHours)
             {
                 view.hoursDGV.Rows.Add(entry.Value);
@@ -189,7 +185,6 @@ namespace DesktopSchedulingApp.Service
 
         private static void RemoveUnavailableHoursExceptCurrent(DateOnly selectedDate, TimeOnly startTime, int duration)
         {
-            // Clear hours if the selected date is in the past or a weekend
             if (selectedDate < DateOnly.FromDateTime(DateTime.Now) ||
                 selectedDate.DayOfWeek == DayOfWeek.Saturday ||
                 selectedDate.DayOfWeek == DayOfWeek.Sunday)
@@ -198,7 +193,6 @@ namespace DesktopSchedulingApp.Service
                 return;
             }
 
-            // Remove hours that are in the past if the selected date is today
             if (selectedDate == DateOnly.FromDateTime(DateTime.Today))
             {
                 var currentTime = TimeOnly.FromDateTime(DateTime.Now);
@@ -209,7 +203,7 @@ namespace DesktopSchedulingApp.Service
                     BusinessHours.Remove(hour);
                 }
             }
-            // Remove hours that are already booked, except for the appointment being modified
+            
             if (AppointmentDates.ContainsKey(selectedDate))
             {
                 foreach (var appointment in AppointmentDates[selectedDate])
@@ -217,14 +211,11 @@ namespace DesktopSchedulingApp.Service
                     TimeOnly bookedTimeLocal = ConvertTime(appointment.Key);
                     TimeSpan existingDuration = appointment.Value;
 
-                    // Skip the current appointment being modified
                     if (bookedTimeLocal == startTime)
                         continue;
 
-                    // Remove the appointment time slot
                     BusinessHours.Remove(bookedTimeLocal);
 
-                    // If the appointment is 60 minutes, also remove the next time slot
                     if (existingDuration.TotalMinutes == 60.0 && BusinessHours.ContainsKey(bookedTimeLocal.AddMinutes(30)))
                     {
                         BusinessHours.Remove(bookedTimeLocal.AddMinutes(30));
@@ -232,23 +223,10 @@ namespace DesktopSchedulingApp.Service
                 }
             }
 
-            // Ensure the appointment start time is available in the dictionary
-            // This handles the case where it might have been removed due to being in the past
             if (!BusinessHours.ContainsKey(startTime))
             {
                 string timeString = GetFormattedTimeString(startTime);
                 BusinessHours.Add(startTime, timeString);
-            }
-
-            // If duration is 60 minutes, ensure the next slot is also available
-            if (duration == 60)
-            {
-                TimeOnly nextSlot = startTime.AddMinutes(30);
-                if (!BusinessHours.ContainsKey(nextSlot))
-                {
-                    string timeString = GetFormattedTimeString(nextSlot);
-                    BusinessHours.Add(nextSlot, timeString);
-                }
             }
         }
 
@@ -262,15 +240,12 @@ namespace DesktopSchedulingApp.Service
 
         private static void DisplayHoursInDataGridWithSelection(TimeOnly selectedTime, ModifyAppointment modifyAppointment)
         {
-            // Clear and set up the DataGridView
             modifyAppointment.hoursDGV.Columns.Clear();
             modifyAppointment.hoursDGV.Rows.Clear();
             modifyAppointment.hoursDGV.Columns.Add("Time", "Time");
 
-            // Sort the business hours for consistent display
             var sortedHours = BusinessHours.OrderBy(h => h.Key).ToDictionary(x => x.Key, x => x.Value);
 
-            // Add available times to the DataGridView
             int selectedIndex = -1;
             int rowIndex = 0;
 
@@ -278,7 +253,6 @@ namespace DesktopSchedulingApp.Service
             {
                 modifyAppointment.hoursDGV.Rows.Add(entry.Value);
 
-                // Keep track of the row index for the selected time
                 if (entry.Key == selectedTime)
                 {
                     selectedIndex = rowIndex;
@@ -287,7 +261,6 @@ namespace DesktopSchedulingApp.Service
                 rowIndex++;
             }
 
-            // Select the row corresponding to the appointment start time
             if (selectedIndex >= 0 && modifyAppointment.hoursDGV.Rows.Count > 0)
             {
                 modifyAppointment.hoursDGV.ClearSelection();
@@ -327,7 +300,6 @@ namespace DesktopSchedulingApp.Service
                 MessageBox.Show("Please select a start time, customer, and duration.");
                 return;
             }
-
 
             int customerId = GetCustomerId(DBConnection.conn, addAppointment.custNamesDGV.CurrentRow.Cells[1].Value.ToString());
             int userId = GetUserId(DBConnection.conn, username);
@@ -545,7 +517,7 @@ namespace DesktopSchedulingApp.Service
             if (result != null)
             {
                 DateTime nextAppointmentTime = Convert.ToDateTime(result);
-                MessageBox.Show($"Reminder: You have an appointment at {ConvertFromEastern(nextAppointmentTime).ToShortTimeString()}.", "Upcoming Appointment", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Reminder: You have an appointment at {ConvertFromEastern(nextAppointmentTime).ToShortTimeString()} ({TimeZoneInfo.Local.StandardName}).", "Upcoming Appointment", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

@@ -3,6 +3,8 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Reflection.Metadata;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Forms
@@ -12,7 +14,7 @@ namespace DesktopSchedulingApp.Forms
         private Dictionary<string, Dictionary<string, string>> translations = new Dictionary<string, Dictionary<string, string>>();
         private string currentLanguage = "en";
         bool passwordHidden;
-        private string loggedInUser;
+        private string loggedInUser = "";
 
         public Login()
         {
@@ -72,9 +74,7 @@ namespace DesktopSchedulingApp.Forms
                     currentLanguage = "en";
                 }
 
-                // Get user's timezone for later use
                 TimeZoneInfo localZone = TimeZoneInfo.Local;
-                //lblTimeZone.Text = localZone.DisplayName;
             }
             catch (Exception ex)
             {
@@ -141,83 +141,51 @@ namespace DesktopSchedulingApp.Forms
             passwordError.Visible = true;
         }
 
-        //private void LogLogin(string username)
-        //{
-        //    try
-        //    {
-        //        string logFilePath = "Login_History.txt";
-        //        string logEntry = $"{DateTime.Now} - User: {username} logged in\n";
+        private void LogLogin(string username)
+        {
+            try
+            {
+                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string logsFolder = Path.Combine(solutionDirectory, "Logs");
 
-        //        // Append to the log file
-        //        File.AppendAllText(logFilePath, logEntry);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error but don't disrupt the login process
-        //        Console.WriteLine($"Error logging login: {ex.Message}");
-        //    }
-        //}
+                if (!Directory.Exists(logsFolder))
+                {
+                    Directory.CreateDirectory(logsFolder);
+                }
 
-        //private void CheckUpcomingAppointments(string username)
-        //{
-        //    try
-        //    {
-        //        int userId = GetUserId(username);
+                string logEntry = $"{DateTime.Now} - User: \"{username}\" logged in";
 
-        //        if (userId == -1)
-        //        {
-        //            return; // User not found or error occurred
-        //        }
+                string filePath = Path.Combine(logsFolder, "Login_History.txt");
+                File.AppendAllText(filePath, logEntry + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving log file: {ex.Message}");
+            }
+        }
 
-        //        // Get current time
-        //        DateTime now = DateTime.Now;
+        public static void LogLogout(string username)
+        {
+            try
+            {
+                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string logsFolder = Path.Combine(solutionDirectory, "Logs");
 
-        //        // Define the 15-minute window
-        //        DateTime fifteenMinutesFromNow = now.AddMinutes(15);
+                if (!Directory.Exists(logsFolder))
+                {
+                    Directory.CreateDirectory(logsFolder);
+                }
 
-        //        // Check for appointments within the next 15 minutes
+                string logEntry = $"{DateTime.Now} - User: \"{username}\" logged out";
 
-        //        string query = @"
-        //        SELECT appointmentId, start, end, type, customer.customerName
-        //        FROM appointment
-        //        JOIN customer ON appointment.customerId = customer.customerId
-        //        WHERE appointment.userId = @userId
-        //        AND appointment.start BETWEEN @now AND @fifteenMin
-        //        ORDER BY start";
-
-        //        MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-        //        cmd.Parameters.AddWithValue("@userId", userId);
-        //        cmd.Parameters.AddWithValue("@now", now);
-        //        cmd.Parameters.AddWithValue("@fifteenMin", fifteenMinutesFromNow);
-
-        //        using (MySqlDataReader reader = cmd.ExecuteReader())
-        //        {
-        //            if (reader.HasRows)
-        //            {
-        //                // Build alert message for upcoming appointments
-        //                string alertMessage = translations[currentLanguage]["appointmentAlert"] + "\n\n";
-
-        //                while (reader.Read())
-        //                {
-        //                    int appointmentId = Convert.ToInt32(reader["appointmentId"]);
-        //                    DateTime start = Convert.ToDateTime(reader["start"]);
-        //                    string type = reader["type"].ToString();
-        //                    string customerName = reader["customerName"].ToString();
-
-        //                    alertMessage += $"- {start.ToLocalTime():g}: {type} with {customerName}\n";
-        //                }
-
-        //                // Show alert for upcoming appointments
-        //                MessageBox.Show(alertMessage, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error but don't disrupt the login process
-        //        Console.WriteLine($"Error checking appointments: {ex.Message}");
-        //    }
-        //}
+                string filePath = Path.Combine(logsFolder, "Login_History.txt");
+                File.AppendAllText(filePath, logEntry + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving log file: {ex.Message}");
+            }
+        }
 
         private int GetUserId(string username)
         {
@@ -257,22 +225,12 @@ namespace DesktopSchedulingApp.Forms
 
             try
             {
-                // Verify credentials
                 if (VerifyLogin(username, password))
                 {
-                    // Save username for later use
                     loggedInUser = username;
-
-                    // Log the successful login
-                    //LogLogin(username);
-
-                    // Show success message
+                    LogLogin(username);
                     MessageBox.Show(translations[currentLanguage]["successLogin"]);
 
-                    // Check for upcoming appointments
-                    //CheckUpcomingAppointments(username);
-
-                    // Open main form
                     this.Hide();
                     new Home(username, GetUserId(username)).ShowDialog();
                     this.Close();
