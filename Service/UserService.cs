@@ -1,66 +1,106 @@
-﻿using DesktopSchedulingApp.Models;
+﻿using DesktopSchedulingApp.Forms;
+using DesktopSchedulingApp.Models;
 using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
 {
     internal class UserService
     {
         public static List<User> Users;
-        private static int highestID = 0;
+        private static RegisterUser view = new RegisterUser();
 
-        public static void LoadUserData()
+        public static void AddUser (RegisterUser registerUserView, string username, string password, string confirmPassword)
         {
-            string sql = "SELECT user.userId, user.userName, user.password FROM user";
-            //UserService.ReadUserData(sql);
+            view = registerUserView;
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                MessageBox.Show("All fields are required.");
+                ClearText(2);
+                return;
+            }
+
+            if (password != confirmPassword)
+            {
+                MessageBox.Show("Passwords do not match.");
+                ClearText(1);
+                return;
+            }
+
+            if (IsUsernameTaken(DBConnection.conn, username))
+            {
+                MessageBox.Show("Username is already in use.");
+                ClearText(0);
+                return;
+            }
+
+            int newUserId = GetNextUserId(DBConnection.conn);
+            string query = "INSERT INTO user (userId, userName, password, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                "VALUES (@userId, @username, @password, @active, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)";
+            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@userId", newUserId);
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@password", password);
+            cmd.Parameters.AddWithValue("@active", 1);
+            cmd.Parameters.AddWithValue("@createDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@createdBy", "");
+            cmd.Parameters.AddWithValue("@lastUpdate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@lastUpdateBy", "");
+            cmd.ExecuteNonQuery();
+            MessageBox.Show("Registration successful.");
+            CloseRegistrationForm(view);
         }
 
-        //internal static void ReadUserData(string sql)
-        //{
-        //    Users = [];
-        //    MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-        //    MySqlDataReader rdr = cmd.ExecuteReader();
+        private static bool IsUsernameTaken(MySqlConnection connection, string username)
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE userName = @username";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@username", username);
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
 
-        //    while (rdr.Read())
-        //    {
-        //        User user = new(
-        //                rdr.GetInt32("userId"),
-        //                rdr.GetString("userName"),
-        //                rdr.GetString("password")
-        //            );
-        //        Users.Add(user);
-        //        if (user.UserId > highestID)
-        //        {
-        //            highestID = user.UserId;
-        //        }
-        //    }
-        //    rdr.Close();
-        //}
+        private static int GetNextUserId(MySqlConnection connection)
+        {
+            string query = "SELECT MAX(userId) FROM user";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            object result = cmd.ExecuteScalar();
+            return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
 
-        //public static User FindByUserName(string userName)
-        //{
-        //    foreach (User user in Users) 
-        //    {
-        //        if (user.Username == userName)
-        //        {
-        //            return user;
-        //        }
-        //    }
-        //    return null;
-        //}
+        private static void ClearText(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    view.usernameText_Reg.Text = "";
+                    view.usernameError.Visible = true;
+                    break;
+                case 1:
+                    view.passwordText1_Reg.Text = "";
+                    view.passwordText2_Reg.Text = "";
+                    view.passwordError1.Visible = true;
+                    view.passwordError2.Visible = true;
+                    break;
+                case 2:
+                    view.usernameText_Reg.Text = "";
+                    view.passwordText1_Reg.Text = "";
+                    view.passwordText2_Reg.Text = "";
+                    view.usernameError.Visible = true;
+                    view.passwordError1.Visible = true;
+                    view.passwordError2.Visible = true;
+                    break;
+            }
+        }
 
-        //public static int GetUserId(string userName)
-        //{
-        //    if (FindByUserName(userName) != null)
-        //    {
-        //        return FindByUserName(userName).UserId;
-        //    }
-        //    return highestID++;
-        //}
+        public static void CloseRegistrationForm(RegisterUser view)
+        {
+            view.Hide();
+            new Login().ShowDialog();
+            view.Close();
+        }
     }
 }
