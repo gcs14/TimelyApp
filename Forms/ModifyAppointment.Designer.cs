@@ -39,37 +39,42 @@
             custNamesDGV = new System.Windows.Forms.DataGridView();
             typeComboBox = new System.Windows.Forms.ComboBox();
             label4 = new System.Windows.Forms.Label();
-            addAppointment_Btn = new System.Windows.Forms.Button();
+            ModifyAppointment_Btn = new System.Windows.Forms.Button();
+            CancelBtn = new System.Windows.Forms.Button();
+            TimeZoneLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)hoursDGV).BeginInit();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).BeginInit();
             SuspendLayout();
             // 
             // addAppoinmentLabel
             // 
-            addAppoinmentLabel.AutoSize = true;
-            addAppoinmentLabel.Font = new System.Drawing.Font("Arial Black", 30F);
+            addAppoinmentLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            addAppoinmentLabel.Font = new System.Drawing.Font("Arial Black", 31F);
             addAppoinmentLabel.ForeColor = System.Drawing.Color.MediumPurple;
-            addAppoinmentLabel.Location = new System.Drawing.Point(54, 9);
+            addAppoinmentLabel.Location = new System.Drawing.Point(0, 0);
             addAppoinmentLabel.Name = "addAppoinmentLabel";
-            addAppoinmentLabel.Size = new System.Drawing.Size(471, 56);
+            addAppoinmentLabel.Size = new System.Drawing.Size(661, 115);
             addAppoinmentLabel.TabIndex = 2;
             addAppoinmentLabel.Text = "EDIT APPOINTMENT";
+            addAppoinmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // monthCalendar
             // 
             monthCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            monthCalendar.Location = new System.Drawing.Point(18, 145);
+            monthCalendar.Location = new System.Drawing.Point(21, 193);
+            monthCalendar.Margin = new System.Windows.Forms.Padding(10, 12, 10, 12);
             monthCalendar.MaxSelectionCount = 1;
             monthCalendar.Name = "monthCalendar";
-            monthCalendar.TabIndex = 5;
+            monthCalendar.TabIndex = 1;
+            monthCalendar.DateChanged += MonthCalendar1_DateSelected;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.ForeColor = System.Drawing.SystemColors.Window;
-            label5.Location = new System.Drawing.Point(18, 121);
+            label5.Location = new System.Drawing.Point(21, 161);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(138, 15);
+            label5.Size = new System.Drawing.Size(174, 20);
             label5.TabIndex = 6;
             label5.Text = "Select Appointment Day:";
             // 
@@ -77,18 +82,19 @@
             // 
             durationComboBox.FormattingEnabled = true;
             durationComboBox.Items.AddRange(new object[] { "30 Mins", "60 Mins" });
-            durationComboBox.Location = new System.Drawing.Point(295, 314);
+            durationComboBox.Location = new System.Drawing.Point(337, 415);
+            durationComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             durationComboBox.Name = "durationComboBox";
-            durationComboBox.Size = new System.Drawing.Size(121, 23);
-            durationComboBox.TabIndex = 9;
+            durationComboBox.Size = new System.Drawing.Size(138, 28);
+            durationComboBox.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.ForeColor = System.Drawing.SystemColors.Window;
-            label2.Location = new System.Drawing.Point(296, 121);
+            label2.Location = new System.Drawing.Point(338, 161);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(94, 15);
+            label2.Size = new System.Drawing.Size(119, 20);
             label2.TabIndex = 8;
             label2.Text = "Select Time Slot:";
             // 
@@ -100,32 +106,35 @@
             hoursDGV.AllowUserToResizeRows = false;
             hoursDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             hoursDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            hoursDGV.Location = new System.Drawing.Point(296, 146);
+            hoursDGV.Location = new System.Drawing.Point(338, 195);
+            hoursDGV.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             hoursDGV.MultiSelect = false;
             hoursDGV.Name = "hoursDGV";
             hoursDGV.ReadOnly = true;
             hoursDGV.RowHeadersVisible = false;
             hoursDGV.RowHeadersWidth = 51;
             hoursDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            hoursDGV.Size = new System.Drawing.Size(120, 162);
-            hoursDGV.TabIndex = 7;
+            hoursDGV.Size = new System.Drawing.Size(137, 216);
+            hoursDGV.TabIndex = 2;
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(438, 313);
+            button1.Location = new System.Drawing.Point(501, 415);
+            button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(120, 23);
+            button1.Size = new System.Drawing.Size(137, 31);
             button1.TabIndex = 12;
             button1.Text = "New Customer";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += NewCustomer_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.ForeColor = System.Drawing.SystemColors.Window;
-            label1.Location = new System.Drawing.Point(438, 121);
+            label1.Location = new System.Drawing.Point(501, 161);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(96, 15);
+            label1.Size = new System.Drawing.Size(119, 20);
             label1.TabIndex = 11;
             label1.Text = "Select Customer:";
             // 
@@ -137,49 +146,85 @@
             custNamesDGV.AllowUserToResizeRows = false;
             custNamesDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             custNamesDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            custNamesDGV.Location = new System.Drawing.Point(438, 146);
+            custNamesDGV.Location = new System.Drawing.Point(501, 195);
+            custNamesDGV.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             custNamesDGV.MultiSelect = false;
             custNamesDGV.Name = "custNamesDGV";
             custNamesDGV.ReadOnly = true;
             custNamesDGV.RowHeadersVisible = false;
             custNamesDGV.RowHeadersWidth = 51;
-            custNamesDGV.Size = new System.Drawing.Size(120, 162);
-            custNamesDGV.TabIndex = 10;
+            custNamesDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            custNamesDGV.Size = new System.Drawing.Size(137, 216);
+            custNamesDGV.TabIndex = 4;
             // 
             // typeComboBox
             // 
             typeComboBox.FormattingEnabled = true;
-            typeComboBox.Location = new System.Drawing.Point(18, 337);
+            typeComboBox.Items.AddRange(new object[] { "Presentation", "Scrum", "Consulation", "Other" });
+            typeComboBox.Location = new System.Drawing.Point(21, 449);
+            typeComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             typeComboBox.Name = "typeComboBox";
-            typeComboBox.Size = new System.Drawing.Size(121, 23);
-            typeComboBox.TabIndex = 14;
+            typeComboBox.Size = new System.Drawing.Size(138, 28);
+            typeComboBox.TabIndex = 5;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.ForeColor = System.Drawing.SystemColors.Window;
-            label4.Location = new System.Drawing.Point(18, 319);
+            label4.Location = new System.Drawing.Point(21, 425);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(35, 15);
+            label4.Size = new System.Drawing.Size(43, 20);
             label4.TabIndex = 13;
             label4.Text = "Type:";
             // 
-            // addAppointment_Btn
+            // ModifyAppointment_Btn
             // 
-            addAppointment_Btn.Location = new System.Drawing.Point(483, 388);
-            addAppointment_Btn.Name = "addAppointment_Btn";
-            addAppointment_Btn.Size = new System.Drawing.Size(75, 23);
-            addAppointment_Btn.TabIndex = 15;
-            addAppointment_Btn.Text = "Submit";
-            addAppointment_Btn.UseVisualStyleBackColor = true;
+            ModifyAppointment_Btn.AutoSize = true;
+            ModifyAppointment_Btn.BackColor = System.Drawing.Color.DarkSeaGreen;
+            ModifyAppointment_Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            ModifyAppointment_Btn.Font = new System.Drawing.Font("Arial", 11F);
+            ModifyAppointment_Btn.Location = new System.Drawing.Point(525, 517);
+            ModifyAppointment_Btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            ModifyAppointment_Btn.Name = "ModifyAppointment_Btn";
+            ModifyAppointment_Btn.Size = new System.Drawing.Size(86, 43);
+            ModifyAppointment_Btn.TabIndex = 6;
+            ModifyAppointment_Btn.Text = "Submit";
+            ModifyAppointment_Btn.UseVisualStyleBackColor = false;
+            ModifyAppointment_Btn.Click += ModifyAppointmentBtn_Click;
+            // 
+            // CancelBtn
+            // 
+            CancelBtn.AutoSize = true;
+            CancelBtn.BackColor = System.Drawing.Color.MediumPurple;
+            CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            CancelBtn.Font = new System.Drawing.Font("Arial", 11F);
+            CancelBtn.Location = new System.Drawing.Point(390, 517);
+            CancelBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            CancelBtn.Name = "CancelBtn";
+            CancelBtn.Size = new System.Drawing.Size(86, 43);
+            CancelBtn.TabIndex = 7;
+            CancelBtn.Text = "Cancel";
+            CancelBtn.UseVisualStyleBackColor = false;
+            CancelBtn.Click += ModifyCancelBtn_Click;
+            // 
+            // TimeZoneLabel
+            // 
+            TimeZoneLabel.AutoSize = true;
+            TimeZoneLabel.ForeColor = System.Drawing.SystemColors.Window;
+            TimeZoneLabel.Location = new System.Drawing.Point(337, 141);
+            TimeZoneLabel.Name = "TimeZoneLabel";
+            TimeZoneLabel.Size = new System.Drawing.Size(0, 20);
+            TimeZoneLabel.TabIndex = 14;
             // 
             // ModifyAppointment
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(578, 438);
-            Controls.Add(addAppointment_Btn);
+            ClientSize = new System.Drawing.Size(661, 584);
+            Controls.Add(TimeZoneLabel);
+            Controls.Add(CancelBtn);
+            Controls.Add(ModifyAppointment_Btn);
             Controls.Add(typeComboBox);
             Controls.Add(label4);
             Controls.Add(button1);
@@ -191,8 +236,10 @@
             Controls.Add(label5);
             Controls.Add(monthCalendar);
             Controls.Add(addAppoinmentLabel);
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "ModifyAppointment";
             Text = "ModifyAppointment";
+            Load += ModifyAppointment_Load;
             ((System.ComponentModel.ISupportInitialize)hoursDGV).EndInit();
             ((System.ComponentModel.ISupportInitialize)custNamesDGV).EndInit();
             ResumeLayout(false);
@@ -212,6 +259,8 @@
         internal System.Windows.Forms.DataGridView custNamesDGV;
         internal System.Windows.Forms.ComboBox typeComboBox;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button addAppointment_Btn;
+        private System.Windows.Forms.Button ModifyAppointment_Btn;
+        private System.Windows.Forms.Button CancelBtn;
+        private System.Windows.Forms.Label TimeZoneLabel;
     }
 }

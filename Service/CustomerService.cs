@@ -1,130 +1,271 @@
-﻿using DesktopSchedulingApp.Models;
+﻿using DesktopSchedulingApp.Forms;
 using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
+using System;
+using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace DesktopSchedulingApp.Service
 {
     internal static class CustomerService
     {
-        public static List<Customer> Customers;
-        private static int highestID = 0;
-
-        internal static void ReadCustomerData(string sql)
+        public static void LoadCustomerData(ViewCustomers view)
         {
-            Customers = [];
-            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            MySqlDataReader rdr = cmd.ExecuteReader();
+            string sql = "SELECT customer.customerId, customer.customerName, address.addressId, address.address, " +
+                "address.phone, city.cityId, city.city, country.countryId, country.country " +
+                "FROM customer " +
+                "JOIN address ON address.addressId = customer.addressId " +
+                "JOIN city ON city.cityId = address.cityId " +
+                "JOIN country ON country.countryId = city.countryId " +
+                "ORDER BY customer.customerId";
 
-            while (rdr.Read())
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            view.dataGridView1.DataSource = dt;
+        }
+
+        public static void LoadCustomerData(AddAppointment view)
+        {
+            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer";
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            view.custNamesDGV.DataSource = dt;
+            view.custNamesDGV.Columns["customerId"].Visible = false;
+            view.custNamesDGV.Columns["addressId"].Visible = false;
+            view.custNamesDGV.Columns["customerName"].HeaderText = "Customer";
+        }
+
+        public static void LoadCustomerData(ModifyAppointment view)
+        {
+            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer";
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            view.custNamesDGV.DataSource = dt;
+            view.custNamesDGV.Columns["customerId"].Visible = false;
+            view.custNamesDGV.Columns["addressId"].Visible = false;
+            view.custNamesDGV.Columns["customerName"].HeaderText = "Customer";
+        }
+
+        public static void AddCustomer(AddCustomer addCustomer)
+        {
+            if (ValidateCustomer(addCustomer.customerNameText.Text.Trim(), addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim()))
             {
-                Customer c = new(
-                        rdr.GetInt32("customerId"),
-                        rdr.GetString("customerName"),
-                        rdr.GetInt32("addressId")
-                    );
-                Customers.Add(c);
-                if (c.CustomerId > highestID)
+                int countryId = GetOrCreateCountry(DBConnection.conn, addCustomer.countryComboBox.Text.Trim());
+                int cityId = GetOrCreateCity(DBConnection.conn, addCustomer.cityText.Text.Trim(), countryId);
+                int addressId = GetOrCreateAddress(DBConnection.conn, addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim(), cityId);
+                int newCustomerId = GetNextCustomerId(DBConnection.conn);
+
+                if (!IsDuplicateCustomer(DBConnection.conn, addCustomer.customerNameText.Text.Trim(), addressId))
                 {
-                    highestID = c.CustomerId;
-                }
-            }
-            rdr.Close();
-        }
-
-        public static bool IsDuplicate(Customer customer)
-        {
-            foreach (Customer c in Customers)
-            {
-                if (c.CustomerId == customer.CustomerId)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool CustomerExistsByName(string customerName)
-        {
-            foreach (Customer c in Customers)
-            {
-                if (c.CustomerName.Equals(customerName))
-                {
-                    return true;
-                }
-            }
-            return false; 
-        }
-
-        public static Customer FindByCustomerName(string customerName)
-        {
-            foreach (Customer customer in Customers)
-            {
-                if (customer.CustomerName.Equals(customerName))
-                {
-                    return customer;
-                }
-            }
-            return null;
-        }
-
-        public static Customer FindByCustomerName(string customerName, int addressId)
-        {
-            foreach (Customer customer in Customers)
-            {
-                if (customer.CustomerName.Equals(customerName)
-                    && customer.AddressId == addressId)
-                {
-                    return customer;
-                }
-            }
-            return null;
-        }
-
-        public static Customer FindByCustomerId(int customerId)
-        {
-            foreach (Customer customer in Customers)
-            {
-                if (customer.CustomerId == customerId)
-                {
-                    return customer;
-                }
-            }
-            return null;
-        }
-
-        public static int GetCustomerID(string customerName, int addressId)
-        {
-            var x = FindByCustomerName(customerName, addressId);
-            if (x != null)
-            {
-                return FindByCustomerName(customerName, addressId).CustomerId;
-            }
-            return highestID += 1;
-        }
-
-        public static void DecrementHighestId()
-        {
-            highestID--;
-        }
-
-        public static void DeleteCustomer(Customer c)
-        {
-            DialogResult confirm = MessageBox.Show("Are you sure want to delete this customer?", "WARNING", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                if (!Customers.Contains(c))
-                {
-                    MessageBox.Show("This customer does not exisit.");
+                    string query = "INSERT INTO customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                                    "VALUES (@customerId, @name, @addressId, @active, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
+                    MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                    cmd.Parameters.AddWithValue("@customerId", newCustomerId);
+                    cmd.Parameters.AddWithValue("@name", addCustomer.customerNameText.Text.Trim());
+                    cmd.Parameters.AddWithValue("@addressId", addressId);
+                    cmd.Parameters.AddWithValue("@active", true);
+                    cmd.Parameters.AddWithValue("@created", "2000-01-01");
+                    cmd.Parameters.AddWithValue("@createdBy", "");
+                    cmd.Parameters.AddWithValue("@update", "2000-01-01");
+                    cmd.Parameters.AddWithValue("@updateBy", "");
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Customer added successfully.");
+                    addCustomer.Close();
                 }
                 else
                 {
-                    Customers.Remove(c);
-                    DBCommands.DeleteCustomerData(c);
-                    MessageBox.Show($"Customer \"{c.CustomerName}\" has successfully been deleted.");
+                    MessageBox.Show("A customer with the same address and phone number already exists.");
                 }
             }
+        }
+
+        public static void ModifyCustomer(ModifyCustomer modifyCustomer, int customerId)
+        {
+            if (ValidateCustomer(modifyCustomer.customerNameText.Text.Trim(), modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim()))
+            {
+                int countryId = GetOrCreateCountry(DBConnection.conn, modifyCustomer.countryComboBox.Text.Trim());
+                int cityId = GetOrCreateCity(DBConnection.conn, modifyCustomer.cityText.Text.Trim(), countryId);
+                int addressId = GetOrCreateAddress(DBConnection.conn, modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim(), cityId);
+
+                string query = "UPDATE customer SET customerName = @name, addressId = @addressId WHERE customerId = @customerId";
+                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+                cmd.Parameters.AddWithValue("@name", modifyCustomer.customerNameText.Text.Trim());
+                cmd.Parameters.AddWithValue("@addressId", addressId);
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                MessageBox.Show(rowsAffected > 0 ? "Customer updated successfully." : "Customer not found.");
+                modifyCustomer.Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid customer ID.");
+            }
+        }
+
+        public static void DeleteCustomer(int customerId)
+        {
+            if (customerId == -1)
+            {
+                MessageBox.Show("Customer not found.");
+                return;
+            }
+            var confirmResult = MessageBox.Show("Are you sure you want to delete this customer?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirmResult == DialogResult.Yes)
+            {
+                string deleteQuery = "DELETE FROM customer WHERE customerId = @id;";
+                MySqlCommand cmd = new(deleteQuery, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@id", customerId);
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                MessageBox.Show(rowsAffected > 0 ? "Customer deleted successfully." : "Customer not found.");
+            }
+        }
+
+        private static int GetOrCreateCountry(MySqlConnection connection, string country)
+        {
+            string query = "SELECT countryId FROM country WHERE country = @country";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@country", country);
+            object result = cmd.ExecuteScalar();
+            if (result != null) return Convert.ToInt32(result);
+
+            int newCountryId = GetNextCountryId(DBConnection.conn);
+            query = "INSERT INTO country (countryId, country, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES (@countryId, @country, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
+            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@countryId", newCountryId);
+            cmd.Parameters.AddWithValue("@country", country);
+            cmd.Parameters.AddWithValue("@created", "2000-01-01");
+            cmd.Parameters.AddWithValue("@createdBy", "");
+            cmd.Parameters.AddWithValue("@update", "2000-01-01");
+            cmd.Parameters.AddWithValue("@updateBy", "");
+            cmd.ExecuteNonQuery();
+            return newCountryId;
+        }
+
+        private static int GetOrCreateCity(MySqlConnection connection, string city, int countryId)
+        {
+            string query = "SELECT cityId FROM city WHERE city = @city AND countryId = @countryId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@city", city);
+            cmd.Parameters.AddWithValue("@countryId", countryId);
+            object result = cmd.ExecuteScalar();
+            if (result != null) return Convert.ToInt32(result);
+
+            int newCityId = GetNextCityId(DBConnection.conn);
+            query = "INSERT INTO city (cityId, city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES (@cityId, @city, @countryId, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
+            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@cityId", newCityId);
+            cmd.Parameters.AddWithValue("@city", city);
+            cmd.Parameters.AddWithValue("@countryId", countryId);
+            cmd.Parameters.AddWithValue("@created", "2000-01-01");
+            cmd.Parameters.AddWithValue("@createdBy", "");
+            cmd.Parameters.AddWithValue("@update", "2000-01-01");
+            cmd.Parameters.AddWithValue("@updateBy", "");
+            cmd.ExecuteNonQuery();
+            return newCityId;
+        }
+
+        private static int GetOrCreateAddress(MySqlConnection connection, string address, string phone, int cityId)
+        {
+            string query = "SELECT addressId FROM address WHERE address = @address AND phone = @phone AND cityId = @cityId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@address", address);
+            cmd.Parameters.AddWithValue("@phone", FormatPhone(phone));
+            cmd.Parameters.AddWithValue("@cityId", cityId);
+            object result = cmd.ExecuteScalar();
+            if (result != null) return Convert.ToInt32(result);
+
+            int newAddressId = GetNextAddressId(DBConnection.conn);
+            query = "INSERT INTO address (addressId, address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES (@addressId, @address, @address2, @postalCode, @phone, @cityId, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
+            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@addressId", newAddressId);
+            cmd.Parameters.AddWithValue("@address", address);
+            cmd.Parameters.AddWithValue("@address2", "");
+            cmd.Parameters.AddWithValue("@postalCode", "");
+            cmd.Parameters.AddWithValue("@phone", FormatPhone(phone));
+            cmd.Parameters.AddWithValue("@cityId", cityId);
+            cmd.Parameters.AddWithValue("@created", "2000-01-01");
+            cmd.Parameters.AddWithValue("@createdBy", "");
+            cmd.Parameters.AddWithValue("@update", "2000-01-01");
+            cmd.Parameters.AddWithValue("@updateBy", "");
+            cmd.ExecuteNonQuery();
+            return newAddressId;
+        }
+
+        private static int GetNextCountryId(MySqlConnection connection)
+        {
+            string query = "SELECT MAX(countryId) FROM country";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            object result = cmd.ExecuteScalar();
+            return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
+
+        private static int GetNextCityId(MySqlConnection connection)
+        {
+            string query = "SELECT MAX(cityId) FROM city";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            object result = cmd.ExecuteScalar();
+            return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
+
+        private static int GetNextAddressId(MySqlConnection connection)
+        {
+            string query = "SELECT MAX(addressId) FROM address";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            object result = cmd.ExecuteScalar();
+            return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
+
+        private static int GetNextCustomerId(MySqlConnection connection)
+        {
+            string query = "SELECT MAX(customerId) FROM customer";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            object result = cmd.ExecuteScalar();
+            return (result != DBNull.Value && result != null) ? Convert.ToInt32(result) + 1 : 1;
+        }
+
+        private static string FormatPhone(string phone)
+        {
+            if (!phone.Contains('-'))
+            {
+                phone = Convert.ToInt64(phone.Trim()).ToString("###-####");
+            }
+            return phone;
+        }
+
+        private static bool IsDuplicateCustomer(MySqlConnection connection, string customerName, int addressId)
+        {
+            string query = "SELECT COUNT(*) FROM customer WHERE customerName = @customerName AND addressId = @addressId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@customerName", customerName);
+            cmd.Parameters.AddWithValue("@addressId", addressId);
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
+
+        private static bool ValidateCustomer(string customerName, string address, string phone)
+        {
+            if (string.IsNullOrWhiteSpace(customerName) || string.IsNullOrWhiteSpace(address) || string.IsNullOrWhiteSpace(phone))
+            {
+                MessageBox.Show("All fields must be filled.");
+                return false;
+            }
+            if (!Regex.IsMatch(phone, "^[0-9-]+$"))
+            {
+                MessageBox.Show("Phone number must contain only digits and dashes.");
+                return false;
+            }
+            return true;
         }
     }
 }

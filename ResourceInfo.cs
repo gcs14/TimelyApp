@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace DesktopSchedulingApp
 {
     internal static class ResourceInfo
     {
-        public static List<string> SpanishSpeaking = ["Spain","Mexico", "Puerto Rico",
-                "Dominican Republic", "Costa Rico", "Columbia", "Argentina", "Chile",
-                "Peru", "Venezuela", "Guatemala", "Ecudaor", "Bolivia", "Cuba", "Honduras",
-                "Paraguay", "El Salvador", "Nicaragua", "Panama", "Uruguay", "Equitorial Guniea"];
-
         public static BindingList<string> Countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
             "Antigua & Deps", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas",
             "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",

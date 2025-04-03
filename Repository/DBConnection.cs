@@ -1,6 +1,6 @@
-﻿using System.Configuration;
+﻿using MySql.Data.MySqlClient;
+using System.Configuration;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace DesktopSchedulingApp.Repository
 {
@@ -15,9 +15,8 @@ namespace DesktopSchedulingApp.Repository
                 string constr = ConfigurationManager.ConnectionStrings["localdb"].ConnectionString;
                 conn = new MySqlConnection(constr);
                 conn.Open();
-                //MessageBox.Show("Connection is open"
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 MessageBox.Show(ex.Message);
             }

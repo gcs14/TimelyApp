@@ -1,48 +1,93 @@
-﻿using MySql.Data.MySqlClient;
+﻿using DesktopSchedulingApp.Repository;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
-using DesktopSchedulingApp.Repository;
-using DesktopSchedulingApp.Models;
-using DesktopSchedulingApp.Service;
-using System.Drawing.Drawing2D;
 
 namespace DesktopSchedulingApp.Forms
 {
     public partial class Login : Form
     {
-        RegionInfo ri;
-        static string username;
-        string password;
+        private Dictionary<string, Dictionary<string, string>> translations = new Dictionary<string, Dictionary<string, string>>();
+        private string currentLanguage = "en";
         bool passwordHidden;
-        bool isSpanish = false;
-        int loginCount;
-        User CurrentUser;
+        private string loggedInUser;
 
         public Login()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            if (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.Equals("es"))
+            SetupTranslations();
+            DetermineUserLocation();
+            UpdateUILanguage();
+        }
+
+        private void SetupTranslations()
+        {
+            var englishTranslations = new Dictionary<string, string>
             {
-                isSpanish = true;
-                TranslateToSpanish_Login();
+                { "loginTitle", "LOGIN" },
+                { "usernameLabel", "USERNAME" },
+                { "passwordLabel", "PASSWORD" },
+                { "enterButton", "Enter" },
+                { "errorInvalidCredentials", "You've entered an invalid username or password." },
+                { "errorEmptyFields", "Username and/or password can not be empty." },
+                { "successLogin", "Login successful!" },
+                { "appointmentAlert", "You have an appointment within 15 minutes!" },
+                { "noAppointments", "No upcoming appointments." },
+                { "errorDatabase", "Database connection error. Please try again later." }
+            };
+            translations.Add("en", englishTranslations);
+
+            var spanishTranslations = new Dictionary<string, string>
+            {
+                { "loginTitle", "ACCEDAR" },
+                { "usernameLabel", "NOMBRE DE USUARIO" },
+                { "passwordLabel", "CONTRASEÑA" },
+                { "enterButton", "ENVIAR" },
+                { "errorInvalidCredentials", "Ha ingresado un nombre de usuario y contraseña no válidos." },
+                { "errorEmptyFields", "El nombre de usuario y/o contraseña no pueden estar vacíos." },
+                { "successLogin", "¡Inicio de sesión exitoso!" },
+                { "appointmentAlert", "¡Tiene una cita en los próximos 15 minutos!" },
+                { "noAppointments", "No hay citas próximas." },
+                { "errorDatabase", "Error de conexión a la base de datos. Por favor, inténtelo más tarde." }
+            };
+            translations.Add("es", spanishTranslations);
+        }
+
+        private void DetermineUserLocation()
+        {
+            try
+            {
+                var currentCulture = CultureInfo.CurrentCulture;
+                string userLanguage = currentCulture.TwoLetterISOLanguageName;
+
+                if (userLanguage == "es")
+                {
+                    currentLanguage = "es";
+                }
+                else
+                {
+                    currentLanguage = "en";
+                }
+
+                TimeZoneInfo localZone = TimeZoneInfo.Local;
+            }
+            catch (Exception ex)
+            {
+                currentLanguage = "en";
+                Console.WriteLine($"Error determining user location: {ex.Message}");
             }
         }
 
-        private void TranslateToSpanish_Login()
+        private void UpdateUILanguage()
         {
-            loginLabel.Text = "ACCEDAR";
-            usernameLabel.Text = "NOMBRE DE USUARIO";
-            passwordLabel.Text = "CONTRASEÑA";
-            enterBtn.Text = "ENVIAR";
+            loginLabel.Text = translations[currentLanguage]["loginTitle"];
+            usernameLabel.Text = translations[currentLanguage]["usernameLabel"];
+            passwordLabel.Text = translations[currentLanguage]["passwordLabel"];
+            enterBtn.Text = translations[currentLanguage]["enterButton"];
         }
 
         private void passwordHide_Click(object sender, EventArgs e)
@@ -60,109 +105,155 @@ namespace DesktopSchedulingApp.Forms
             passwordHidden = !passwordHidden;
         }
 
-        private bool InputEvaluation(string username, string password)
+        private bool VerifyLogin(string username, string password)
         {
-            bool validated = false;
-            if (!usernameText.Text.Equals("") && !passwordText.Text.Equals(""))
+            bool isValid = false;
+
+            try
             {
-                if (usernameText.Text.Equals(username) && passwordText.Text.Equals(password))
+                string query = "SELECT userId FROM user WHERE userName = @username AND password = @password";
+                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
                 {
-                    if (isSpanish)
-                    {
-                        MessageBox.Show("Inicio de sesión exitoso.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Login successful.");
-                    }
-                    validated = true;
-                }
-                else
-                {
-                    if (isSpanish)
-                    {
-                        MessageBox.Show("Ha ingresado un nombre de usuario y contraseña no válidos.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("You've entered an invalid username or password.");
-                    }
-                    ClearText(2);
+                    isValid = true;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (isSpanish)
-                {
-                    MessageBox.Show("El nombre de usuario y/o contraseña no pueden estar vacíos.");
-                }
-                else
-                {
-                    MessageBox.Show("Username and/or password can not be empty.");
-                }
-                ClearText(2);
+                Console.WriteLine($"Database error: {ex.Message}");
+                throw;
             }
-            return validated;
+
+            return isValid;
         }
 
-        private void LoginValidation()
+        private void ClearText()
         {
-            string sql = "SELECT Username, Password FROM User WHERE Username =@Username AND Password =@Password";
-            MySqlCommand cmd = new MySqlCommand(sql, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@Username", usernameText.Text);
-            cmd.Parameters.AddWithValue("@Password", passwordText.Text);
-            MySqlDataReader rdr = cmd.ExecuteReader();
+            usernameText.Text = "";
+            passwordText.Text = "";
+            usernameError.Visible = true;
+            passwordError.Visible = true;
+        }
 
-            while (rdr.Read())
+        private void LogLogin(string username)
+        {
+            try
             {
-                username = rdr["username"].ToString();
-                password = rdr["password"].ToString();
+                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string logsFolder = Path.Combine(solutionDirectory, "Logs");
+
+                if (!Directory.Exists(logsFolder))
+                {
+                    Directory.CreateDirectory(logsFolder);
+                }
+
+                string logEntry = $"{DateTime.Now} - User: \"{username}\" logged in";
+
+                string filePath = Path.Combine(logsFolder, "Login_History.txt");
+                File.AppendAllText(filePath, logEntry + Environment.NewLine);
             }
-            rdr.Close();
-            if (InputEvaluation(username, password))
+            catch (Exception ex)
             {
-                this.Hide();
-                new Home(username).ShowDialog();
-                this.Close();
+                MessageBox.Show($"Error saving log file: {ex.Message}");
             }
+        }
+
+        public static void LogLogout(string username)
+        {
+            try
+            {
+                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string logsFolder = Path.Combine(solutionDirectory, "Logs");
+
+                if (!Directory.Exists(logsFolder))
+                {
+                    Directory.CreateDirectory(logsFolder);
+                }
+
+                string logEntry = $"{DateTime.Now} - User: \"{username}\" logged out";
+
+                string filePath = Path.Combine(logsFolder, "Login_History.txt");
+                File.AppendAllText(filePath, logEntry + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving log file: {ex.Message}");
+            }
+        }
+
+        private int GetUserId(string username)
+        {
+            int userId = -1;
+
+            try
+            {
+                string query = "SELECT userId FROM user WHERE userName = @username";
+                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@username", username);
+
+                object result = cmd.ExecuteScalar();
+
+                if (result != null)
+                {
+                    userId = Convert.ToInt32(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting user ID: {ex.Message}");
+            }
+
+            return userId;
         }
 
         private void EnterBtn_Click(object sender, EventArgs e)
         {
-            if (loginCount <= 1)
-            {
-                LoginValidation();
+            string username = usernameText.Text.Trim();
+            string password = passwordText.Text.Trim();
 
-            }
-            else
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                if (isSpanish)
+                MessageBox.Show(translations[currentLanguage]["errorEmptyFields"]);
+                return;
+            }
+
+            try
+            {
+                if (VerifyLogin(username, password))
                 {
-                    MessageBox.Show("Un usuario ya ha iniciado sesión.");
+                    loggedInUser = username;
+                    LogLogin(username);
+                    MessageBox.Show(translations[currentLanguage]["successLogin"]);
+
+                    this.Hide();
+                    new Home(username, GetUserId(username)).ShowDialog();
+                    this.Close();
                 }
-                MessageBox.Show("A user is already logged in.");
+                else
+                {
+                    MessageBox.Show(translations[currentLanguage]["errorInvalidCredentials"]);
+                    ClearText();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(translations[currentLanguage]["errorDatabase"] + "\n" + ex.Message,
+                                this.Text,
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
 
-        private void ClearText(int i)
+        private void CreateAccount_Click(object sender, EventArgs e)
         {
-            switch (i)
-            {
-                case 0:
-                    usernameText.Text = "";
-                    usernameError.Visible = true;
-                    break;
-                case 1:
-                    passwordText.Text = "";
-                    passwordError.Visible = true;
-                    break;
-                case 2:
-                    usernameText.Text = "";
-                    passwordText.Text = "";
-                    usernameError.Visible = true;
-                    passwordError.Visible = true;
-                    break;
-            }
+            this.Hide();
+            new RegisterUser().ShowDialog();
+            this.Close();
         }
     }
 }

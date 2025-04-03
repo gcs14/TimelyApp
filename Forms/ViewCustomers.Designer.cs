@@ -35,6 +35,7 @@
             addCustomerBtn = new System.Windows.Forms.Button();
             modifyCustomerBtn = new System.Windows.Forms.Button();
             deleteCustomerBtn = new System.Windows.Forms.Button();
+            closeBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -66,7 +67,8 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.EnableHeadersVisualStyles = false;
-            dataGridView1.Location = new System.Drawing.Point(12, 12);
+            dataGridView1.Location = new System.Drawing.Point(14, 16);
+            dataGridView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -83,7 +85,7 @@
             dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dataGridView1.RowTemplate.ReadOnly = true;
             dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new System.Drawing.Size(776, 305);
+            dataGridView1.Size = new System.Drawing.Size(887, 407);
             dataGridView1.TabIndex = 0;
             dataGridView1.SelectionChanged += CustomerSelection;
             // 
@@ -92,10 +94,11 @@
             addCustomerBtn.AutoSize = true;
             addCustomerBtn.BackColor = System.Drawing.Color.MediumPurple;
             addCustomerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            addCustomerBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            addCustomerBtn.Location = new System.Drawing.Point(190, 356);
+            addCustomerBtn.Font = new System.Drawing.Font("Arial", 11F);
+            addCustomerBtn.Location = new System.Drawing.Point(119, 475);
+            addCustomerBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             addCustomerBtn.Name = "addCustomerBtn";
-            addCustomerBtn.Size = new System.Drawing.Size(75, 32);
+            addCustomerBtn.Size = new System.Drawing.Size(86, 43);
             addCustomerBtn.TabIndex = 1;
             addCustomerBtn.Text = "Add";
             addCustomerBtn.UseVisualStyleBackColor = false;
@@ -106,10 +109,11 @@
             modifyCustomerBtn.AutoSize = true;
             modifyCustomerBtn.BackColor = System.Drawing.Color.DarkSeaGreen;
             modifyCustomerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            modifyCustomerBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            modifyCustomerBtn.Location = new System.Drawing.Point(359, 356);
+            modifyCustomerBtn.Font = new System.Drawing.Font("Arial", 11F);
+            modifyCustomerBtn.Location = new System.Drawing.Point(312, 475);
+            modifyCustomerBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             modifyCustomerBtn.Name = "modifyCustomerBtn";
-            modifyCustomerBtn.Size = new System.Drawing.Size(75, 32);
+            modifyCustomerBtn.Size = new System.Drawing.Size(86, 43);
             modifyCustomerBtn.TabIndex = 1;
             modifyCustomerBtn.Text = "Modify";
             modifyCustomerBtn.UseVisualStyleBackColor = false;
@@ -120,26 +124,44 @@
             deleteCustomerBtn.AutoSize = true;
             deleteCustomerBtn.BackColor = System.Drawing.Color.Silver;
             deleteCustomerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            deleteCustomerBtn.Font = new System.Drawing.Font("Segoe UI", 11F);
-            deleteCustomerBtn.Location = new System.Drawing.Point(533, 356);
+            deleteCustomerBtn.Font = new System.Drawing.Font("Arial", 11F);
+            deleteCustomerBtn.Location = new System.Drawing.Point(511, 475);
+            deleteCustomerBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             deleteCustomerBtn.Name = "deleteCustomerBtn";
-            deleteCustomerBtn.Size = new System.Drawing.Size(75, 32);
+            deleteCustomerBtn.Size = new System.Drawing.Size(86, 43);
             deleteCustomerBtn.TabIndex = 1;
             deleteCustomerBtn.Text = "Delete";
             deleteCustomerBtn.UseVisualStyleBackColor = false;
             deleteCustomerBtn.Click += DeleteCustomerBtn_Click;
             // 
+            // closeBtn
+            // 
+            closeBtn.AutoSize = true;
+            closeBtn.BackColor = System.Drawing.Color.Red;
+            closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            closeBtn.Font = new System.Drawing.Font("Arial", 11F);
+            closeBtn.Location = new System.Drawing.Point(702, 475);
+            closeBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            closeBtn.Name = "closeBtn";
+            closeBtn.Size = new System.Drawing.Size(86, 43);
+            closeBtn.TabIndex = 4;
+            closeBtn.Text = "Close";
+            closeBtn.UseVisualStyleBackColor = false;
+            closeBtn.Click += CloseBtn_Click;
+            // 
             // ViewCustomers
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(800, 450);
+            ClientSize = new System.Drawing.Size(914, 600);
+            Controls.Add(closeBtn);
             Controls.Add(deleteCustomerBtn);
             Controls.Add(modifyCustomerBtn);
             Controls.Add(addCustomerBtn);
             Controls.Add(dataGridView1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "ViewCustomers";
             Text = "Customers";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -152,5 +174,6 @@
         private System.Windows.Forms.Button modifyCustomerBtn;
         private System.Windows.Forms.Button deleteCustomerBtn;
         internal System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button closeBtn;
     }
 }
