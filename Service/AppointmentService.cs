@@ -17,6 +17,7 @@ namespace DesktopSchedulingApp.Service
         public static List<Appointment> Appointments;
         private static int highestID = 0;
         public static DateOnly selectedDate;
+        public static DateTime justDate;
 
         public static void LoadAppointmentData(ViewAppointments view)
         {
@@ -274,6 +275,7 @@ namespace DesktopSchedulingApp.Service
         public static void GetSelectedDate(string date)
         {
             selectedDate = DateOnly.FromDateTime(DateTime.Parse(date));
+            justDate = DateTime.Parse(date);
         }
 
         public static string GetSelectedTime(string selectedTime)
@@ -490,6 +492,11 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                bool isDST = estZone.IsDaylightSavingTime(justDate);
+                if (isDST)
+                {
+                    localTime = localTime.AddHours(-1);
+                }
                 return TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Local, estZone);
             }
             return localTime;
@@ -500,6 +507,11 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                bool isDST = estZone.IsDaylightSavingTime(justDate);
+                if (isDST)
+                {
+                    estTime = estTime.AddHours(1);
+                }
                 return TimeZoneInfo.ConvertTime(estTime, estZone, TimeZoneInfo.Local);
             }
             return estTime;
