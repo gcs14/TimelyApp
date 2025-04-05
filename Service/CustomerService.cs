@@ -3,6 +3,8 @@ using DesktopSchedulingApp.Repository;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
+using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -10,6 +12,8 @@ namespace DesktopSchedulingApp.Service
 {
     internal static class CustomerService
     {
+        static TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+
         public static void LoadCustomerData(ViewCustomers view)
         {
             string sql = "SELECT customer.customerId, customer.customerName, address.addressId, address.address, " +
@@ -56,9 +60,9 @@ namespace DesktopSchedulingApp.Service
         {
             if (ValidateCustomer(addCustomer.customerNameText.Text.Trim(), addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim()))
             {
-                int countryId = GetOrCreateCountry(DBConnection.conn, addCustomer.countryComboBox.Text.Trim());
-                int cityId = GetOrCreateCity(DBConnection.conn, addCustomer.cityText.Text.Trim(), countryId);
-                int addressId = GetOrCreateAddress(DBConnection.conn, addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim(), cityId);
+                int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.countryComboBox.Text.Trim())));
+                int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.cityText.Text.Trim())), countryId);
+                int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.addressText.Text.Trim())), addCustomer.phoneText.Text.Trim(), cityId);
                 int newCustomerId = GetNextCustomerId(DBConnection.conn);
 
                 if (!IsDuplicateCustomer(DBConnection.conn, addCustomer.customerNameText.Text.Trim(), addressId))
@@ -67,7 +71,7 @@ namespace DesktopSchedulingApp.Service
                                     "VALUES (@customerId, @name, @addressId, @active, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
                     MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
                     cmd.Parameters.AddWithValue("@customerId", newCustomerId);
-                    cmd.Parameters.AddWithValue("@name", addCustomer.customerNameText.Text.Trim());
+                    cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(addCustomer.customerNameText.Text.Trim())));
                     cmd.Parameters.AddWithValue("@addressId", addressId);
                     cmd.Parameters.AddWithValue("@active", true);
                     cmd.Parameters.AddWithValue("@created", "2000-01-01");
@@ -89,14 +93,14 @@ namespace DesktopSchedulingApp.Service
         {
             if (ValidateCustomer(modifyCustomer.customerNameText.Text.Trim(), modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim()))
             {
-                int countryId = GetOrCreateCountry(DBConnection.conn, modifyCustomer.countryComboBox.Text.Trim());
-                int cityId = GetOrCreateCity(DBConnection.conn, modifyCustomer.cityText.Text.Trim(), countryId);
-                int addressId = GetOrCreateAddress(DBConnection.conn, modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim(), cityId);
+                int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.countryComboBox.Text.Trim())));
+                int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.cityText.Text.Trim())), countryId);
+                int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.addressText.Text.Trim())), modifyCustomer.phoneText.Text.Trim(), cityId);
 
                 string query = "UPDATE customer SET customerName = @name, addressId = @addressId WHERE customerId = @customerId";
                 MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
                 cmd.Parameters.AddWithValue("@customerId", customerId);
-                cmd.Parameters.AddWithValue("@name", modifyCustomer.customerNameText.Text.Trim());
+                cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(modifyCustomer.customerNameText.Text.Trim())));
                 cmd.Parameters.AddWithValue("@addressId", addressId);
                 int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -266,6 +270,15 @@ namespace DesktopSchedulingApp.Service
                 return false;
             }
             return true;
+        }
+
+        public static string CheckUpper(string str)
+        {
+            if (str.Equals(str.ToUpper()))
+            {
+                return str.ToLower();
+            }
+            return str;
         }
     }
 }
