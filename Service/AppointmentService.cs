@@ -544,8 +544,10 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                bool isDST = estZone.IsDaylightSavingTime(justDate);
+                //bool isDST = estZone.IsDaylightSavingTime(justDate);
+                bool isDST = estZone.IsDaylightSavingTime(localTime);
                 if (isDST)
+                    if (isDST)
                 {
                     localTime = localTime.AddHours(-1);
                 }
@@ -559,7 +561,8 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                bool isDST = estZone.IsDaylightSavingTime(justDate);
+                //bool isDST = estZone.IsDaylightSavingTime(justDate);
+                bool isDST = estZone.IsDaylightSavingTime(estTime);
                 if (isDST)
                 {
                     estTime = estTime.AddHours(1);
