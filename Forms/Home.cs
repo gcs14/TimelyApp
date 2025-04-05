@@ -74,7 +74,7 @@ namespace DesktopSchedulingApp.Forms
 
         private void peakHoursBtn_Click(object sender, EventArgs e)
         {
-            new PeakHours().ShowDialog();
+            new PeakHours(userId).ShowDialog();
         }
     }
 }

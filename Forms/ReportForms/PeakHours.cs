@@ -10,15 +10,21 @@ namespace DesktopSchedulingApp.Forms.ReportForms
 {
     public partial class PeakHours : Form
     {
-        public PeakHours()
+        int userId;
+
+        public PeakHours(int id)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            userId = id;
             LoadPeakHoursData();
         }
 
         private void LoadPeakHoursData()
         {
+            firstLabel.Text = $"Most Booked: ---";
+            secondLabel.Text = $"Second Most: ---";
+            thirdLabel.Text = $"Third Most: ---";
             var peakHours = GetTopBookedTimeSlots();
 
             if (peakHours.Count > 0) firstLabel.Text = $"Most Booked: {peakHours[0].Time} (EST) - {peakHours[0].Percentage}%";
@@ -30,10 +36,11 @@ namespace DesktopSchedulingApp.Forms.ReportForms
         {
             Dictionary<string, int> timeSlotCounts = new Dictionary<string, int>();
             int totalAppointments = 0;
-
-            string query = "SELECT appointment.start FROM appointment";
-
-            using (MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn))
+            
+            string query = "SELECT appointment.start FROM appointment WHERE appointment.userId = @userId";
+            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+            cmd.Parameters.AddWithValue("@userId", userId);
+            //using (MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn))
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
