@@ -273,6 +273,10 @@ namespace DesktopSchedulingApp.Service
 
         public static string CheckUpper(string str)
         {
+            if (str.Equals("US"))
+            {
+                return str;
+            }
             if (str.Equals(str.ToUpper()))
             {
                 return str.ToLower();
