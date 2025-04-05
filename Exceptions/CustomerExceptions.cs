@@ -1,4 +1,6 @@
 ﻿using DesktopSchedulingApp.Forms;
+using DesktopSchedulingApp.Service;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -8,6 +10,7 @@ namespace DesktopSchedulingApp.Exceptions
     {
         AddCustomer addCustomer;
         ModifyCustomer modifyCustomer;
+        TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
 
         public bool AddCustomerExceptions(AddCustomer addCustomer)
         {
@@ -43,7 +46,7 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(1);
             }
             // customer phone number must be 7 digits long
-            if (addCustomer.phoneText.Text.Trim().Length < 7 || addCustomer.phoneText.Text.Trim().Length > 8)
+            if (addCustomer.phoneText.Text.Trim().Length != 7)
             {
                 MessageBox.Show("ERROR: Phone number must be 7 digits long.");
                 return EraseAndFocus(1);
@@ -97,7 +100,7 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(4);
             }
             //customer country must be present in country list
-            if (!ResourceInfo.Countries.Contains(addCustomer.countryComboBox.Text.Trim()))
+            if (!ResourceInfo.Countries.Contains(ti.ToTitleCase(CustomerService.CheckUpper(addCustomer.countryComboBox.Text.Trim()))))
             {
                 MessageBox.Show("ERROR: The value entered is not a real country.");
                 return EraseAndFocus(4);
@@ -194,7 +197,7 @@ namespace DesktopSchedulingApp.Exceptions
                 return EraseAndFocus(9);
             }
             //customer country must be present in country list
-            if (!ResourceInfo.Countries.Contains(modifyCustomer.countryComboBox.Text.Trim()))
+            if (!ResourceInfo.Countries.Contains(ti.ToTitleCase(CustomerService.CheckUpper(modifyCustomer.countryComboBox.Text.Trim()))))
             {
                 MessageBox.Show("ERROR: The value entered is not a real country.");
                 return EraseAndFocus(9);
@@ -253,7 +256,8 @@ namespace DesktopSchedulingApp.Exceptions
                     break;
                 // customer country
                 case 9:
-                    modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "country").Select(kv => kv.Value).ToString();
+                    //modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "country").Select(kv => kv.Value).ToString();
+                    modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo["country"];
                     modifyCustomer.countryComboBox.Focus();
                     break;
             }
