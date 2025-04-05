@@ -31,7 +31,7 @@ namespace DesktopSchedulingApp.Service
 
         public static void LoadCustomerData(AddAppointment view)
         {
-            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer";
+            string sql = "SELECT customerId, customerName, addressId FROM customer";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();
@@ -44,7 +44,7 @@ namespace DesktopSchedulingApp.Service
 
         public static void LoadCustomerData(ModifyAppointment view)
         {
-            string sql = "SELECT customer.customerId, customer.customerName, customer.addressId FROM customer";
+            string sql = "SELECT customerId, customerName, addressId FROM customer";
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, DBConnection.conn);
             DataTable dt = new DataTable();

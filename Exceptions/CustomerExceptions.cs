@@ -256,7 +256,6 @@ namespace DesktopSchedulingApp.Exceptions
                     break;
                 // customer country
                 case 9:
-                    //modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo.Where(kv => kv.Key == "country").Select(kv => kv.Value).ToString();
                     modifyCustomer.countryComboBox.Text = modifyCustomer.customerInfo["country"];
                     modifyCustomer.countryComboBox.Focus();
                     break;

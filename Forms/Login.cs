@@ -144,7 +144,6 @@ namespace DesktopSchedulingApp.Forms
         {
             try
             {
-                //string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
                 string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
                 string logsFolder = Path.Combine(solutionDirectory, "Logs");
 
@@ -168,7 +167,6 @@ namespace DesktopSchedulingApp.Forms
         {
             try
             {
-                //string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
                 string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
                 string logsFolder = Path.Combine(solutionDirectory, "Logs");
 

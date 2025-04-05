@@ -15,7 +15,6 @@ namespace DesktopSchedulingApp.Service
         public static Dictionary<DateOnly, Dictionary<TimeOnly, TimeSpan>> AppointmentDates = new();
         public static Dictionary<TimeOnly, string> BusinessHours = new();
         public static List<Appointment> Appointments;
-        private static int highestID = 0;
         public static DateOnly selectedDate;
         public static DateTime justDate;
 
@@ -75,11 +74,6 @@ namespace DesktopSchedulingApp.Service
                     {
                         AppointmentDates[key1].Add(TimeOnly.FromDateTime(appointment.StartTime), duration);
                     }
-                }
-
-                if (appointment.AppointmentId > highestID)
-                {
-                    highestID = appointment.AppointmentId;
                 }
             }
             rdr.Close();
@@ -439,20 +433,8 @@ namespace DesktopSchedulingApp.Service
                    start.DayOfWeek != DayOfWeek.Saturday && start.DayOfWeek != DayOfWeek.Sunday;
         }
 
-        //private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end)
-        //{
-        //    string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId AND ((start < @end AND end > @start))";
-        //    MySqlCommand cmd = new MySqlCommand(query, connection);
-        //    cmd.Parameters.AddWithValue("@userId", userId);
-        //    cmd.Parameters.AddWithValue("@start", start);
-        //    cmd.Parameters.AddWithValue("@end", end);
-        //    int count = Convert.ToInt32(cmd.ExecuteScalar());
-        //    return count > 0;
-        //}
-
         private static bool IsOverlappingAppointmentForUser(MySqlConnection connection, int userId, DateTime start, DateTime end, int? appointmentId = null)
         {
-            // Query to check for overlapping appointments, but ignore the current one if we're updating
             string query = "SELECT COUNT(*) FROM appointment WHERE userId = @userId " +
                            "AND ((start < @end AND end > @start)) " +
                            "AND (@appointmentId IS NULL OR appointmentId != @appointmentId)";
@@ -462,7 +444,6 @@ namespace DesktopSchedulingApp.Service
             cmd.Parameters.AddWithValue("@start", start);
             cmd.Parameters.AddWithValue("@end", end);
 
-            // If appointmentId is provided, use it; otherwise, ignore it
             if (appointmentId.HasValue)
             {
                 cmd.Parameters.AddWithValue("@appointmentId", appointmentId.Value);
@@ -473,23 +454,11 @@ namespace DesktopSchedulingApp.Service
             }
 
             int count = Convert.ToInt32(cmd.ExecuteScalar());
-            return count > 0; // True means there's an overlap
+            return count > 0;
         }
-
-        //private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end)
-        //{
-        //    string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId AND ((start < @end AND end > @start))";
-        //    MySqlCommand cmd = new MySqlCommand(query, connection);
-        //    cmd.Parameters.AddWithValue("@customerId", customerId);
-        //    cmd.Parameters.AddWithValue("@start", start);
-        //    cmd.Parameters.AddWithValue("@end", end);
-        //    int count = Convert.ToInt32(cmd.ExecuteScalar());
-        //    return count > 0;
-        //}
 
         private static bool IsOverlappingAppointmentForCustomer(MySqlConnection connection, int customerId, DateTime start, DateTime end, int? appointmentId = null)
         {
-            // Query to check for overlapping appointments, but ignore the current one if we're updating
             string query = "SELECT COUNT(*) FROM appointment WHERE customerId = @customerId " +
                            "AND ((start < @end AND end > @start)) " +
                            "AND (@appointmentId IS NULL OR appointmentId != @appointmentId)";
@@ -499,7 +468,6 @@ namespace DesktopSchedulingApp.Service
             cmd.Parameters.AddWithValue("@start", start);
             cmd.Parameters.AddWithValue("@end", end);
 
-            // If appointmentId is provided, use it; otherwise, ignore it
             if (appointmentId.HasValue)
             {
                 cmd.Parameters.AddWithValue("@appointmentId", appointmentId.Value);
@@ -510,7 +478,7 @@ namespace DesktopSchedulingApp.Service
             }
 
             int count = Convert.ToInt32(cmd.ExecuteScalar());
-            return count > 0; // True means there's an overlap
+            return count > 0;
         }
 
         private static int GetCustomerId(MySqlConnection connection, string customerName)
@@ -544,7 +512,6 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                //bool isDST = estZone.IsDaylightSavingTime(justDate);
                 bool isDST = estZone.IsDaylightSavingTime(localTime);
                 if (isDST)
                     if (isDST)
@@ -561,7 +528,6 @@ namespace DesktopSchedulingApp.Service
             if (TimeZoneInfo.Local.StandardName != "Eastern Standard Time")
             {
                 TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                //bool isDST = estZone.IsDaylightSavingTime(justDate);
                 bool isDST = estZone.IsDaylightSavingTime(estTime);
                 if (isDST)
                 {

@@ -37,7 +37,7 @@ namespace DesktopSchedulingApp.Forms.ReportForms
             Dictionary<string, int> timeSlotCounts = new Dictionary<string, int>();
             int totalAppointments = 0;
             
-            string query = "SELECT appointment.start FROM appointment WHERE appointment.userId = @userId";
+            string query = "SELECT start FROM appointment WHERE userId = @userId";
             MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
             cmd.Parameters.AddWithValue("@userId", userId);
             using (var reader = cmd.ExecuteReader())
