@@ -31,9 +31,9 @@ namespace DesktopSchedulingApp.Service
         }
 
         // this method is problematic and does not work well with UTC
-        public static Dictionary<string, List<(DateTime Date, TimeSpan Time, string Customer)>> GetScheduleByUser(int userId)
+        public static Dictionary<string, List<(DateTime Date, string Time, string Customer)>> GetScheduleByUser(int userId)
         {
-            var report = new Dictionary<string, List<(DateTime, TimeSpan, string)>>();
+            var report = new Dictionary<string, List<(DateTime, string, string)>>();
 
             string query = "SELECT u.userName, a.start, c.customerName FROM appointment a " +
                        "JOIN user u ON a.userId = u.userId " +
@@ -50,12 +50,13 @@ namespace DesktopSchedulingApp.Service
                     string user = reader.GetString("userName");
                     DateTime easternStart = reader.GetDateTime("start");
                     DateTime localStart = AppointmentService.ConvertFromEastern(easternStart);
-                    TimeSpan time = localStart.TimeOfDay;
+                    //TimeSpan time = localStart.TimeOfDay;
+                    string time = localStart.ToShortTimeString();
                     string customer = reader.GetString("customerName");
 
                     if (!report.ContainsKey(user))
                     {
-                        report[user] = new List<(DateTime, TimeSpan, string)>();
+                        report[user] = new List<(DateTime, string, string)>();
                     }
                     report[user].Add((localStart.Date, time, customer));
                 }
