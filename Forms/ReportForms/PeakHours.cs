@@ -40,7 +40,6 @@ namespace DesktopSchedulingApp.Forms.ReportForms
             string query = "SELECT appointment.start FROM appointment WHERE appointment.userId = @userId";
             MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
             cmd.Parameters.AddWithValue("@userId", userId);
-            //using (MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn))
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())

@@ -11,7 +11,6 @@ namespace DesktopSchedulingApp.Service
     {
         public static Dictionary<string, int> GetAppointmentTypesByMonth(int userId, int year)
         {
-            //var report = new Dictionary<string, int>();
             var report = Enumerable.Range(1, 12)
                 .ToDictionary(m => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m), m => 0);
 
@@ -30,7 +29,6 @@ namespace DesktopSchedulingApp.Service
             return report;
         }
 
-        // this method is problematic and does not work well with UTC
         public static Dictionary<string, List<(DateTime Date, string Time, string Customer)>> GetScheduleByUser(int userId)
         {
             var report = new Dictionary<string, List<(DateTime, string, string)>>();
@@ -50,7 +48,6 @@ namespace DesktopSchedulingApp.Service
                     string user = reader.GetString("userName");
                     DateTime easternStart = reader.GetDateTime("start");
                     DateTime localStart = AppointmentService.ConvertFromEastern(easternStart);
-                    //TimeSpan time = localStart.TimeOfDay;
                     string time = localStart.ToShortTimeString();
                     string customer = reader.GetString("customerName");
 
