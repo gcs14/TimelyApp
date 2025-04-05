@@ -40,23 +40,21 @@
             // yearComboBox
             // 
             yearComboBox.FormattingEnabled = true;
-            yearComboBox.Location = new System.Drawing.Point(14, 104);
-            yearComboBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            yearComboBox.Location = new System.Drawing.Point(12, 78);
             yearComboBox.Name = "yearComboBox";
-            yearComboBox.Size = new System.Drawing.Size(138, 28);
+            yearComboBox.Size = new System.Drawing.Size(121, 23);
             yearComboBox.TabIndex = 0;
             yearComboBox.SelectedIndexChanged += yearComboBox_SelectedIndexChanged;
             // 
             // CancelBtn
             // 
             CancelBtn.AutoSize = true;
-            CancelBtn.BackColor = System.Drawing.Color.Red;
+            CancelBtn.BackColor = System.Drawing.Color.MediumPurple;
             CancelBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             CancelBtn.Font = new System.Drawing.Font("Arial", 11F);
-            CancelBtn.Location = new System.Drawing.Point(303, 425);
-            CancelBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            CancelBtn.Location = new System.Drawing.Point(265, 319);
             CancelBtn.Name = "CancelBtn";
-            CancelBtn.Size = new System.Drawing.Size(88, 43);
+            CancelBtn.Size = new System.Drawing.Size(77, 32);
             CancelBtn.TabIndex = 8;
             CancelBtn.Text = "CLOSE";
             CancelBtn.UseVisualStyleBackColor = false;
@@ -69,7 +67,7 @@
             addAppoinmentLabel.ForeColor = System.Drawing.Color.MediumPurple;
             addAppoinmentLabel.Location = new System.Drawing.Point(0, 0);
             addAppoinmentLabel.Name = "addAppoinmentLabel";
-            addAppoinmentLabel.Size = new System.Drawing.Size(410, 85);
+            addAppoinmentLabel.Size = new System.Drawing.Size(359, 64);
             addAppoinmentLabel.TabIndex = 9;
             addAppoinmentLabel.Text = "MONTHLY COUNT";
             addAppoinmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -78,9 +76,9 @@
             // 
             label1.AutoSize = true;
             label1.ForeColor = System.Drawing.SystemColors.Window;
-            label1.Location = new System.Drawing.Point(14, 80);
+            label1.Location = new System.Drawing.Point(12, 60);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(40, 20);
+            label1.Size = new System.Drawing.Size(32, 15);
             label1.TabIndex = 10;
             label1.Text = "Year:";
             // 
@@ -92,39 +90,37 @@
             monthReportDGV.AllowUserToResizeRows = false;
             monthReportDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             monthReportDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            monthReportDGV.Location = new System.Drawing.Point(15, 164);
-            monthReportDGV.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            monthReportDGV.Location = new System.Drawing.Point(13, 123);
             monthReportDGV.MultiSelect = false;
             monthReportDGV.Name = "monthReportDGV";
             monthReportDGV.ReadOnly = true;
             monthReportDGV.RowHeadersVisible = false;
             monthReportDGV.RowHeadersWidth = 51;
             monthReportDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            monthReportDGV.Size = new System.Drawing.Size(374, 221);
+            monthReportDGV.Size = new System.Drawing.Size(327, 166);
             monthReportDGV.TabIndex = 11;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(205, 108);
+            label2.Location = new System.Drawing.Point(179, 81);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(50, 20);
+            label2.Size = new System.Drawing.Size(38, 15);
             label2.TabIndex = 12;
             label2.Text = "label2";
             // 
             // MonthlyAppointments
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.FromArgb(18, 18, 18);
-            ClientSize = new System.Drawing.Size(410, 484);
+            ClientSize = new System.Drawing.Size(359, 363);
             Controls.Add(label2);
             Controls.Add(monthReportDGV);
             Controls.Add(label1);
             Controls.Add(addAppoinmentLabel);
             Controls.Add(CancelBtn);
             Controls.Add(yearComboBox);
-            Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             Name = "MonthlyAppointments";
             Text = "MonthlyAppointments";
             ((System.ComponentModel.ISupportInitialize)monthReportDGV).EndInit();
