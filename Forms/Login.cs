@@ -144,18 +144,26 @@ namespace DesktopSchedulingApp.Forms
         {
             try
             {
-                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
-                string logsFolder = Path.Combine(solutionDirectory, "Logs");
+                string solutionDirectory1 = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string solutionDirectory2 = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
+                string logsFolder1 = Path.Combine(solutionDirectory1, "Logs");
+                string logsFolder2 = Path.Combine(solutionDirectory2, "Logs");
 
-                if (!Directory.Exists(logsFolder))
+                if (!Directory.Exists(logsFolder1))
                 {
-                    Directory.CreateDirectory(logsFolder);
+                    Directory.CreateDirectory(logsFolder1);
+                }
+                if (!Directory.Exists(logsFolder2))
+                {
+                    Directory.CreateDirectory(logsFolder2);
                 }
 
                 string logEntry = $"{DateTime.Now} - User: \"{username}\" logged in";
 
-                string filePath = Path.Combine(logsFolder, "Login_History.txt");
-                File.AppendAllText(filePath, logEntry + Environment.NewLine);
+                string filePath1 = Path.Combine(logsFolder1, "Login_History.txt");
+                string filePath2 = Path.Combine(logsFolder2, "Login_History.txt");
+                File.AppendAllText(filePath1, logEntry + Environment.NewLine);
+                File.AppendAllText(filePath2, logEntry + Environment.NewLine);
             }
             catch (Exception ex)
             {
@@ -167,18 +175,26 @@ namespace DesktopSchedulingApp.Forms
         {
             try
             {
-                string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
-                string logsFolder = Path.Combine(solutionDirectory, "Logs");
+                string solutionDirectory1 = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.ToString();
+                string solutionDirectory2 = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString();
+                string logsFolder1 = Path.Combine(solutionDirectory1, "Logs");
+                string logsFolder2 = Path.Combine(solutionDirectory2, "Logs");
 
-                if (!Directory.Exists(logsFolder))
+                if (!Directory.Exists(logsFolder1))
                 {
-                    Directory.CreateDirectory(logsFolder);
+                    Directory.CreateDirectory(logsFolder1);
+                }
+                if (!Directory.Exists(logsFolder2))
+                {
+                    Directory.CreateDirectory(logsFolder2);
                 }
 
                 string logEntry = $"{DateTime.Now} - User: \"{username}\" logged out";
 
-                string filePath = Path.Combine(logsFolder, "Login_History.txt");
-                File.AppendAllText(filePath, logEntry + Environment.NewLine);
+                string filePath1 = Path.Combine(logsFolder1, "Login_History.txt");
+                string filePath2 = Path.Combine(logsFolder2, "Login_History.txt");
+                File.AppendAllText(filePath1, logEntry + Environment.NewLine);
+                File.AppendAllText(filePath2, logEntry + Environment.NewLine);
             }
             catch (Exception ex)
             {
