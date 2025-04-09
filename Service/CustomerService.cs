@@ -91,11 +91,11 @@ namespace DesktopSchedulingApp.Service
             }
             catch (MySqlException sqlEx)
             {
-                MessageBox.Show(sqlEx.Message);
+                MessageBox.Show($"Unexpected error occurred: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Unexpected error occurred: {ex.Message}");
             }
         }
 
@@ -126,11 +126,11 @@ namespace DesktopSchedulingApp.Service
             }
             catch (MySqlException sqlEx)
             {
-                MessageBox.Show(sqlEx.Message);
+                MessageBox.Show($"Unexpected error occurred: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Unexpected error occurred: {ex.Message}");
             }
         }
 
@@ -156,11 +156,11 @@ namespace DesktopSchedulingApp.Service
             }
             catch (MySqlException sqlEx)
             {
-                MessageBox.Show(sqlEx.Message);
+                MessageBox.Show($"Unexpected error occurred: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Unexpected error occurred: {ex.Message}");
             }
         }
 
