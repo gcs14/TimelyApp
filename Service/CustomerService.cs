@@ -57,77 +57,110 @@ namespace DesktopSchedulingApp.Service
 
         public static void AddCustomer(AddCustomer addCustomer)
         {
-            if (ValidateCustomer(addCustomer.customerNameText.Text.Trim(), addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim()))
+            try
             {
-                int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.countryComboBox.Text.Trim())));
-                int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.cityText.Text.Trim())), countryId);
-                int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.addressText.Text.Trim())), addCustomer.phoneText.Text.Trim(), cityId);
-                int newCustomerId = GetNextCustomerId(DBConnection.conn);
+                if (ValidateCustomer(addCustomer.customerNameText.Text.Trim(), addCustomer.addressText.Text.Trim(), addCustomer.phoneText.Text.Trim()))
+                {
+                    int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.countryComboBox.Text.Trim())));
+                    int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.cityText.Text.Trim())), countryId);
+                    int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(addCustomer.addressText.Text.Trim())), addCustomer.phoneText.Text.Trim(), cityId);
+                    int newCustomerId = GetNextCustomerId(DBConnection.conn);
 
-                if (!IsDuplicateCustomer(DBConnection.conn, addCustomer.customerNameText.Text.Trim(), addressId))
-                {
-                    string query = "INSERT INTO customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                                    "VALUES (@customerId, @name, @addressId, @active, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
-                    MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-                    cmd.Parameters.AddWithValue("@customerId", newCustomerId);
-                    cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(addCustomer.customerNameText.Text.Trim())));
-                    cmd.Parameters.AddWithValue("@addressId", addressId);
-                    cmd.Parameters.AddWithValue("@active", true);
-                    cmd.Parameters.AddWithValue("@created", "2000-01-01");
-                    cmd.Parameters.AddWithValue("@createdBy", "");
-                    cmd.Parameters.AddWithValue("@update", "2000-01-01");
-                    cmd.Parameters.AddWithValue("@updateBy", "");
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Customer added successfully.");
-                    addCustomer.Close();
+                    if (!IsDuplicateCustomer(DBConnection.conn, addCustomer.customerNameText.Text.Trim(), addressId))
+                    {
+                        string query = "INSERT INTO customer (customerId, customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                                        "VALUES (@customerId, @name, @addressId, @active, @created, @createdBy, @update, @updateBy); SELECT LAST_INSERT_ID();";
+                        MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                        cmd.Parameters.AddWithValue("@customerId", newCustomerId);
+                        cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(addCustomer.customerNameText.Text.Trim())));
+                        cmd.Parameters.AddWithValue("@addressId", addressId);
+                        cmd.Parameters.AddWithValue("@active", true);
+                        cmd.Parameters.AddWithValue("@created", "2000-01-01");
+                        cmd.Parameters.AddWithValue("@createdBy", "");
+                        cmd.Parameters.AddWithValue("@update", "2000-01-01");
+                        cmd.Parameters.AddWithValue("@updateBy", "");
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Customer added successfully.");
+                        addCustomer.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("A customer with the same address and phone number already exists.");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("A customer with the same address and phone number already exists.");
-                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                MessageBox.Show(sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
         public static void ModifyCustomer(ModifyCustomer modifyCustomer, int customerId)
         {
-            if (ValidateCustomer(modifyCustomer.customerNameText.Text.Trim(), modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim()))
+            try
             {
-                int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.countryComboBox.Text.Trim())));
-                int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.cityText.Text.Trim())), countryId);
-                int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.addressText.Text.Trim())), modifyCustomer.phoneText.Text.Trim(), cityId);
+                if (ValidateCustomer(modifyCustomer.customerNameText.Text.Trim(), modifyCustomer.addressText.Text.Trim(), modifyCustomer.phoneText.Text.Trim()))
+                {
+                    int countryId = GetOrCreateCountry(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.countryComboBox.Text.Trim())));
+                    int cityId = GetOrCreateCity(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.cityText.Text.Trim())), countryId);
+                    int addressId = GetOrCreateAddress(DBConnection.conn, ti.ToTitleCase(CheckUpper(modifyCustomer.addressText.Text.Trim())), modifyCustomer.phoneText.Text.Trim(), cityId);
 
-                string query = "UPDATE customer SET customerName = @name, addressId = @addressId WHERE customerId = @customerId";
-                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@customerId", customerId);
-                cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(modifyCustomer.customerNameText.Text.Trim())));
-                cmd.Parameters.AddWithValue("@addressId", addressId);
-                int rowsAffected = cmd.ExecuteNonQuery();
+                    string query = "UPDATE customer SET customerName = @name, addressId = @addressId WHERE customerId = @customerId";
+                    MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                    cmd.Parameters.AddWithValue("@customerId", customerId);
+                    cmd.Parameters.AddWithValue("@name", ti.ToTitleCase(CheckUpper(modifyCustomer.customerNameText.Text.Trim())));
+                    cmd.Parameters.AddWithValue("@addressId", addressId);
+                    int rowsAffected = cmd.ExecuteNonQuery();
 
-                MessageBox.Show(rowsAffected > 0 ? "Customer updated successfully." : "Customer not found.");
-                modifyCustomer.Close();
+                    MessageBox.Show(rowsAffected > 0 ? "Customer updated successfully." : "Customer not found.");
+                    modifyCustomer.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid customer ID.");
+                }
             }
-            else
+            catch (MySqlException sqlEx)
             {
-                MessageBox.Show("Invalid customer ID.");
+                MessageBox.Show(sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
         public static void DeleteCustomer(int customerId)
         {
-            if (customerId == -1)
+            try
             {
-                MessageBox.Show("Customer not found.");
-                return;
-            }
-            var confirmResult = MessageBox.Show("Are you sure you want to delete this customer?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (confirmResult == DialogResult.Yes)
-            {
-                string deleteQuery = "DELETE FROM customer WHERE customerId = @id;";
-                MySqlCommand cmd = new(deleteQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@id", customerId);
-                int rowsAffected = cmd.ExecuteNonQuery();
+                if (customerId == -1)
+                {
+                    MessageBox.Show("Customer not found.");
+                    return;
+                }
+                var confirmResult = MessageBox.Show("Are you sure you want to delete this customer?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    string deleteQuery = "DELETE FROM customer WHERE customerId = @id;";
+                    MySqlCommand cmd = new(deleteQuery, DBConnection.conn);
+                    cmd.Parameters.AddWithValue("@id", customerId);
+                    int rowsAffected = cmd.ExecuteNonQuery();
 
-                MessageBox.Show(rowsAffected > 0 ? "Customer deleted successfully." : "Customer not found.");
+                    MessageBox.Show(rowsAffected > 0 ? "Customer deleted successfully." : "Customer not found.");
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                MessageBox.Show(sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

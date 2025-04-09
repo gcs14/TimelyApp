@@ -291,139 +291,172 @@ namespace DesktopSchedulingApp.Service
 
         public static void AddAppointment(AddAppointment addAppointment, string username)
         {
-            if (addAppointment.hoursDGV.SelectedRows.Count == 0 || addAppointment.custNamesDGV.SelectedRows.Count == 0 || addAppointment.durationComboBox.SelectedItem == null)
+            try
             {
-                MessageBox.Show("Please select a start time, customer, and duration.");
-                return;
+                if (addAppointment.hoursDGV.SelectedRows.Count == 0 || addAppointment.custNamesDGV.SelectedRows.Count == 0 || addAppointment.durationComboBox.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a start time, customer, and duration.");
+                    return;
+                }
+
+                int customerId = GetCustomerId(DBConnection.conn, addAppointment.custNamesDGV.CurrentRow.Cells[1].Value.ToString());
+                int userId = GetUserId(DBConnection.conn, username);
+                DateTime selectedDate = addAppointment.monthCalendar.SelectionStart;
+                DateTime startTime = DateTime.Parse(addAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
+                DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
+                int duration = int.Parse(addAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
+                DateTime end = start.AddMinutes(duration);
+
+                if (!IsValidAppointmentTime(start, end))
+                {
+                    MessageBox.Show("Appointment must be within business hours (9 AM - 5 PM EST, Mon-Fri).");
+                    return;
+                }
+
+                if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end))
+                {
+                    MessageBox.Show("You already have an appointment scheduled at this time.");
+                    return;
+                }
+
+                if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end))
+                {
+                    MessageBox.Show("This customer already has an appointment at this time.");
+                    return;
+                }
+
+                string query = "INSERT INTO Appointment (appointmentId, customerId, userId, title, " +
+                    "description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) " +
+                    "VALUES (@appointmentId, @customerId, @userId, @title, @description, @location, @contact, @type, " +
+                    "@url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)";
+                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@appointmentId", GetNextAppointmentId(DBConnection.conn));
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@title", "");
+                cmd.Parameters.AddWithValue("@description", "");
+                cmd.Parameters.AddWithValue("@location", "");
+                cmd.Parameters.AddWithValue("@contact", "");
+                cmd.Parameters.AddWithValue("@type", addAppointment.typeComboBox.Text);
+                cmd.Parameters.AddWithValue("@url", "");
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
+                cmd.Parameters.AddWithValue("@createDate", "2000-01-01");
+                cmd.Parameters.AddWithValue("@createdBy", "");
+                cmd.Parameters.AddWithValue("@lastUpdate", "2000-01-01");
+                cmd.Parameters.AddWithValue("@lastUpdateBy", "");
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Appointment added successfully.");
+                addAppointment.Close();
             }
-
-            int customerId = GetCustomerId(DBConnection.conn, addAppointment.custNamesDGV.CurrentRow.Cells[1].Value.ToString());
-            int userId = GetUserId(DBConnection.conn, username);
-            DateTime selectedDate = addAppointment.monthCalendar.SelectionStart;
-            DateTime startTime = DateTime.Parse(addAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
-            DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
-            int duration = int.Parse(addAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
-            DateTime end = start.AddMinutes(duration);
-
-            if (!IsValidAppointmentTime(start, end))
+            catch (MySqlException sqlEx)
             {
-                MessageBox.Show("Appointment must be within business hours (9 AM - 5 PM EST, Mon-Fri).");
-                return;
+                MessageBox.Show(sqlEx.Message);
             }
-
-            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end))
+            catch (Exception ex)
             {
-                MessageBox.Show("You already have an appointment scheduled at this time.");
-                return;
+                MessageBox.Show(ex.Message);
             }
-
-            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end))
-            {
-                MessageBox.Show("This customer already has an appointment at this time.");
-                return;
-            }
-
-            string query = "INSERT INTO Appointment (appointmentId, customerId, userId, title, " +
-                "description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) " +
-                "VALUES (@appointmentId, @customerId, @userId, @title, @description, @location, @contact, @type, " +
-                "@url, @start, @end, @createDate, @createdBy, @lastUpdate, @lastUpdateBy)";
-            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@appointmentId", GetNextAppointmentId(DBConnection.conn));
-            cmd.Parameters.AddWithValue("@customerId", customerId);
-            cmd.Parameters.AddWithValue("@userId", userId);
-            cmd.Parameters.AddWithValue("@title", "");
-            cmd.Parameters.AddWithValue("@description", "");
-            cmd.Parameters.AddWithValue("@location", "");
-            cmd.Parameters.AddWithValue("@contact", "");
-            cmd.Parameters.AddWithValue("@type", addAppointment.typeComboBox.Text);
-            cmd.Parameters.AddWithValue("@url", "");
-            cmd.Parameters.AddWithValue("@start", start);
-            cmd.Parameters.AddWithValue("@end", end);
-            cmd.Parameters.AddWithValue("@createDate", "2000-01-01");
-            cmd.Parameters.AddWithValue("@createdBy", "");
-            cmd.Parameters.AddWithValue("@lastUpdate", "2000-01-01");
-            cmd.Parameters.AddWithValue("@lastUpdateBy", "");
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("Appointment added successfully.");
-            addAppointment.Close();
         }
 
         public static void ModifyAppointment(ModifyAppointment modifyAppointment, int appointmentId, int userId)
         {
-            if (modifyAppointment.hoursDGV.SelectedRows.Count == 0 || modifyAppointment.custNamesDGV.SelectedRows.Count == 0 || modifyAppointment.durationComboBox.SelectedItem == null)
+            try
             {
-                MessageBox.Show("Please select a start time, customer, and duration.");
-                return;
+                if (modifyAppointment.hoursDGV.SelectedRows.Count == 0 || modifyAppointment.custNamesDGV.SelectedRows.Count == 0 || modifyAppointment.durationComboBox.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a start time, customer, and duration.");
+                    return;
+                }
+
+                DateTime selectedDate = modifyAppointment.monthCalendar.SelectionStart;
+                DateTime startTime = DateTime.Parse(modifyAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
+                DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
+                int duration = int.Parse(modifyAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
+                DateTime end = start.AddMinutes(duration);
+                int customerId = Convert.ToInt32(modifyAppointment.custNamesDGV.SelectedRows[0].Cells[0].Value);
+
+                if (!IsValidAppointmentTime(start, end))
+                {
+                    MessageBox.Show("Appointment must be within business hours (9 AM - 5 PM EST, Mon-Fri).");
+                    return;
+                }
+
+                if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end, appointmentId))
+                {
+                    MessageBox.Show("You already have an appointment scheduled at this time.");
+                    return;
+                }
+
+                if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end, appointmentId))
+                {
+                    MessageBox.Show("This customer already has an appointment at this time.");
+                    return;
+                }
+
+                string query = "UPDATE appointment SET appointmentId = @appointmentId, customerId = @customerId, userId = @userId, " +
+                    "title = @title, description = @description, location = @location, contact = @contact, type = @type, url = @url, " +
+                    "start = @start, end = @end, createDate = @createDate, createdBy = @createdBy, lastUpdate = @lastUpdate, lastUpdateBy = @lastUpdateBy " +
+                    "WHERE appointmentId = @appointmentId";
+
+                MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
+                cmd.Parameters.AddWithValue("@appointmentId", appointmentId);
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@title", "");
+                cmd.Parameters.AddWithValue("@description", "");
+                cmd.Parameters.AddWithValue("@location", "");
+                cmd.Parameters.AddWithValue("@contact", "");
+                cmd.Parameters.AddWithValue("@type", modifyAppointment.typeComboBox.Text);
+                cmd.Parameters.AddWithValue("@url", "");
+                cmd.Parameters.AddWithValue("@start", start);
+                cmd.Parameters.AddWithValue("@end", end);
+                cmd.Parameters.AddWithValue("@createDate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@createdBy", "");
+                cmd.Parameters.AddWithValue("@lastUpdate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@lastUpdateBy", "");
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                MessageBox.Show(rowsAffected > 0 ? "Appointment updated successfully." : "No matching appointment found.");
+                modifyAppointment.Close();
             }
-
-            DateTime selectedDate = modifyAppointment.monthCalendar.SelectionStart;
-            DateTime startTime = DateTime.Parse(modifyAppointment.hoursDGV.SelectedRows[0].Cells[0].Value.ToString());
-            DateTime start = ConvertToEastern(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, startTime.Hour, startTime.Minute, 0));
-            int duration = int.Parse(modifyAppointment.durationComboBox.SelectedItem.ToString().Substring(0, 2));
-            DateTime end = start.AddMinutes(duration);
-            int customerId = Convert.ToInt32(modifyAppointment.custNamesDGV.SelectedRows[0].Cells[0].Value);
-
-            if (!IsValidAppointmentTime(start, end))
+            catch (MySqlException sqlEx)
             {
-                MessageBox.Show("Appointment must be within business hours (9 AM - 5 PM EST, Mon-Fri).");
-                return;
+                MessageBox.Show(sqlEx.Message);
             }
-
-            if (IsOverlappingAppointmentForUser(DBConnection.conn, userId, start, end, appointmentId))
+            catch (Exception ex)
             {
-                MessageBox.Show("You already have an appointment scheduled at this time.");
-                return;
+                MessageBox.Show(ex.Message);
             }
-
-            if (IsOverlappingAppointmentForCustomer(DBConnection.conn, customerId, start, end, appointmentId))
-            {
-                MessageBox.Show("This customer already has an appointment at this time.");
-                return;
-            }
-
-            string query = "UPDATE appointment SET appointmentId = @appointmentId, customerId = @customerId, userId = @userId, " +
-                "title = @title, description = @description, location = @location, contact = @contact, type = @type, url = @url, " +
-                "start = @start, end = @end, createDate = @createDate, createdBy = @createdBy, lastUpdate = @lastUpdate, lastUpdateBy = @lastUpdateBy " +
-                "WHERE appointmentId = @appointmentId";
-
-            MySqlCommand cmd = new MySqlCommand(query, DBConnection.conn);
-            cmd.Parameters.AddWithValue("@appointmentId", appointmentId);
-            cmd.Parameters.AddWithValue("@customerId", customerId);
-            cmd.Parameters.AddWithValue("@userId", userId);
-            cmd.Parameters.AddWithValue("@title", "");
-            cmd.Parameters.AddWithValue("@description", "");
-            cmd.Parameters.AddWithValue("@location", "");
-            cmd.Parameters.AddWithValue("@contact", "");
-            cmd.Parameters.AddWithValue("@type", modifyAppointment.typeComboBox.Text);
-            cmd.Parameters.AddWithValue("@url", "");
-            cmd.Parameters.AddWithValue("@start", start);
-            cmd.Parameters.AddWithValue("@end", end);
-            cmd.Parameters.AddWithValue("@createDate", DateTime.Now);
-            cmd.Parameters.AddWithValue("@createdBy", "");
-            cmd.Parameters.AddWithValue("@lastUpdate", DateTime.Now);
-            cmd.Parameters.AddWithValue("@lastUpdateBy", "");
-            int rowsAffected = cmd.ExecuteNonQuery();
-
-            MessageBox.Show(rowsAffected > 0 ? "Appointment updated successfully." : "No matching appointment found.");
-            modifyAppointment.Close();
         }
 
         public static void DeleteAppointment(int appointmentID)
         {
-            if (appointmentID == -1)
+            try
             {
-                MessageBox.Show("Appointment not found.");
-                return;
-            }
-            var confirmResult = MessageBox.Show("Are you sure you want to delete this appointment?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (confirmResult == DialogResult.Yes)
-            {
-                string deleteQuery = "DELETE FROM appointment WHERE appointmentID = @id;";
-                MySqlCommand cmd = new(deleteQuery, DBConnection.conn);
-                cmd.Parameters.AddWithValue("@id", appointmentID);
-                int rowsAffected = cmd.ExecuteNonQuery();
+                if (appointmentID == -1)
+                {
+                    MessageBox.Show("Appointment not found.");
+                    return;
+                }
+                var confirmResult = MessageBox.Show("Are you sure you want to delete this appointment?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    string deleteQuery = "DELETE FROM appointment WHERE appointmentID = @id;";
+                    MySqlCommand cmd = new(deleteQuery, DBConnection.conn);
+                    cmd.Parameters.AddWithValue("@id", appointmentID);
+                    int rowsAffected = cmd.ExecuteNonQuery();
 
-                MessageBox.Show(rowsAffected > 0 ? "Appointment deleted successfully." : "Appointment not found.");
+                    MessageBox.Show(rowsAffected > 0 ? "Appointment deleted successfully." : "Appointment not found.");
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                MessageBox.Show(sqlEx.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
