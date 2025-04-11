@@ -23,20 +23,41 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerBtn_Click(object sender, EventArgs e)
         {
-            new AddCustomer().ShowDialog();
-            PopulateCustomerTable();
+            try
+            {
+                new AddCustomer().ShowDialog();
+                PopulateCustomerTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ModifyCustomerBtn_Click(object sender, EventArgs e)
         {
-            new ModifyCustomer(selectedCustomerId).ShowDialog();
-            PopulateCustomerTable();
+            try
+            {
+                new ModifyCustomer(selectedCustomerId).ShowDialog();
+                PopulateCustomerTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void DeleteCustomerBtn_Click(object sender, EventArgs e)
         {
+            try
+            {
             CustomerService.DeleteCustomer(selectedCustomerId);
             PopulateCustomerTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void CustomerSelection(object sender, EventArgs e)

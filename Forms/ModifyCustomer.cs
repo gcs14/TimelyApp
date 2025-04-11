@@ -56,10 +56,17 @@ namespace DesktopSchedulingApp.Forms
 
         private void ModifyCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
-            CustomerExceptions customerExceptions = new();
-            if (customerExceptions.ModifyCustomerExceptions(this))
+            try
             {
-                CustomerService.ModifyCustomer(this, customerId);
+                CustomerExceptions customerExceptions = new();
+                if (customerExceptions.ModifyCustomerExceptions(this))
+                {
+                    CustomerService.ModifyCustomer(this, customerId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

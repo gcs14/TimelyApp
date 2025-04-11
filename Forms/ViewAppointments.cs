@@ -32,20 +32,41 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddAppointmentBtn_Click(object sender, EventArgs e)
         {
-            new AddAppointment(username).ShowDialog();
-            PopulateAppointmentTable();
+            try
+            {
+                new AddAppointment(username).ShowDialog();
+                PopulateAppointmentTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ModifyAppointmentBtn_Click(object sender, EventArgs e)
         {
-            new ModifyAppointment(selectedAppointmentId).ShowDialog();
-            PopulateAppointmentTable();
+            try
+            {
+                new ModifyAppointment(selectedAppointmentId).ShowDialog();
+                PopulateAppointmentTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void DeleteAppointmentBtn_Click(object sender, EventArgs e)
         {
-            AppointmentService.DeleteAppointment(selectedAppointmentId);
-            PopulateAppointmentTable();
+            try
+            {
+                AppointmentService.DeleteAppointment(selectedAppointmentId);
+                PopulateAppointmentTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void AppointmentSelection(object sender, EventArgs e)

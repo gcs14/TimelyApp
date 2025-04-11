@@ -93,10 +93,17 @@ namespace DesktopSchedulingApp.Forms
 
         private void ModifyAppointmentBtn_Click(object sender, EventArgs e)
         {
-            AppointmentExceptions appointmentExceptions = new();
-            if (appointmentExceptions.ModifyAppointmentExceptions(this))
+            try
             {
-                AppointmentService.ModifyAppointment(this, appointmentId, userId);
+                AppointmentExceptions appointmentExceptions = new();
+                if (appointmentExceptions.ModifyAppointmentExceptions(this))
+                {
+                    AppointmentService.ModifyAppointment(this, appointmentId, userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

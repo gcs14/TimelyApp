@@ -38,10 +38,17 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddAppointmentBtn_Click(object sender, EventArgs e)
         {
-            AppointmentExceptions appointmentExceptions = new();
-            if (appointmentExceptions.AddAppointmentExceptions(this))
+            try
             {
-                AppointmentService.AddAppointment(this, username);
+                AppointmentExceptions appointmentExceptions = new();
+                if (appointmentExceptions.AddAppointmentExceptions(this))
+                {
+                    AppointmentService.AddAppointment(this, username);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

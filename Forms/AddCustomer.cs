@@ -21,10 +21,17 @@ namespace DesktopSchedulingApp.Forms
 
         private void AddCustomerSubmitBtn_Click(object sender, EventArgs e)
         {
-            CustomerExceptions customerExceptions = new();
-            if (customerExceptions.AddCustomerExceptions(this))
+            try
             {
-                CustomerService.AddCustomer(this);
+                CustomerExceptions customerExceptions = new();
+                if (customerExceptions.AddCustomerExceptions(this))
+                {
+                    CustomerService.AddCustomer(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
